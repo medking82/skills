@@ -26,6 +26,30 @@ You can stay up to date with my skills here:
 npx skills@latest add emilkowalski/skills
 ```
 
+### Keep the forked Apple Design skill current in Codex and Claude
+
+This fork includes a deterministic updater for the user-scoped copies consumed by Codex and
+Claude. The fork is the canonical source; each workstation still needs its own checkout and
+bootstrap because installed skills are snapshots, not live GitHub mounts.
+
+```powershell
+# Preview whether either installed copy differs from medking82/skills@main.
+pwsh scripts/sync-apple-design.ps1 -Mode Check
+
+# Copy the reported source_sha256, then bind Apply to that exact reviewed manifest.
+pwsh scripts/sync-apple-design.ps1 -Mode Apply -ExpectedSourceSha256 <64-hex-source-sha256>
+
+# Preview, then register, a daily 06:30 check-only Scheduled Task on Windows.
+pwsh scripts/install-apple-design-update-task.ps1
+pwsh scripts/install-apple-design-update-task.ps1 -Execute
+```
+
+Scheduled checks write daily logs under
+`%LOCALAPPDATA%\AppleDesignSkillUpdate\`. A detected update does not overwrite either installed
+copy; run `Apply` explicitly with the exact manifest SHA-256 reported by `Check` after reviewing
+the fork change. A missing or mismatched digest fails before either installed scope is written.
+Syncing this GitHub fork from its upstream repository remains a separate manual decision.
+
 ## Why use it?
 
 Agents don’t have great taste
