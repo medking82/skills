@@ -69,7 +69,7 @@ This is your shortcut to great interfaces. A shortcut to stand out in a sea of s
 - **[improve-animations](./skills/improve-animations/SKILL.md)** — Audit all the animations in your codebase and get prioritized, self-contained plans that any agent can execute.
 - **[find-animation-opportunities](./skills/find-animation-opportunities/SKILL.md)** — Search your UI for places that would genuinely benefit from motion, while also telling you what not to animate.
 - **[animation-vocabulary](./skills/animation-vocabulary/SKILL.md)** — Get better animations from an AI by telling it exactly what you want by using the right words.
-- **[apple-design](./skills/apple-design/SKILL.md)** — Apple's principles for interface design and fluid motion, distilled from their WWDC design talks and translated for the web.
+- **[apple-design](./skills/apple-design/SKILL.md)** — Apple's interface and fluid-motion principles for the web, including iPhone Home Screen and standalone PWA experience guidance.
 - **[pick-ui-library](./skills/pick-ui-library/SKILL.md)** — Have your agent pick the right library for the task based on libraries I use and trust, instead of letting AI hand-roll a toast component or install an abandoned package.
 
 ### Improve animations
