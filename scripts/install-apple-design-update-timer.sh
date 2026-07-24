@@ -60,7 +60,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-WorkingDirectory="$escaped_repo"
+WorkingDirectory=$escaped_repo
 ExecStart="$escaped_python" "$escaped_runner" --mode Check
 SuccessExitStatus=3
 TimeoutStartSec=5min

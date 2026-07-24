@@ -265,6 +265,8 @@ class AppleDesignUpdaterTests(unittest.TestCase):
         installer = TIMER_INSTALLER.read_text(encoding="utf-8")
         self.assertIn("--mode Check", installer)
         self.assertIn("SuccessExitStatus=3", installer)
+        self.assertIn("WorkingDirectory=$escaped_repo", installer)
+        self.assertNotIn('WorkingDirectory="$escaped_repo"', installer)
         self.assertNotIn("--mode Apply", installer)
 
 
