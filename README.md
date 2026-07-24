@@ -50,6 +50,47 @@ copy; run `Apply` explicitly with the exact manifest SHA-256 reported by `Check`
 the fork change. A missing or mismatched digest fails before either installed scope is written.
 Syncing this GitHub fork from its upstream repository remains a separate manual decision.
 
+#### WSL-native check/apply and timer
+
+The Linux updater always downloads the published `medking82/skills@main` archive. It never
+uses the current checkout as skill content, so an unpublished feature branch cannot become an
+installed skill accidentally. It compares or replaces four independent snapshots:
+
+- `/home/marck/.agents/skills/apple-design`
+- `/home/marck/.claude/skills/apple-design`
+- `/mnt/c/Users/Marck/.codex/skills/apple-design`
+- `/mnt/c/Users/Marck/.claude/skills/apple-design`
+
+```bash
+# Check all four scopes. Exit 3 means at least one is missing or drifted.
+python3 scripts/sync-apple-design.py --mode Check
+
+# After reviewing published main, bind the one-time Apply to Check's exact digest.
+python3 scripts/sync-apple-design.py --mode Apply \
+  --expected-source-sha256 <64-hex-source-sha256>
+
+# Verify all four scopes are current.
+python3 scripts/sync-apple-design.py --mode Check
+
+# Preview, then install, a daily 06:30 check-only systemd user timer.
+scripts/install-apple-design-update-timer.sh
+scripts/install-apple-design-update-timer.sh --execute
+```
+
+Apply stages all changed scopes before swapping any of them and restores the previous snapshots
+if a swap or verification fails. It also fails before destination writes when `/mnt/c` is not the
+expected WSL Windows mount or the Windows profile/consumer directories are unavailable.
+
+The timer never runs Apply. Its output goes to the user journal:
+
+```bash
+journalctl --user -u apple-design-skill-update.service
+```
+
+Keep the Windows Scheduled Task as the fallback until a manual Linux Check/Apply, fresh
+Codex/Claude load checks, a manual service run, and one natural timer cycle have all succeeded.
+Only then disable the Windows task in a separate, explicit cutover.
+
 ## Why use it?
 
 Agents don’t have great taste
