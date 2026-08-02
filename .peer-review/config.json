@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "mode": "report",
   "plan_roots": ["docs/plans", "docs/specs"],
   "review_slow_seconds": 300,
@@ -16,9 +16,10 @@
       "high_risk_effort": "high"
     },
     "claude": {
-      "model": "sonnet",
-      "effort": "medium",
-      "high_risk_effort": "high"
+      "model": "fable",
+      "effort": "max",
+      "high_risk_effort": "max",
+      "quota_fallback_model": "opus"
     }
   }
 }
