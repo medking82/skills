@@ -243,6 +243,71 @@ class AppleDesignUpdaterTests(unittest.TestCase):
         self.assertFalse((fake_home / ".agents" / "skills").exists())
         self.assertFalse((fake_home / ".claude" / "skills").exists())
 
+    def test_linux_profile_uses_only_two_validated_linux_snapshots(self) -> None:
+        fake_home = self.root / "linux-home"
+        (fake_home / ".agents").mkdir(parents=True)
+        (fake_home / ".claude").mkdir()
+        env = os.environ.copy()
+        env["HOME"] = str(fake_home)
+        profile_args = [
+            "--scope-profile",
+            "linux",
+            "--test-windows-mount",
+            str(self.root / "missing-windows-mount"),
+            "--test-windows-profile",
+            str(self.root / "missing-windows-profile"),
+        ]
+
+        check = self.invoke(
+            "Check",
+            custom_scopes=False,
+            extra_args=profile_args,
+            env=env,
+        )
+        self.assertEqual(3, check.returncode, check.stderr)
+        self.assertIn("scope=LinuxCodex status=missing", check.stdout)
+        self.assertIn("scope=LinuxClaude status=missing", check.stdout)
+        self.assertNotIn("scope=Windows", check.stdout)
+        self.assertFalse((fake_home / ".agents" / "skills").exists())
+        self.assertFalse((fake_home / ".claude" / "skills").exists())
+
+        digest = self.reported_digest(check)
+        apply = self.invoke(
+            "Apply",
+            expected=digest,
+            custom_scopes=False,
+            extra_args=profile_args,
+            env=env,
+        )
+        self.assertEqual(0, apply.returncode, apply.stderr)
+        self.assertEqual(
+            digest, tree_digest(fake_home / ".agents" / "skills" / "apple-design")
+        )
+        self.assertEqual(
+            digest, tree_digest(fake_home / ".claude" / "skills" / "apple-design")
+        )
+
+    def test_linux_profile_rejects_symlinked_consumer_home_before_writes(self) -> None:
+        fake_home = self.root / "linux-symlink-home"
+        outside = self.root / "outside-agents"
+        fake_home.mkdir()
+        outside.mkdir()
+        os.symlink(outside, fake_home / ".agents")
+        (fake_home / ".claude").mkdir()
+        env = os.environ.copy()
+        env["HOME"] = str(fake_home)
+
+        result = self.invoke(
+            "Check",
+            custom_scopes=False,
+            extra_args=["--scope-profile", "linux"],
+            env=env,
+        )
+        self.assertEqual(1, result.returncode)
+        self.assertIn("Linux Codex home must not be a symlink", result.stderr)
+        self.assertFalse((outside / "skills").exists())
+        self.assertFalse((fake_home / ".claude" / "skills").exists())
+
     def test_timer_installer_is_preview_first_and_check_only(self) -> None:
         fake_home = self.root / "timer-home"
         config_root = self.root / "timer-config"
@@ -268,6 +333,72 @@ class AppleDesignUpdaterTests(unittest.TestCase):
         self.assertIn("WorkingDirectory=$escaped_repo", installer)
         self.assertNotIn('WorkingDirectory="$escaped_repo"', installer)
         self.assertNotIn("--mode Apply", installer)
+
+        linux_preview = subprocess.run(
+            ["bash", str(TIMER_INSTALLER), "--linux-only"],
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
+        )
+        self.assertEqual(0, linux_preview.returncode, linux_preview.stderr)
+        self.assertIn("scope_profile=linux", linux_preview.stdout)
+        self.assertIn("scopes=Linux Codex, Linux Claude", linux_preview.stdout)
+        self.assertIn("status=preview-only", linux_preview.stdout)
+        self.assertFalse(config_root.exists())
+
+    def test_linux_only_timer_renders_production_profile_argv(self) -> None:
+        fake_home = self.root / "timer-linux-home"
+        config_root = self.root / "timer-linux-config"
+        fake_bin = self.root / "timer-linux-bin"
+        fake_home.mkdir()
+        fake_bin.mkdir()
+        systemctl = fake_bin / "systemctl"
+        systemctl.write_text("#!/usr/bin/env sh\nexit 0\n", encoding="utf-8")
+        systemctl.chmod(0o755)
+        env = os.environ.copy()
+        env.update(
+            {
+                "HOME": str(fake_home),
+                "XDG_CONFIG_HOME": str(config_root),
+                "PATH": f"{fake_bin}:{env['PATH']}",
+            }
+        )
+
+        default_result = subprocess.run(
+            ["bash", str(TIMER_INSTALLER), "--execute"],
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
+        )
+        self.assertEqual(0, default_result.returncode, default_result.stderr)
+        service_path = (
+            config_root / "systemd" / "user" / "apple-design-skill-update.service"
+        )
+        default_service = service_path.read_text(encoding="utf-8")
+        self.assertIn("--mode Check", default_service)
+        self.assertNotIn("--scope-profile", default_service)
+        self.assertNotIn("--test-", default_service)
+
+        result = subprocess.run(
+            [
+                "bash",
+                str(TIMER_INSTALLER),
+                "--execute",
+                "--linux-only",
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+            env=env,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        service = service_path.read_text(encoding="utf-8")
+        self.assertIn("--mode Check --scope-profile linux", service)
+        self.assertIn("SuccessExitStatus=3", service)
+        self.assertNotIn("--mode Apply", service)
+        self.assertNotIn("--test-", service)
 
 
 if __name__ == "__main__":
