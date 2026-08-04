@@ -50,11 +50,12 @@ copy; run `Apply` explicitly with the exact manifest SHA-256 reported by `Check`
 the fork change. A missing or mismatched digest fails before either installed scope is written.
 Syncing this GitHub fork from its upstream repository remains a separate manual decision.
 
-#### WSL-native check/apply and timer
+#### Linux check/apply and timer
 
 The Linux updater always downloads the published `medking82/skills@main` archive. It never
 uses the current checkout as skill content, so an unpublished feature branch cannot become an
-installed skill accidentally. It compares or replaces four independent snapshots:
+installed skill accidentally. Its default `wsl` scope profile compares or replaces four
+independent snapshots:
 
 - `/home/marck/.agents/skills/apple-design`
 - `/home/marck/.claude/skills/apple-design`
@@ -77,9 +78,28 @@ scripts/install-apple-design-update-timer.sh
 scripts/install-apple-design-update-timer.sh --execute
 ```
 
+On a bare-metal Linux host with no `/mnt/c`, select the explicit `linux` scope profile. It
+validates and manages only that Linux user's Codex and Claude snapshots under `~/.agents` and
+`~/.claude`:
+
+```bash
+# Check, review the digest, apply once, then verify the two Linux snapshots.
+python3 scripts/sync-apple-design.py --scope-profile linux --mode Check
+python3 scripts/sync-apple-design.py --scope-profile linux --mode Apply \
+  --expected-source-sha256 <64-hex-source-sha256>
+python3 scripts/sync-apple-design.py --scope-profile linux --mode Check
+
+# Preview, then install, a Linux-only daily check timer.
+scripts/install-apple-design-update-timer.sh --linux-only
+scripts/install-apple-design-update-timer.sh --linux-only --execute
+```
+
+Omitting `--scope-profile` and `--linux-only` preserves the four-scope WSL behavior.
+
 Apply stages all changed scopes before swapping any of them and restores the previous snapshots
-if a swap or verification fails. It also fails before destination writes when `/mnt/c` is not the
-expected WSL Windows mount or the Windows profile/consumer directories are unavailable.
+if a swap or verification fails. The default WSL profile also fails before destination writes
+when `/mnt/c` is not the expected WSL Windows mount or the Windows profile/consumer directories
+are unavailable. The Linux profile does not inspect or require `/mnt/c`.
 
 The timer never runs Apply. Its output goes to the user journal:
 

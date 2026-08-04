@@ -13,6 +13,20 @@ snapshots current without linking a live checkout into either desktop:
 
 The existing PowerShell updater remains the Windows fallback.
 
+### 2026-08-04 bare-metal Linux profile amendment
+
+The four-scope behavior above remains the default `wsl` profile. An explicit
+`linux` profile supports the GA401 bare-metal host and manages only these two
+snapshots for the current Linux user:
+
+- `~/.agents/skills/apple-design` (Linux Codex)
+- `~/.claude/skills/apple-design` (Linux Claude)
+
+The `linux` profile does not inspect or require `/mnt/c`; it preserves the same
+digest-bound Check/Apply transaction, fail-closed path validation, and
+check-only timer rules. The timer installer selects it only when the operator
+passes `--linux-only`; omitting the flag preserves the four-scope WSL contract.
+
 ## Context map
 
 - The published fork `main` archive is authoritative. A local branch or working tree is
@@ -34,15 +48,16 @@ The existing PowerShell updater remains the Windows fallback.
 
 ## Guardrails
 
-1. Check downloads and validates published `main`, compares all four scopes, creates no
+1. Check downloads and validates published `main`, compares all four scopes in the default
+   `wsl` profile or the two Linux scopes in the explicit `linux` profile, creates no
    destination roots, and exits `0` when current or `3` when missing/drifted.
 2. Apply requires the exact 64-hex `source_sha256` emitted by a prior Check. A missing or
    mismatched digest performs zero destination writes.
 3. Source and destination trees must contain only regular directories/files, must contain a
    regular `SKILL.md` declaring `name: apple-design`, and must contain no symlinks or special
    files.
-4. Apply stages and verifies every changed scope before swapping any scope. It verifies all
-   four post-swap manifests before declaring the transaction committed.
+4. Apply stages and verifies every changed scope before swapping any scope. It verifies every
+   selected profile manifest before declaring the transaction committed.
 5. The Linux runner uses the published codeload archive by default. Local source and custom
    scope arguments are hidden test hooks, not supported operator inputs.
 6. The timer installer is preview-first. Its generated service always invokes Check,

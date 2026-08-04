@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Digest-bound Apple Design skill sync for WSL and Windows consumers."""
+"""Digest-bound Apple Design skill sync for Linux and Windows consumers."""
 
 from __future__ import annotations
 
@@ -27,6 +27,8 @@ SKILL_NAME = "apple-design"
 WINDOWS_MOUNT = Path("/mnt/c")
 WINDOWS_PROFILE = Path("/mnt/c/Users/Marck")
 EXPECTED_WINDOWS_FSTYPES = {"9p", "drvfs"}
+SCOPE_PROFILE_WSL = "wsl"
+SCOPE_PROFILE_LINUX = "linux"
 
 
 class SyncError(RuntimeError):
@@ -254,12 +256,44 @@ def _validate_windows_environment(mountpoint: Path, profile: Path) -> None:
         _assert_plain_directory(consumer, "Windows consumer root")
 
 
+def _validate_linux_environment(home: Path, environment: str) -> None:
+    _assert_plain_directory(home, f"{environment} home")
+    try:
+        resolved_home = home.resolve(strict=True)
+    except OSError as error:
+        raise SyncError(f"Cannot resolve {environment} home: {home}") from error
+    for name, consumer in (
+        ("Codex", home / ".agents"),
+        ("Claude", home / ".claude"),
+    ):
+        _assert_plain_directory(consumer, f"{environment} {name} home")
+        try:
+            resolved_consumer = consumer.resolve(strict=True)
+            if os.path.commonpath([str(resolved_home), str(resolved_consumer)]) != str(
+                resolved_home
+            ):
+                raise SyncError(
+                    f"{environment} {name} home resolves outside {home}: {consumer}"
+                )
+        except OSError as error:
+            raise SyncError(
+                f"Cannot resolve {environment} {name} home: {consumer}"
+            ) from error
+
+
 def _default_scopes(home: Path, windows_profile: Path) -> list[Scope]:
     return [
         Scope("WslCodex", home / ".agents" / "skills"),
         Scope("WslClaude", home / ".claude" / "skills"),
         Scope("WindowsCodex", windows_profile / ".codex" / "skills"),
         Scope("WindowsClaude", windows_profile / ".claude" / "skills"),
+    ]
+
+
+def _linux_scopes(home: Path) -> list[Scope]:
+    return [
+        Scope("LinuxCodex", home / ".agents" / "skills"),
+        Scope("LinuxClaude", home / ".claude" / "skills"),
     ]
 
 
@@ -438,11 +472,31 @@ def _mode(value: str) -> str:
     raise argparse.ArgumentTypeError("mode must be Check or Apply")
 
 
+def _scope_profile(value: str) -> str:
+    normalized = value.lower()
+    if normalized in {SCOPE_PROFILE_WSL, SCOPE_PROFILE_LINUX}:
+        return normalized
+    raise argparse.ArgumentTypeError("scope profile must be wsl or linux")
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Check or apply the published Apple Design skill to four snapshots."
+        description=(
+            "Check or apply the published Apple Design skill to the selected "
+            "consumer snapshots."
+        )
     )
     parser.add_argument("--mode", type=_mode, default="Check")
+    parser.add_argument(
+        "--scope-profile",
+        type=_scope_profile,
+        default=SCOPE_PROFILE_WSL,
+        metavar="{wsl,linux}",
+        help=(
+            "consumer layout: wsl (default) checks Linux and Windows snapshots; "
+            "linux checks only this Linux user's Codex and Claude snapshots"
+        ),
+    )
     parser.add_argument("--expected-source-sha256")
     parser.add_argument("--test-source-path", type=Path, help=argparse.SUPPRESS)
     parser.add_argument(
@@ -472,12 +526,15 @@ def _run(args: argparse.Namespace) -> int:
         scopes = _parse_test_scopes(args.test_scope)
     else:
         home = Path.home()
-        _validate_windows_environment(
-            args.test_windows_mount, args.test_windows_profile
-        )
-        _assert_plain_directory(home / ".agents", "WSL Codex home")
-        _assert_plain_directory(home / ".claude", "WSL Claude home")
-        scopes = _default_scopes(home, args.test_windows_profile)
+        if args.scope_profile == SCOPE_PROFILE_WSL:
+            _validate_windows_environment(
+                args.test_windows_mount, args.test_windows_profile
+            )
+            _validate_linux_environment(home, "WSL")
+            scopes = _default_scopes(home, args.test_windows_profile)
+        else:
+            _validate_linux_environment(home, "Linux")
+            scopes = _linux_scopes(home)
 
     lock_path = args.test_lock_file or _default_lock_file()
     with _updater_lock(lock_path) as acquired:
