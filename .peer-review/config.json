@@ -1,12 +1,13 @@
 {
-  "schema_version": 5,
-  "mode": "report",
+  "schema_version": 6,
+  "mode": "auto",
   "plan_roots": ["docs/plans", "docs/specs"],
   "review_slow_seconds": 300,
   "review_hard_timeout_seconds": 900,
   "review_heartbeat_seconds": 30,
   "diff_review": {
-    "routine_max_rounds": 5,
+    "medium_max_rounds": 1,
+    "high_max_rounds": 2,
     "max_diff_growth_percent": 25
   },
   "reviewers": {
