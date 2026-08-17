@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/hook-launch.js\" no-polling-wait.py",
+            "commandWindows": "powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -Command \"$root = (& git rev-parse --show-toplevel).Trim(); & node (Join-Path $root '.codex/hooks/hook-launch.js') 'no-polling-wait.py'; exit $LASTEXITCODE\"",
+            "statusMessage": "Checking bounded wait policy",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(Bash|wait_agent)$"
+      }
+    ]
+  }
+}

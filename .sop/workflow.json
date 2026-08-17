@@ -1,0 +1,13 @@
+{
+  "ci": [],
+  "delivery": {
+    "mode": "manual",
+    "rollback_boundary": "manual_exact_commit"
+  },
+  "full": [],
+  "notify": [],
+  "quick": [],
+  "readiness": [],
+  "rollback": [],
+  "verify": []
+}
