@@ -3,6 +3,18 @@
     "sop_bounded_wait": {
       "event": "PreToolUse",
       "sha256": "938fdc77db4a497fb3fac5be845a2d942afab78f26feb975964c85fd1285e779"
+    },
+    "sop_review_observe_after": {
+      "event": "PostToolUse",
+      "sha256": "d5189e10e9b26eba3e1c49d9ec5ce7f1cb6be4a2ed7680a947e344d9b041e2a0"
+    },
+    "sop_review_observe_before": {
+      "event": "PreToolUse",
+      "sha256": "d5189e10e9b26eba3e1c49d9ec5ce7f1cb6be4a2ed7680a947e344d9b041e2a0"
+    },
+    "sop_review_stop": {
+      "event": "Stop",
+      "sha256": "0116fd6039c9490a98b0d11fe7a0c7c0aaf401d9730b125c3ebe366b99023df6"
     }
   },
   "generated_by": "agent-sop-kit v2",

@@ -1,5 +1,18 @@
 {
   "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/hook-launch.js\" peer-review-bridge.py",
+            "commandWindows": "powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -Command \"$root = (& git rev-parse --show-toplevel).Trim(); & node (Join-Path $root '.codex/hooks/hook-launch.js') 'peer-review-bridge.py'; exit $LASTEXITCODE\"",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(apply_patch|Edit|Write)$"
+      }
+    ],
     "PreToolUse": [
       {
         "hooks": [
@@ -12,6 +25,29 @@
           }
         ],
         "matcher": "^(Bash|wait_agent)$"
+      },
+      {
+        "hooks": [
+          {
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/hook-launch.js\" peer-review-bridge.py",
+            "commandWindows": "powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -Command \"$root = (& git rev-parse --show-toplevel).Trim(); & node (Join-Path $root '.codex/hooks/hook-launch.js') 'peer-review-bridge.py'; exit $LASTEXITCODE\"",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(apply_patch|Edit|Write)$"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/hook-launch.js\" peer-review-bridge.py",
+            "commandWindows": "powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -Command \"$root = (& git rev-parse --show-toplevel).Trim(); & node (Join-Path $root '.codex/hooks/hook-launch.js') 'peer-review-bridge.py'; exit $LASTEXITCODE\"",
+            "timeout": 5,
+            "type": "command"
+          }
+        ]
       }
     ]
   }
