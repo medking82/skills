@@ -1,0 +1,21 @@
+{
+  "codex_hook_fragments": {
+    "sop_bounded_wait": {
+      "event": "PreToolUse",
+      "sha256": "938fdc77db4a497fb3fac5be845a2d942afab78f26feb975964c85fd1285e779"
+    }
+  },
+  "generated_by": "agent-sop-kit v3",
+  "owned_files": {
+    ".codex/hooks/hook-launch.js": {
+      "sha256": "53095a2f45e6880cbb64f86ae7462b88664b76a2624cbf9b0cd977f26277126e"
+    },
+    ".sop/sop.py": {
+      "sha256": "d9188a85580b9f924ba2d368597d73edc40125544a9fc49d10f20a70136dd494"
+    },
+    ".sop/workflow.json": {
+      "sha256": "54aa811ff6abec5a2c0f98e01ccce09d31e62f10daaec2fe7884e37d44d94496"
+    }
+  },
+  "sop_kit_manifest_version": 3
+}

@@ -17,7 +17,7 @@ function gitSiblingRoots(project) {
     ).trim();
     if (!common || path.basename(common) !== ".git") return [];
     const parent = path.dirname(path.dirname(common));
-    return ["agent-sop-kit", "claude-sop-kit"].map((name) => path.join(parent, name));
+    return [path.join(parent, "agent-sop-kit")];
   } catch {
     return [];
   }
@@ -27,16 +27,12 @@ function roots() {
   const project = path.resolve(__dirname, "..", "..");
   const values = [];
   if (process.env.AGENT_SOP_KIT_ROOT) values.push(process.env.AGENT_SOP_KIT_ROOT);
-  if (process.env.CLAUDE_SOP_KIT_ROOT) values.push(process.env.CLAUDE_SOP_KIT_ROOT);
   values.push(...gitSiblingRoots(project));
   values.push(path.join(path.dirname(project), "agent-sop-kit"));
-  values.push(path.join(path.dirname(project), "claude-sop-kit"));
   if ([".worktrees", "worktrees"].includes(path.basename(path.dirname(project)))) {
     values.push(path.join(path.dirname(path.dirname(project)), "agent-sop-kit"));
-    values.push(path.join(path.dirname(path.dirname(project)), "claude-sop-kit"));
   }
   values.push(path.join(os.homedir(), ".local", "share", "agent-sop-kit"));
-  values.push(path.join(os.homedir(), ".local", "share", "claude-sop-kit"));
   return [...new Set(values.map((value) => path.resolve(value)))];
 }
 

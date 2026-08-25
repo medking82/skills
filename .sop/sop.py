@@ -31,24 +31,20 @@ def git_sibling_candidates(project: Path) -> list[Path]:
     common = Path(result.stdout.strip()).resolve()
     if common.name != ".git":
         return []
-    return [common.parent.parent / name for name in ("agent-sop-kit", "claude-sop-kit")]
+    return [common.parent.parent / "agent-sop-kit"]
 
 
 def candidates() -> list[Path]:
     project = Path(__file__).resolve().parents[1]
     values: list[Path] = []
-    for name in ("AGENT_SOP_KIT_ROOT", "CLAUDE_SOP_KIT_ROOT"):
-        explicit = os.environ.get(name)
-        if explicit:
-            values.append(Path(explicit).expanduser())
+    explicit = os.environ.get("AGENT_SOP_KIT_ROOT")
+    if explicit:
+        values.append(Path(explicit).expanduser())
     values.extend(git_sibling_candidates(project))
     values.append(project.parent / "agent-sop-kit")
-    values.append(project.parent / "claude-sop-kit")
     if project.parent.name in {".worktrees", "worktrees"}:
         values.append(project.parent.parent / "agent-sop-kit")
-        values.append(project.parent.parent / "claude-sop-kit")
     values.append(Path.home() / ".local" / "share" / "agent-sop-kit")
-    values.append(Path.home() / ".local" / "share" / "claude-sop-kit")
     unique = dict.fromkeys(value.resolve() / "runtime" / "sop.py" for value in values)
     return list(unique)
 
@@ -60,6 +56,6 @@ for runtime in candidates():
 
 sys.stderr.write(
     "ERROR: agent-sop-kit runtime not found. Clone it beside this repository or set "
-    "AGENT_SOP_KIT_ROOT (legacy CLAUDE_SOP_KIT_ROOT remains supported).\n"
+    "AGENT_SOP_KIT_ROOT.\n"
 )
 raise SystemExit(2)
