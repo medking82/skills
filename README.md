@@ -26,8 +26,14 @@ You can stay up to date with my skills here:
 npx skills@latest add emilkowalski/skills
 ```
 
-Installed Codex copies are synchronized by the workstation's canonical `agent-sop-kit`; this
-source repository no longer carries a second updater or scheduled-task control plane.
+This checkout is the source of truth for local Codex compatibility. Installed user-scope copies
+are updated explicitly from this checkout; `agent-sop-kit` does not synchronize this repository.
+
+Validate the skill metadata before installing an update:
+
+```bash
+python tests/test_skill_metadata.py
+```
 
 ## Why use it?
 
