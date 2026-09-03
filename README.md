@@ -35,6 +35,9 @@ Validate the skill metadata before installing an update:
 python tests/test_skill_metadata.py
 ```
 
+This fork automatically checks `emilkowalski/skills:main` every six hours. See
+[upstream sync and fork customizations](./docs/upstream-sync.md) for its behavior and recovery steps.
+
 ## Why use it?
 
 Agents don’t have great taste
@@ -51,11 +54,13 @@ This is your shortcut to great interfaces. A shortcut to stand out in a sea of s
 
 - **[emil-design-eng](./skills/emil-design-eng/SKILL.md)** — The main skill that consists of mostly animation, but also some design advice.
 - **[animate](./skills/animate/SKILL.md)** — Builds an animation from scratch while choosing the correct curve, duration, properties, and so on.
+- **[animate-expo](./skills/animate-expo/SKILL.md)** — The same bar, for React Native and Expo: gestures, sheets, haptics, screen transitions, and keeping motion off the JS thread.
 - **[review-animations](./skills/review-animations/SKILL.md)** — Review your animations in a strict way, based on my rules.
 - **[improve-animations](./skills/improve-animations/SKILL.md)** — Audit all the animations in your codebase and get prioritized, self-contained plans that any agent can execute.
 - **[find-animation-opportunities](./skills/find-animation-opportunities/SKILL.md)** — Search your UI for places that would genuinely benefit from motion, while also telling you what not to animate.
 - **[animation-vocabulary](./skills/animation-vocabulary/SKILL.md)** — Get better animations from an AI by telling it exactly what you want by using the right words.
-- **[apple-design](./skills/apple-design/SKILL.md)** — Apple’s interface and fluid-motion principles for the web, including an iPhone Home Screen web-app profile.
+- **[apple-design](./skills/apple-design/SKILL.md)** — Apple’s principles for interface design and fluid motion, distilled from their WWDC design talks and translated for the web.
+- **[write-swift](./skills/write-swift/SKILL.md)** — Write modern Swift. Includes: value types, Swift 6 concurrency, generics, performance, and Swift Testing.
 - **[pick-ui-library](./skills/pick-ui-library/SKILL.md)** — Have your agent pick the right library for the task based on libraries I use and trust, instead of letting AI hand-roll a toast component or install an abandoned package.
 - **[prototype](./skills/prototype/SKILL.md)** — Build multiple different versions of a UI piece you describe and go through them using a switcher.
 - **[ask-sonner](./skills/ask-sonner/SKILL.md)** — Your guide to working with [Sonner](https://sonner.emilkowal.ski), my toast library. Contains setup, styling, recipes, and fixes for the most common issues.
