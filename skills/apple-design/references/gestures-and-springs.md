@@ -12,6 +12,11 @@ gesture. Update the presented position continuously. Keep a short timestamped hi
 velocity is available. On interruption, cancel the old animation and read the live presented value;
 starting from a stale target produces a jump. Carry release velocity into new motion when supported.
 
+Pressed feedback starts on pointer-down; activation normally commits on release and can be
+cancelled by moving away. Keep gesture recognition thresholds distinct from visual feedback:
+the user should see a response while drag intent is still being resolved. Handle pointer cancellation
+and lost capture so an interrupted drag cannot leave a stuck pressed state.
+
 CSS transitions and keyframes are valid for simple state changes. For a gesture-driven value they
 need explicit interruption handling and a current-value handoff; a spring library often supplies
 that behavior. Do not ban CSS categorically, and do not lock input during a transition.
@@ -27,6 +32,11 @@ Treat a conversion as an approximation and record the library/version with the c
 - Reserve bounce for a gesture that supplied momentum or a deliberate playful affordance.
 - Tune X and Y independently when their velocity or bounds differ.
 - Project a flick only when the component has a clear snap model; clamp the result at safe bounds.
+
+For snapping, select a target from the projected stopping position when momentum is part of the
+interaction, then hand off velocity using the library's documented units. Do not import a UIKit
+deceleration constant as a universal desktop value. Anchor popovers to their trigger and preserve
+spatial continuity on dismissal; changing direction midway must not restart from the old endpoint.
 
 ```js
 // Exact options depend on the selected library; velocity uses that library's units.

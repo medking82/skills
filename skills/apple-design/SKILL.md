@@ -10,6 +10,16 @@ Guidelines (HIG) as design heuristics; confirm each web capability against the p
 depending on it. The aim is a responsive interface that is clear, forgiving, and physically
 coherent, not an imitation of a native API.
 
+For a native or cross-platform desktop consumer, transfer the interaction principles but verify
+the actual framework and OS capabilities. CSS examples do not establish WPF, Avalonia, AppKit,
+or SwiftUI support. Read the materials reference for native effects and fallback boundaries.
+
+This is a maintained adaptation of [Emil's apple-design](https://github.com/emilkowalski/skills/tree/main/skills/apple-design),
+not an Apple SDK or an automatic feed of HIG changes. Upstream was compared at
+`85e8e2363b713506e1d5b6e07a0eb2da66be1bc3` on 2026-09-16. Keep the focused references and
+platform checks when incorporating later changes; verify current official documentation before
+claiming support for a new API. Repository sync and updating installed copies are separate actions.
+
 ## Route first
 
 - For drag, swipe, sheet, carousel, or interruptible motion, read
