@@ -11,7 +11,7 @@
             "type": "command"
           }
         ],
-        "matcher": "^(Bash|wait_agent)$"
+        "matcher": "^Bash$"
       }
     ]
   }

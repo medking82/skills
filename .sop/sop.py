@@ -34,12 +34,19 @@ def git_sibling_candidates(project: Path) -> list[Path]:
     return [common.parent.parent / "agent-sop-kit"]
 
 
+def valid_root(root: Path) -> bool:
+    return (root / "runtime" / "sop.py").is_file() and (root / "sop-init.py").is_file()
+
+
 def candidates() -> list[Path]:
     project = Path(__file__).resolve().parents[1]
     values: list[Path] = []
     explicit = os.environ.get("AGENT_SOP_KIT_ROOT")
     if explicit:
-        values.append(Path(explicit).expanduser())
+        explicit_root = Path(explicit).expanduser().resolve()
+        if valid_root(explicit_root):
+            return [explicit_root / "runtime" / "sop.py"]
+        values.append(explicit_root)
     values.extend(git_sibling_candidates(project))
     values.append(project.parent / "agent-sop-kit")
     if project.parent.name in {".worktrees", "worktrees"}:

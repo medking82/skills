@@ -23,10 +23,17 @@ function gitSiblingRoots(project) {
   }
 }
 
+function validRoot(root) {
+  return fs.existsSync(path.join(root, "runtime", "hooks", "hook-launch.js"))
+    && fs.existsSync(path.join(root, "sop-init.py"));
+}
+
 function roots() {
   const project = path.resolve(__dirname, "..", "..");
+  const explicit = process.env.AGENT_SOP_KIT_ROOT;
+  if (explicit && validRoot(path.resolve(explicit))) return [path.resolve(explicit)];
   const values = [];
-  if (process.env.AGENT_SOP_KIT_ROOT) values.push(process.env.AGENT_SOP_KIT_ROOT);
+  if (explicit) values.push(explicit);
   values.push(...gitSiblingRoots(project));
   values.push(path.join(path.dirname(project), "agent-sop-kit"));
   if ([".worktrees", "worktrees"].includes(path.basename(path.dirname(project)))) {
