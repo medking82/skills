@@ -1,9 +1,12 @@
 # Combined Design skill
 
-`skills/design` is the self-contained `$design` entrypoint for this collection's 13 modes.
+`skills/design` is the self-contained `$design` entrypoint for this collection's 14 modes.
 Its short `SKILL.md` selects a mode; mode guides and their original supporting resources
 are loaded only for the current request. No separately installed specialist Skills are needed.
-Prototype exploration, library selection and motion review remain explicitly requested modes.
+Prototype exploration, library selection, motion review and worst-case UI data testing
+(`break-ui`) remain explicitly requested modes. Mentioning `$design` alone does not invoke
+them. `break-ui` uses dev-only fixtures/toggles and reports before fixing unless fixes are
+requested; its standalone entrypoint also disables implicit invocation.
 
 The original `skills/<mode>` folders remain the maintained sources for upstream merges and
 individual installations. Do not edit the generated `skills/design/references` copies.

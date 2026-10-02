@@ -3,8 +3,10 @@ from __future__ import annotations
 import re
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -22,6 +24,7 @@ CLAUDE_ONLY_KEYS = {
     "disable_model_invocation",
 }
 EXPLICIT_ONLY_SKILLS = {
+    "break-ui",
     "pick-ui-library",
     "prototype",
     "review-animations",
@@ -114,6 +117,35 @@ class SkillMetadataTests(unittest.TestCase):
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_break_ui_requires_explicit_invocation_policy(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="break-ui-policy-") as temporary:
+            skills = Path(temporary)
+            mode = skills / "break-ui"
+            mode.mkdir()
+            (mode / "SKILL.md").write_text(
+                "---\nname: break-ui\ndescription: Test UI edge cases.\n---\n",
+                encoding="utf-8",
+            )
+            metadata = mode / "agents/openai.yaml"
+            for policy in (None, True, False):
+                with self.subTest(allow_implicit_invocation=policy):
+                    if policy is not None:
+                        metadata.parent.mkdir(exist_ok=True)
+                        metadata.write_text(
+                            f"policy:\n  allow_implicit_invocation: {str(policy).lower()}\n",
+                            encoding="utf-8",
+                        )
+                    result = unittest.TestResult()
+                    case = SkillMetadataTests("test_skill_metadata_is_codex_compatible")
+                    with patch(__name__ + ".SKILLS_ROOT", skills):
+                        case.run(result)
+                    self.assertEqual(result.errors, [])
+                    if policy is False:
+                        self.assertTrue(result.wasSuccessful(), result.failures)
+                    else:
+                        self.assertEqual(len(result.failures), 1)
+                        self.assertIn("explicit-only skill", result.failures[0][1])
 
     def test_skill_metadata_is_codex_compatible(self) -> None:
         skill_files = sorted(SKILLS_ROOT.glob("*/SKILL.md"))

@@ -27,6 +27,11 @@
       "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
       "guide": "ask-sonner/guide.md"
     },
+    "break-ui": {
+      "entrypoint": "skills/break-ui/SKILL.md",
+      "source_sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+      "guide": "break-ui/guide.md"
+    },
     "emil-design-eng": {
       "entrypoint": "skills/emil-design-eng/SKILL.md",
       "source_sha256": "bffa3135d676ff7e4618ab8873dc246e6bb497f0d00f337b83c5b14cd9da1ea0",
@@ -133,6 +138,16 @@
       "source": "skills/ask-sonner/API.md",
       "source_sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491",
       "sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491"
+    },
+    "break-ui/guide.md": {
+      "source": "skills/break-ui/SKILL.md",
+      "source_sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+      "sha256": "79d846a84d02d019435fefbc4869a3431f1ba13f3482b155e6f7d0f7bcae3d0e"
+    },
+    "break-ui/CATALOG.md": {
+      "source": "skills/break-ui/CATALOG.md",
+      "source_sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15",
+      "sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15"
     },
     "emil-design-eng/guide.md": {
       "source": "skills/emil-design-eng/SKILL.md",

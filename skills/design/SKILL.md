@@ -1,6 +1,6 @@
 ---
 name: design
-description: Design and polish web or native app interfaces, including motion, component feedback, mobile web, Apple interactions, Expo and Swift. Use for UI implementation or requested design audits, prototypes and UI library selection; not graphics, documents or backend work.
+description: Design and polish web or native app interfaces, including motion, component feedback, mobile web, Apple interactions, Expo and Swift. Use for UI implementation or requested design audits, UI data stress tests, prototypes and UI library selection; not graphics, documents or backend work.
 ---
 
 # Design
@@ -24,6 +24,7 @@ for a component change.
 | Swift implementation, concurrency or performance in a native-app task | [write-swift](references/write-swift/guide.md) |
 | Find useful motion opportunities in existing UI | [find-animation-opportunities](references/find-animation-opportunities/guide.md) |
 | Audit a codebase's existing motion and propose improvements | [improve-animations](references/improve-animations/guide.md) |
+| Explicitly stress-test UI with worst-case data or find data edge cases | [break-ui](references/break-ui/guide.md) |
 | Explicitly critique motion or review an animation diff | [review-animations](references/review-animations/guide.md) |
 | Explicitly choose or compare UI libraries | [pick-ui-library](references/pick-ui-library/guide.md) |
 | Explicitly explore different UI variants behind a visual picker | [prototype](references/prototype/guide.md) |
@@ -34,11 +35,16 @@ an audit ends with findings or a plan. Implement when implementation is part of 
 
 ## Invocation and scope
 
-The three explicit modes remain opt-in: `prototype`, `pick-ui-library`, and
-`review-animations`. Mentioning `$design` alone does not select them. Select them when the
-user asks for variants/prototyping, dependency recommendations/comparison, or a motion
-critique/review respectively. Ordinary UI building or polish does not require a picker,
-library-selection pass, codebase audit, or review.
+The four explicit modes remain opt-in: `prototype`, `pick-ui-library`,
+`review-animations`, and `break-ui`. Mentioning `$design` alone does not select them. Select
+them when the user asks for variants/prototyping, dependency recommendations/comparison,
+a motion critique/review, or UI stress-testing with worst-case data or data edge cases
+respectively. Ordinary UI building or polish does not require a picker, library-selection
+pass, codebase audit, motion review, or adversarial data test.
+
+`break-ui` changes fixtures at the existing data boundary and uses a dev-only data toggle.
+It reports failures and proposed fixes, then stops; apply fixes only when the user asks.
+A request to stress-test alone does not authorize redesign or production controls.
 
 Names of other design Skills inside the guides refer to the modes in the table above.
 Follow the local guide link when a mode change is warranted; no separate Skill installation
