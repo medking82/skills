@@ -30,6 +30,10 @@ npx skills@latest add emilkowalski/skills
 This checkout is the source of truth for local Codex compatibility. Installed user-scope copies
 are updated explicitly from this checkout; `agent-sop-kit` does not synchronize this repository.
 
+For one self-contained Codex entrypoint covering this collection, use
+[`design`](./skills/design/SKILL.md). See the [combined package maintenance and installation
+guide](./docs/design-bundle.md). The individual source Skills remain available.
+
 Validate the skill metadata before installing an update:
 
 ```bash

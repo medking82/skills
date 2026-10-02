@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "generator": "scripts/build-design-skill.py",
+  "modes": {
+    "animate": {
+      "entrypoint": "skills/animate/SKILL.md",
+      "source_sha256": "be1096e27365b3983fdb42bc4f04aeb75049fce21d8c66de23b22ded79295493",
+      "guide": "animate/guide.md"
+    },
+    "animate-expo": {
+      "entrypoint": "skills/animate-expo/SKILL.md",
+      "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
+      "guide": "animate-expo/guide.md"
+    },
+    "animation-vocabulary": {
+      "entrypoint": "skills/animation-vocabulary/SKILL.md",
+      "source_sha256": "d53852f2fb7310c03c2dfbb47901ea4a68ffe07628d0bd5ebe17d17b5ce7d8e0",
+      "guide": "animation-vocabulary/guide.md"
+    },
+    "apple-design": {
+      "entrypoint": "skills/apple-design/SKILL.md",
+      "source_sha256": "69081e0c7a80ff55e52d72624925ede6eeb976e94683e058542adccf7ab11838",
+      "guide": "apple-design/guide.md"
+    },
+    "ask-sonner": {
+      "entrypoint": "skills/ask-sonner/SKILL.md",
+      "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
+      "guide": "ask-sonner/guide.md"
+    },
+    "emil-design-eng": {
+      "entrypoint": "skills/emil-design-eng/SKILL.md",
+      "source_sha256": "bffa3135d676ff7e4618ab8873dc246e6bb497f0d00f337b83c5b14cd9da1ea0",
+      "guide": "emil-design-eng/guide.md"
+    },
+    "find-animation-opportunities": {
+      "entrypoint": "skills/find-animation-opportunities/SKILL.md",
+      "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
+      "guide": "find-animation-opportunities/guide.md"
+    },
+    "improve-animations": {
+      "entrypoint": "skills/improve-animations/SKILL.md",
+      "source_sha256": "39f8338e6fb19814e6b94d2ad40ae4a5d6046e081b5d074678dd8db54d96d810",
+      "guide": "improve-animations/guide.md"
+    },
+    "mobile-native": {
+      "entrypoint": "skills/mobile-native/SKILL.md",
+      "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
+      "guide": "mobile-native/guide.md"
+    },
+    "pick-ui-library": {
+      "entrypoint": "skills/pick-ui-library/SKILL.md",
+      "source_sha256": "54ee1b6b2a4e5fe6fc6fb7851329c15b26a870d75c6ff988cb7745d3bece2d19",
+      "guide": "pick-ui-library/guide.md"
+    },
+    "prototype": {
+      "entrypoint": "skills/prototype/SKILL.md",
+      "source_sha256": "f9f1dcccbd5769e15f6eafe0e832ee57f5e07765f4afb626166d7545a805a180",
+      "guide": "prototype/guide.md"
+    },
+    "review-animations": {
+      "entrypoint": "skills/review-animations/SKILL.md",
+      "source_sha256": "18265c933507ddc66d7719dc63619b7f64576271f9575705b97f2fda2bc28946",
+      "guide": "review-animations/guide.md"
+    },
+    "write-swift": {
+      "entrypoint": "skills/write-swift/SKILL.md",
+      "source_sha256": "287e500d2d6d6bd5e9577bc77fc95807dfd8b43c320f275c45a87a1b8beb2ef6",
+      "guide": "write-swift/guide.md"
+    }
+  },
+  "files": {
+    "animate/guide.md": {
+      "source": "skills/animate/SKILL.md",
+      "source_sha256": "be1096e27365b3983fdb42bc4f04aeb75049fce21d8c66de23b22ded79295493",
+      "sha256": "0cd083d153f5051e1421bb126fde07fd633609949657c7c94499970822b04d37"
+    },
+    "animate/RECIPES.md": {
+      "source": "skills/animate/RECIPES.md",
+      "source_sha256": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2",
+      "sha256": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2"
+    },
+    "animate-expo/guide.md": {
+      "source": "skills/animate-expo/SKILL.md",
+      "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
+      "sha256": "762354244e786021d3be814a632cb99ed20894ea21c1131012ce14428aa4b227"
+    },
+    "animate-expo/RECIPES.md": {
+      "source": "skills/animate-expo/RECIPES.md",
+      "source_sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718",
+      "sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718"
+    },
+    "animation-vocabulary/guide.md": {
+      "source": "skills/animation-vocabulary/SKILL.md",
+      "source_sha256": "d53852f2fb7310c03c2dfbb47901ea4a68ffe07628d0bd5ebe17d17b5ce7d8e0",
+      "sha256": "e62a37d44357d165ce75b9a21f94292ced3916f18c1d959c209f3d2d82816cca"
+    },
+    "animation-vocabulary/references/glossary.md": {
+      "source": "skills/animation-vocabulary/references/glossary.md",
+      "source_sha256": "fb4e28a05955fb667493b1515b3ebb7c4322743ea5b7f52de0736df9a1b4f96c",
+      "sha256": "fb4e28a05955fb667493b1515b3ebb7c4322743ea5b7f52de0736df9a1b4f96c"
+    },
+    "apple-design/guide.md": {
+      "source": "skills/apple-design/SKILL.md",
+      "source_sha256": "69081e0c7a80ff55e52d72624925ede6eeb976e94683e058542adccf7ab11838",
+      "sha256": "8647acf7c0e1bd3024a1637363a5a124a7991c653c17dd6160a73853a7d28398"
+    },
+    "apple-design/references/gestures-and-springs.md": {
+      "source": "skills/apple-design/references/gestures-and-springs.md",
+      "source_sha256": "95026c1d83320bcbbd5b9a15126c8b5d4fff571dc97d6d0ae5c64cc2d625b8f1",
+      "sha256": "95026c1d83320bcbbd5b9a15126c8b5d4fff571dc97d6d0ae5c64cc2d625b8f1"
+    },
+    "apple-design/references/ios-home-screen-web-app.md": {
+      "source": "skills/apple-design/references/ios-home-screen-web-app.md",
+      "source_sha256": "b352aa6e10fa25c1585553af1a27a825576d5e2ecb8f57969b46ad054e1a7deb",
+      "sha256": "b352aa6e10fa25c1585553af1a27a825576d5e2ecb8f57969b46ad054e1a7deb"
+    },
+    "apple-design/references/materials-and-accessibility.md": {
+      "source": "skills/apple-design/references/materials-and-accessibility.md",
+      "source_sha256": "27eda8980c4ce70bf7281fabfeccea31b26712fd4ba6c076b20384ae4a53ad60",
+      "sha256": "27eda8980c4ce70bf7281fabfeccea31b26712fd4ba6c076b20384ae4a53ad60"
+    },
+    "apple-design/references/typography.md": {
+      "source": "skills/apple-design/references/typography.md",
+      "source_sha256": "ac09be4511ed2d858a19b04c4acc264a09ed076f1984a10e2097899908dc4bf3",
+      "sha256": "ac09be4511ed2d858a19b04c4acc264a09ed076f1984a10e2097899908dc4bf3"
+    },
+    "ask-sonner/guide.md": {
+      "source": "skills/ask-sonner/SKILL.md",
+      "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
+      "sha256": "007d5a89822741dd00eaeba07c717b57d5ca0672ec82c2aa7ab9a3a1361e1a1e"
+    },
+    "ask-sonner/API.md": {
+      "source": "skills/ask-sonner/API.md",
+      "source_sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491",
+      "sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491"
+    },
+    "emil-design-eng/guide.md": {
+      "source": "skills/emil-design-eng/SKILL.md",
+      "source_sha256": "bffa3135d676ff7e4618ab8873dc246e6bb497f0d00f337b83c5b14cd9da1ea0",
+      "sha256": "52f8f0290ae7c6d13f994363dddbe802a19554a834efd073cd1e8a4737388422"
+    },
+    "emil-design-eng/references/craft-guide.md": {
+      "source": "skills/emil-design-eng/references/craft-guide.md",
+      "source_sha256": "e9f16b035280a6e4f93645beb7b48549748f17d3e33068555656541859863edd",
+      "sha256": "e9f16b035280a6e4f93645beb7b48549748f17d3e33068555656541859863edd"
+    },
+    "find-animation-opportunities/guide.md": {
+      "source": "skills/find-animation-opportunities/SKILL.md",
+      "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
+      "sha256": "e444ab42ae9b707fbe1119dc99ed5f43422f0fdf4d54495a7577741cabcc4fe7"
+    },
+    "improve-animations/guide.md": {
+      "source": "skills/improve-animations/SKILL.md",
+      "source_sha256": "39f8338e6fb19814e6b94d2ad40ae4a5d6046e081b5d074678dd8db54d96d810",
+      "sha256": "426210360c31b58fe3e22ee5948ed320593ddf447707a099cfafdf13176d1ad4"
+    },
+    "improve-animations/AUDIT.md": {
+      "source": "skills/improve-animations/AUDIT.md",
+      "source_sha256": "5b0b06e92a55732f4aa6417c96fd5020fe1b810df3a2b5c70727be08cffcd358",
+      "sha256": "5b0b06e92a55732f4aa6417c96fd5020fe1b810df3a2b5c70727be08cffcd358"
+    },
+    "improve-animations/PLAN-TEMPLATE.md": {
+      "source": "skills/improve-animations/PLAN-TEMPLATE.md",
+      "source_sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad",
+      "sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad"
+    },
+    "mobile-native/guide.md": {
+      "source": "skills/mobile-native/SKILL.md",
+      "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
+      "sha256": "774877e0a78ee60474d016c91174e5474e173a1195b793772e151c026a5d3819"
+    },
+    "pick-ui-library/guide.md": {
+      "source": "skills/pick-ui-library/SKILL.md",
+      "source_sha256": "54ee1b6b2a4e5fe6fc6fb7851329c15b26a870d75c6ff988cb7745d3bece2d19",
+      "sha256": "b5862154b8171b03d5c7f9c891267b5a6e0ead1df57e2c6a81121d8d8ec5545a"
+    },
+    "prototype/guide.md": {
+      "source": "skills/prototype/SKILL.md",
+      "source_sha256": "f9f1dcccbd5769e15f6eafe0e832ee57f5e07765f4afb626166d7545a805a180",
+      "sha256": "3d98c50551827dc6ee44a070780b0f843c3d54fe859822442b70d53a304a17b4"
+    },
+    "prototype/PICKER.md": {
+      "source": "skills/prototype/PICKER.md",
+      "source_sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65",
+      "sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65"
+    },
+    "review-animations/guide.md": {
+      "source": "skills/review-animations/SKILL.md",
+      "source_sha256": "18265c933507ddc66d7719dc63619b7f64576271f9575705b97f2fda2bc28946",
+      "sha256": "c8165c75f8871202c2b08bbaf5372f6432f14ad7d05fc2caca158396efe98cfd"
+    },
+    "review-animations/STANDARDS.md": {
+      "source": "skills/review-animations/STANDARDS.md",
+      "source_sha256": "610ca889f57adb748f8616190dec3f6a10cb6c85dffd5cda22c439404120d8b1",
+      "sha256": "610ca889f57adb748f8616190dec3f6a10cb6c85dffd5cda22c439404120d8b1"
+    },
+    "write-swift/guide.md": {
+      "source": "skills/write-swift/SKILL.md",
+      "source_sha256": "287e500d2d6d6bd5e9577bc77fc95807dfd8b43c320f275c45a87a1b8beb2ef6",
+      "sha256": "af3dc11ee4434ca7b3c2a197ee4366cac7403151ada754c16b76b3f523e7eb89"
+    }
+  }
+}

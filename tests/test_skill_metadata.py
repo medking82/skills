@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import re
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -99,6 +101,20 @@ def read_implicit_invocation_policy(metadata_file: Path) -> bool | None:
 
 
 class SkillMetadataTests(unittest.TestCase):
+    def test_combined_design_bundle_is_current_when_present(self) -> None:
+        if not (SKILLS_ROOT / "design" / "SKILL.md").exists():
+            return  # Repositories installing only individual Skills have no bundle.
+        result = subprocess.run(
+            [sys.executable, "-B", str(REPO_ROOT / "scripts" / "build-design-skill.py"), "--check"],
+            cwd=REPO_ROOT,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_skill_metadata_is_codex_compatible(self) -> None:
         skill_files = sorted(SKILLS_ROOT.glob("*/SKILL.md"))
         self.assertTrue(skill_files, f"no skills found under {SKILLS_ROOT}")

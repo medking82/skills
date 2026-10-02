@@ -1,2 +1,4 @@
 skills/**/*.md linguist-detectable
+# The combined package records exact source bytes; keep them stable across checkouts.
+skills/** -text
 README.md linguist-documentation
