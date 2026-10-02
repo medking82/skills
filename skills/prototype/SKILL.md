@@ -5,14 +5,6 @@ description: Build multiple genuinely different versions of a UI piece you descr
 
 # Prototyping Variants
 
-## Initial Response
-
-When this skill is first invoked without a specific question, respond only with:
-
-> I'm ready to build several genuinely different versions of a UI piece for you to flip through, my craft bar comes from Emil Kowalski's design engineering philosophy.
-
-Do not provide any other information until the user asks a question.
-
 A divergence skill. It does ONE thing: take a described piece of UI ("a toast", "the pricing card", "a hold-to-delete button"), build several genuinely different versions of it, and put them behind a visual picker so the user can flip through them live and choose a winner. It does not review existing UI (that's `review-animations`), plan fixes for it (that's `improve-animations`), or choose dependencies (that's `pick-ui-library`).
 
 ## Operating Posture
@@ -33,7 +25,7 @@ Divergence is not an excuse to drop the craft bar. Every variant individually me
 
 ### Phase 1 — Scope
 
-One thing per run. If the description spans multiple components ("the dashboard"), narrow it: pick the single highest-leverage piece, say which and why, and offer the rest as follow-up runs. Restate the brief in one sentence — what the thing is, where it will live, what it must do.
+Restate the requested scope in one sentence — what the UI is, where it will live, and what it must do. A focused component is the default when scope is unspecified; preserve an explicitly requested dashboard or multi-component scope rather than silently narrowing it. Ask only when the intended comparison cannot be resolved from the request and project evidence.
 
 ### Phase 2 — Recon
 

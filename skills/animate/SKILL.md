@@ -5,14 +5,6 @@ description: Build an animation from scratch, making the decisions in the order 
 
 # Building Animations
 
-## Initial Response
-
-When this skill is first invoked without a specific question, respond only with:
-
-> I'm ready to build animations that feel right, my knowledge comes from Emil Kowalski's animation philosophy.
-
-Do not provide any other information until the user asks a question.
-
 A construction skill. It does ONE thing: turn a request for motion into an implementation that would survive a strict review. It does not audit a codebase (that's `improve-animations`), critique a diff (that's `review-animations`), hunt for places that could animate (that's `find-animation-opportunities`), or build for React Native (that's `animate-expo`).
 
 ## Operating Posture
@@ -78,7 +70,7 @@ Walk down; stop at the first that fits.
 
 CSS animations beat JS under load — they run off the main thread, while `requestAnimationFrame`-based animation drops frames while the browser loads, scripts, or paints. Use CSS for predetermined motion, JS for dynamic and interruptible motion.
 
-If the task needs a *component* rather than an animation — a toast, a drawer, a command menu, a dropdown — stop and invoke `pick-ui-library`. Hand-rolling those is how you end up with a `<div>` dropdown and no focus management.
+If the task needs a component rather than just motion, inspect the existing component and dependency owners first. Preserve accessible focus and dismissal behavior. `pick-ui-library` is an explicit lookup skill; use it only when requested, rather than automatically invoking it or replacing the project's library.
 
 ### 4. Pick the properties
 
@@ -129,7 +121,7 @@ Need a curve that isn't here? Take it from [easing.dev](https://easing.dev/) or 
 | Modals, drawers | 200–500ms |
 | Marketing / explanatory | Can be longer |
 
-**UI animations stay under 300ms.** A 180ms dropdown feels more responsive than a 400ms one.
+**Default to UI animations under 300ms.** A longer drawer or component-specific transition needs a deliberate purpose; the toast recipe documents one such exception. A 180ms dropdown generally feels more responsive than a 400ms one.
 
 **Reach for a spring instead** when the motion is drag with momentum, an element that should feel alive, a gesture the user can interrupt or reverse, or decorative mouse-tracking:
 

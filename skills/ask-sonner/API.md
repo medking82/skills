@@ -44,7 +44,7 @@ Exact props, types, and defaults. Options passed to `toast()` override the same 
 | `testId` | `string` | – | Rendered as `data-testid` for e2e tests. |
 | `toasterId` | `string` | – | Id of the toaster to render this toast in. |
 | `style` | `object` | – | Inline styles for the toast. |
-| `classNames` | `object` | – | Classes per part: `{ toast, title, description, actionButton, cancelButton, closeButton }`. Needs `!important` unless `unstyled`. |
+| `classNames` | `object` | – | Classes per part: `{ toast, title, description, actionButton, cancelButton, closeButton }`. Inspect the cascade before adding specificity or `!important`. |
 | `unstyled` | `boolean` | `false` | Removes all default styles. |
 | `onDismiss` | `(toast) => void` | – | Fires when the close button is clicked or the toast is swiped away. |
 | `onAutoClose` | `(toast) => void` | – | Fires when the toast closes automatically after `duration`. |

@@ -33,7 +33,7 @@ Decision order for easing:
 --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);     /* iOS-like drawer curve */
 ```
 
-Duration budgets — **UI animations stay under 300ms**:
+Duration budgets — **default ordinary UI to under 300ms**, preserving documented component-specific exceptions:
 
 | Element | Duration |
 | --- | --- |
@@ -55,7 +55,7 @@ Hunt for: `ease-in` anywhere, bare `ease`/`linear` on entrances, durations > 300
   **Modals are exempt** — they appear centered; `transform-origin: center` is correct there. Do not report it.
 - **Press feedback**: `transform: scale(0.97)` on `:active` with `transition: transform 160ms ease-out`. Keep it subtle (0.95–0.98).
 
-Hunt for: `scale(0)`, pure-fade entrances with no initial transform, `transform-origin: center` (or none) on trigger-anchored elements, pressable elements with no press feedback.
+Hunt for: `scale(0)`, incorrect origins on trigger-anchored elements, and pressable elements with no feedback. Pure fades can be appropriate, especially for reduced-motion variants; their lack of transform is not itself a finding.
 
 ## 4. Interruptibility
 
@@ -70,7 +70,7 @@ Hunt for: `@keyframes` on toasts/toggles/rapidly-triggered UI, gesture handlers 
 
 ## 5. Performance
 
-- **Animate `transform` and `opacity` only.** `width`/`height`/`margin`/`padding`/`top`/`left` trigger layout + paint + composite.
+- **Prefer `transform` and `opacity`.** Layout properties can incur layout work. Allow necessary measured accordion height transitions or isolated indicators, and verify actual runtime cost before reporting a defect.
 - **`transition: all`** animates unintended properties off-GPU — always a finding.
 - **Framer Motion `x`/`y`/`scale` shorthands are not hardware-accelerated** — they run on the main thread and drop frames under load. Target: the full transform string, `animate={{ transform: "translateX(100px)" }}`.
 - **Don't drive child transforms via a CSS variable on the parent** — it recalcs styles for all children. Set `transform` directly on the element.

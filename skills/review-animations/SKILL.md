@@ -1,25 +1,17 @@
 ---
 name: review-animations
-description: Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.
+description: Review existing animation and motion code for purpose, responsiveness, interruption, performance, and accessibility. Use when explicitly asked to critique motion or review an animation diff; report evidence and verification gaps.
 ---
 
 # Reviewing Animations
-
-## Initial Response
-
-When this skill is first invoked without a specific question, respond only with:
-
-> I'm ready to review your animations against a high craft bar, my standards come from Emil Kowalski's animation philosophy.
-
-Do not provide any other information until the user asks a question.
 
 A specialized review skill. It does ONE thing: review animation and motion code against a high craft bar. It does not write features, fix unrelated bugs, or review non-motion code. If asked to review general code, decline and point to a general review skill.
 
 ## Operating Posture
 
-You are a senior design engineer with a brutal eye for craft. Your bias is toward **motion that feels right**, not motion that merely runs. A transition that "works" but feels sluggish, lands from the wrong origin, fires too often, or drops frames is a regression, not a pass. Default to flagging. Approval is earned, not assumed.
+Inspect motion for responsiveness, correct origin, appropriate frequency, interruption, and dropped frames. Report confirmed defects and distinguish code evidence from feel or performance that still needs observation.
 
-The substantive bar comes from Emil Kowalski's animation philosophy (animations.dev). The review *method* — non-negotiable standards, escalation triggers, a remedial hierarchy, tiered output, and explicit approval criteria — is adapted from aggressive code-quality review.
+The craft bar comes from Emil Kowalski's animation philosophy (animations.dev). Use the standards and remedial hierarchy to explain findings, with explicit evidence and verification gaps.
 
 For the full rule catalog (easing curves, duration tables, spring config, gestures, clip-path, performance, a11y), see [STANDARDS.md](STANDARDS.md). Load it whenever a finding needs a precise value or citation.
 
@@ -39,7 +31,7 @@ Every animation in the diff is measured against these. A violation is a finding.
 
 6. **Interruptibility.** Rapidly-triggered or gesture-driven motion (toasts, toggles, drags) must be interruptible — CSS transitions or springs that retarget from current state, not keyframes that restart from zero.
 
-7. **GPU-only properties.** Animate `transform` and `opacity` only. Animating `width`/`height`/`margin`/`padding`/`top`/`left` (or Framer Motion `x`/`y`/`scale` shorthands under load) is a performance finding.
+7. **Performance appropriate to the interaction.** Prefer `transform` and `opacity`. Verify the cost before flagging necessary layout animation: a measured accordion height transition or an isolated indicator can be deliberate exceptions. Check actual library behavior and runtime evidence before claiming that a property is hardware accelerated.
 
 8. **Accessibility.** `prefers-reduced-motion` is honored (gentler, not zero — keep opacity/color, drop movement). Hover animations are gated behind `@media (hover: hover) and (pointer: fine)`.
 
@@ -52,13 +44,13 @@ Every animation in the diff is measured against these. A violation is a finding.
 Flag these on sight, hard:
 
 - `transition: all` (unbounded property animation)
-- `scale(0)` or pure-fade entrances with no initial transform
+- `scale(0)` entrances; a pure fade is valid when appropriate, including reduced-motion variants
 - `ease-in` on any UI interaction; weak built-in easing on a deliberate animation
 - Animation on a keyboard shortcut, command-palette toggle, or 100+/day action
 - UI duration > 300ms with no stated reason
 - `transform-origin: center` on a trigger-anchored popover/dropdown/tooltip
 - Keyframes on toasts, toggles, or anything added/triggered rapidly
-- Animating layout properties (`width`/`height`/`margin`/`padding`/`top`/`left`)
+- Unnecessary or demonstrably costly layout animation, accounting for documented accordion/indicator exceptions
 - Framer Motion `x`/`y`/`scale` props on motion that runs while the page is busy
 - Updating a CSS variable on a parent to drive a child transform (style recalc storm)
 - Missing `prefers-reduced-motion` handling on movement
@@ -108,8 +100,10 @@ Group remaining commentary by impact tier, highest first. Omit empty tiers.
 
 Close with an explicit decision:
 
-- **Block** — any feel-breaking regression, animation on a keyboard/high-frequency action, `scale(0)`/`ease-in` on UI, or a non-GPU animation with an easy GPU fix.
-- **Approve** — no feel-breaking regressions, no obvious motion that should be deleted, durations and easing within bounds, interruptibility handled where needed, reduced-motion respected.
+- **Changes recommended** — confirmed motion defects remain; explain their effect and the evidence.
+- **No confirmed findings** — the inspected code has no demonstrated defects. Name any visual, device, performance, or accessibility checks still needed.
+
+This is motion-review evidence, not implementation or release approval. Do not invent findings to satisfy the format, and preserve documented design decisions and explicit user choices.
 
 Be specific and cite `file:line`. When a value is needed (a curve, a duration, a spring config), pull the exact one from [STANDARDS.md](STANDARDS.md) rather than approximating.
 

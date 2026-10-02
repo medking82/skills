@@ -163,7 +163,7 @@ function mount(i) {
 }
 
 function setActive(i) {
-  if (i < 0 || i >= variants.length) return;
+  if (!Number.isInteger(i) || i < 0 || i >= variants.length) return;
   current = i;
   items.forEach((el, j) => {
     el.toggleAttribute('data-active', j === i);
@@ -183,15 +183,28 @@ window.addEventListener('resize', moveHighlight);
 
 document.addEventListener('keydown', (e) => {
   if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  const num = parseInt(e.key, 10);
-  if (num >= 1 && num <= variants.length) setActive(num - 1);
-  else if (e.key === 'ArrowRight') setActive((current + 1) % variants.length);
-  else if (e.key === 'ArrowLeft') setActive((current - 1 + variants.length) % variants.length);
-  else if (e.key === 'r' || e.key === 'R') mount(current);
+  if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+  const num = /^[1-9]$/.test(e.key) ? Number(e.key) : NaN;
+  if (num >= 1 && num <= variants.length) {
+    e.preventDefault();
+    setActive(num - 1);
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    setActive((current + 1) % variants.length);
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    setActive((current - 1 + variants.length) % variants.length);
+  } else if (e.key === 'r' || e.key === 'R') {
+    e.preventDefault();
+    mount(current);
+  }
 });
 
-setActive((parseInt(new URLSearchParams(location.search).get('v'), 10) || 1) - 1);
+const requestedVariant = new URLSearchParams(location.search).get('v');
+const initialVariant = requestedVariant !== null && /^[1-9]\d*$/.test(requestedVariant)
+  ? Number(requestedVariant) : 1;
+setActive(Number.isSafeInteger(initialVariant) && initialVariant <= variants.length
+  ? initialVariant - 1 : 0);
 // Enable the slide only after first paint, so load doesn't animate.
 requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute('data-ready', '')));
 ```
