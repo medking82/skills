@@ -47,7 +47,8 @@ class DesignBundleTests(unittest.TestCase):
         self.assertTrue(bundle.build(self.repo))
         manifest = json.loads((self.root / "sources.json").read_text())
         self.assertEqual(set(manifest["modes"]), set(bundle.MODES))
-        self.assertEqual(len(manifest["modes"]), 14)
+        self.assertEqual(len(manifest["modes"]), 15)
+        self.assertIn("animation-performance", manifest["modes"])
         for mode in bundle.MODES:
             source = self.repo / "skills" / mode
             destination = self.root / mode
@@ -129,6 +130,16 @@ class DesignBundleTests(unittest.TestCase):
         self.assertEqual(self.snapshot(), before)
         (self.repo / "skills/new-mode/SKILL.md").unlink()
         self.write("skills/design/SKILL.md", "# No routes\n")
+        before = self.snapshot()
+        with self.assertRaisesRegex(bundle.BundleError, "router must link"):
+            bundle.build(self.repo)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_animation_performance_requires_its_own_route(self) -> None:
+        router = self.repo / "skills/design/SKILL.md"
+        router.write_text(router.read_text().replace(
+            "[animation-performance](references/animation-performance/guide.md)", ""
+        ))
         before = self.snapshot()
         with self.assertRaisesRegex(bundle.BundleError, "router must link"):
             bundle.build(self.repo)

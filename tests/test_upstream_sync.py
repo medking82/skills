@@ -3,6 +3,7 @@ from __future__ import annotations
 import contextlib
 import importlib.util
 import io
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -106,6 +107,32 @@ class UpstreamSyncTests(unittest.TestCase):
             self.prepare()
         self.assertFalse((self.fork / "executed.txt").exists())
         self.assert_restored()
+
+    def test_changed_bundled_source_requires_manual_rebuild(self) -> None:
+        # Exercise the real owned bundle, not only standalone metadata fixtures.
+        shutil.copytree(REPO_ROOT / "skills", self.upstream / "skills", dirs_exist_ok=True)
+        (self.upstream / "skills/example/SKILL.md").unlink()
+        self.commit(self.upstream, "current design bundle")
+        self.git(self.fork, "fetch", str(self.upstream), "main")
+        self.git(self.fork, "merge", "--no-edit", "FETCH_HEAD")
+        (self.fork / "scripts").mkdir()
+        shutil.copy2(REPO_ROOT / "scripts/build-design-skill.py", self.fork / "scripts")
+        shutil.copy2(REPO_ROOT / ".gitattributes", self.fork)
+        # Restore exact source bytes after checkout under Windows autocrlf.
+        shutil.copytree(REPO_ROOT / "skills", self.fork / "skills", dirs_exist_ok=True)
+        self.commit(self.fork, "fork-owned bundle validation")
+        self.initial = self.git(self.fork, "rev-parse", "HEAD").stdout.strip()
+        self.git(self.fork, "push", "origin", "main")
+        source = self.upstream / "skills/animation-performance/SKILL.md"
+        source.write_bytes(source.read_bytes() + b"\nUpdated upstream diagnosis.\n")
+        self.commit(self.upstream, "update accepted mode")
+        with self.assertRaisesRegex(sync.SyncError, "Design references are stale"):
+            self.prepare()
+        self.assert_restored()
+        self.assertEqual(
+            (self.fork / "skills/animation-performance/SKILL.md").read_bytes(),
+            (REPO_ROOT / "skills/animation-performance/SKILL.md").read_bytes(),
+        )
 
     def test_dirty_checkout_is_preserved(self) -> None:
         self.write(self.fork, "notes.txt", "Uncommitted user work.\n")
