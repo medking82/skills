@@ -15,6 +15,7 @@ for a component change.
 | Request | Mode and guide |
 | --- | --- |
 | Component polish, feedback, spacing, cohesion or accessibility | [emil-design-eng](references/emil-design-eng/guide.md) |
+| Diagnose web animation jank, dropped frames, property cost or main-thread contention | [animation-performance](references/animation-performance/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
 | Name a described animation or effect | [animation-vocabulary](references/animation-vocabulary/guide.md) |
@@ -32,6 +33,9 @@ for a component change.
 For general interface work, start with `emil-design-eng`. Prefer `ask-sonner` for a Sonner
 problem and the platform-specific mode for mobile work. A naming question ends with the term;
 an audit ends with findings or a plan. Implement when implementation is part of the request.
+For web frame-performance diagnosis, use `animation-performance`; it reports causes and
+verification limits, then stops unless fixes are requested. Use `animate` for easing and
+duration, and `animate-expo` for React Native thread performance.
 
 ## Invocation and scope
 

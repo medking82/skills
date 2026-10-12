@@ -1,6 +1,6 @@
 # Combined Design skill
 
-`skills/design` is the self-contained `$design` entrypoint for this collection's 14 modes.
+`skills/design` is the self-contained `$design` entrypoint for this collection's 15 modes.
 Its short `SKILL.md` selects a mode; mode guides and their original supporting resources
 are loaded only for the current request. No separately installed specialist Skills are needed.
 Prototype exploration, library selection, motion review and worst-case UI data testing
