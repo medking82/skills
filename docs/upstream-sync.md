@@ -32,6 +32,8 @@ conflicts when new skills are added.
 
 GitHub sync does not install skills on a computer. This checkout remains the source
 for explicit updates of installed user-scope copies, as described in the README.
+The optional [Windows Codex design updater](codex-design-sync.md) automatically refreshes
+only the enrolled combined package from this fork's published `main`.
 
 ## Validation and recovery
 

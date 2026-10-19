@@ -34,3 +34,5 @@ other design, image or document tools. Restart Codex after changing `config.toml
 
 Repository publication and installed-copy updates are separate actions. GitHub sync alone
 does not install or refresh `$design` on a workstation.
+Windows Codex can opt into the dedicated [local auto-updater](codex-design-sync.md),
+which follows the published bundle every 30 minutes and includes new routed modes automatically.

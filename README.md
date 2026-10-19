@@ -29,6 +29,8 @@ npx skills@latest add emilkowalski/skills
 
 This checkout is the source of truth for local Codex compatibility. Installed user-scope copies
 are updated explicitly from this checkout; `agent-sop-kit` does not synchronize this repository.
+Windows Codex can also opt into the [dedicated design auto-updater](docs/codex-design-sync.md)
+to follow this fork's published combined package without manual reinstalls.
 
 For one self-contained Codex entrypoint covering this collection, use
 [`design`](./skills/design/SKILL.md). See the [combined package maintenance and installation
