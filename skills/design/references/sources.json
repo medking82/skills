@@ -12,6 +12,11 @@
       "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
       "guide": "animate-expo/guide.md"
     },
+    "animation-performance": {
+      "entrypoint": "skills/animation-performance/SKILL.md",
+      "source_sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
+      "guide": "animation-performance/guide.md"
+    },
     "animation-vocabulary": {
       "entrypoint": "skills/animation-vocabulary/SKILL.md",
       "source_sha256": "d53852f2fb7310c03c2dfbb47901ea4a68ffe07628d0bd5ebe17d17b5ce7d8e0",
@@ -93,6 +98,11 @@
       "source": "skills/animate-expo/RECIPES.md",
       "source_sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718",
       "sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718"
+    },
+    "animation-performance/guide.md": {
+      "source": "skills/animation-performance/SKILL.md",
+      "source_sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
+      "sha256": "eb05376015bade50cb18d1d653467ab43fffa638cac0fd194c4aee3fdb79a881"
     },
     "animation-vocabulary/guide.md": {
       "source": "skills/animation-vocabulary/SKILL.md",
