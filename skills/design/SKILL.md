@@ -34,6 +34,19 @@ For general interface work, start with `emil-design-eng`. Prefer `ask-sonner` fo
 problem and the platform-specific mode for mobile work. A naming question ends with the term;
 an audit ends with findings or a plan. Implement when implementation is part of the request.
 
+## Jev-Assisted Mode Selection
+
+When the unified `$jev` skill is available and two or more modes plausibly fit, use its
+`design` helper with a short description of the current request, then read the selected
+guide above. Reuse a design-mode recommendation already supplied by the Jev turn hook.
+Explicit mode names, clear single-mode requests and ordinary component polish need no
+extra routing call. If Jev abstains or is unavailable, choose from this table normally.
+
+The helper's default candidate set excludes the four explicit modes below. Include one
+in `allowed_modes` only when the actual user request authorizes it; a Jev recommendation
+does not expand task scope. Preserve the user's model, effort, Fast, tool bans and UI copy
+preferences. Jev selects a procedure; design judgment and validation remain with the agent.
+
 ## Invocation and scope
 
 The four explicit modes remain opt-in: `prototype`, `pick-ui-library`,
