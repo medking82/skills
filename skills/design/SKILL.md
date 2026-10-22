@@ -37,15 +37,19 @@ an audit ends with findings or a plan. Implement when implementation is part of 
 ## Jev-Assisted Mode Selection
 
 When the unified `$jev` skill is available and two or more modes plausibly fit, use its
-`design` helper with a short description of the current request, then read the selected
-guide above. Reuse a design-mode recommendation already supplied by the Jev turn hook.
+`design` helper with a short description of the current request as a second opinion on
+the main LLM's mode choice. Reuse a design-mode recommendation already supplied by the
+Jev turn hook. On same-layer disagreement, recheck the request, opt-in constraints and
+guide evidence once, then choose the mode and read its guide without another Jev call.
 Explicit mode names, clear single-mode requests and ordinary component polish need no
 extra routing call. If Jev abstains or is unavailable, choose from this table normally.
 
 The helper's default candidate set excludes the four explicit modes below. Include one
 in `allowed_modes` only when the actual user request authorizes it; a Jev recommendation
 does not expand task scope. Preserve the user's model, effort, Fast, tool bans and UI copy
-preferences. Jev selects a procedure; design judgment and validation remain with the agent.
+preferences. The main LLM owns the final route, design judgment and validation.
+Jev abstention or local fallback is not disagreement. `native-review` remains the owner
+of admitted code review; a routing disagreement does not start one.
 
 ## Invocation and scope
 
