@@ -1,0 +1,85 @@
+name: Sync Impeccable References
+
+on:
+  schedule:
+    - cron: '37 */6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+# Serialize this job with the existing Emil upstream merge and publication.
+concurrency:
+  group: sync-upstream-main
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'medking82/skills' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the maintained design bundle
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check out the personal Impeccable fork as data
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: medking82/impeccable
+          ref: main
+          path: impeccable-source
+          sparse-checkout: |
+            /.agents/skills/impeccable/
+            /LICENSE
+            /NOTICE.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Check source ancestry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          old="$(python -c 'import json; print(json.load(open("skills/impeccable/upstream/source.json"))["commit"])')"
+          head="$(git -C impeccable-source rev-parse HEAD)"
+          comparison="$(gh api "repos/medking82/impeccable/compare/$old...$head" --jq '.status + ":" + (.behind_by | tostring)')"
+          case "$comparison" in ahead:0|identical:0) ;; *) echo 'Fork history changed; manual reconciliation required.' >&2; exit 1 ;; esac
+
+      - name: Refresh the owned snapshot
+        run: |
+          set -euo pipefail
+          head="$(git -C impeccable-source rev-parse HEAD)"
+          test -z "$(git -C impeccable-source status --porcelain -- .agents/skills/impeccable LICENSE NOTICE.md)"
+          python -B scripts/sync-impeccable.py --source impeccable-source --commit "$head"
+          python -B scripts/build-design-skill.py
+
+      - name: Validate the combined package
+        run: python -B -m unittest discover -s tests
+
+      - name: Prepare the verified snapshot
+        id: prepare
+        run: |
+          set -euo pipefail
+          git add skills/impeccable/upstream skills/design/references
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Sync Impeccable design references'
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
+
+      - name: Publish the verified snapshot
+        if: steps.prepare.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git --hostname github.com
+          git push origin HEAD:refs/heads/main

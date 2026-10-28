@@ -19,7 +19,7 @@ NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 class UpstreamSyncTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.temporary = tempfile.TemporaryDirectory(prefix="skills-upstream-sync-")
+        self.temporary = tempfile.TemporaryDirectory(prefix="skills-upstream-sync-", dir=REPO_ROOT / "tests")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name).resolve()
         self.upstream = self.root / "upstream"
@@ -48,7 +48,7 @@ class UpstreamSyncTests(unittest.TestCase):
     def write(self, repo: Path, path: str, content: str) -> None:
         target = repo / path
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8")
+        target.write_bytes(content.encode("utf-8"))
 
     def commit(self, repo: Path, message: str) -> str:
         self.git(repo, "add", "--all")
@@ -58,6 +58,68 @@ class UpstreamSyncTests(unittest.TestCase):
     def prepare(self) -> bool:
         with contextlib.redirect_stdout(io.StringIO()):
             return sync.prepare_sync(self.fork, str(self.upstream))
+
+    def add_bundle(self) -> None:
+        spec = importlib.util.spec_from_file_location("fixture_bundle", REPO_ROOT / "scripts/build-design-skill.py")
+        assert spec is not None and spec.loader is not None
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        for repo in (self.upstream, self.fork):
+            self.git(repo, "config", "core.autocrlf", "false")
+            self.git(repo, "reset", "--hard", "HEAD")
+        self.git(self.upstream, "rm", "skills/example/SKILL.md")
+        for mode in builder.MODES:
+            self.write(self.upstream, f"skills/{mode}/SKILL.md", f"---\nname: {mode}\ndescription: Fixture.\n---\n# Initial guide\n")
+            self.write(self.upstream, f"skills/{mode}/agents/openai.yaml", "policy:\n  allow_implicit_invocation: false\n")
+        self.commit(self.upstream, "accepted modes")
+        self.git(self.fork, "fetch", str(self.upstream), "main")
+        self.git(self.fork, "merge", "--no-edit", "FETCH_HEAD")
+        self.write(self.fork, "scripts/build-design-skill.py", (REPO_ROOT / "scripts/build-design-skill.py").read_text(encoding="utf-8"))
+        self.write(self.fork, "skills/design/SKILL.md", "---\nname: design\ndescription: Fixture router.\n---\n" + "\n".join(
+            f"[{mode}](references/{mode}/guide.md)" for mode in builder.MODES))
+        builder.build(self.fork)
+        self.initial = self.commit(self.fork, "maintained bundle")
+        self.git(self.fork, "push", "origin", "main")
+
+    def test_source_update_rebuilds_and_commits_combined_bundle(self) -> None:
+        self.add_bundle()
+        self.write(self.upstream, "skills/animate/SKILL.md", "---\nname: animate\ndescription: Updated.\n---\n# Updated guide\n")
+        self.write(self.upstream, "skills/animate/assets/new.md", "New supporting resource\n")
+        upstream = self.commit(self.upstream, "upstream content")
+        self.assertTrue(self.prepare())
+        self.assertIn("# Updated guide", self.git(self.fork, "show", "HEAD:skills/design/references/animate/guide.md").stdout)
+        self.assertIn("New supporting resource", self.git(self.fork, "show", "HEAD:skills/design/references/animate/assets/new.md").stdout)
+        self.git(self.fork, "merge-base", "--is-ancestor", self.initial, "HEAD")
+        self.git(self.fork, "merge-base", "--is-ancestor", upstream, "HEAD")
+        self.assertEqual(self.git(self.fork, "status", "--porcelain").stdout, "")
+        self.assertFalse(self.prepare())
+
+    def test_unknown_mode_stops_and_restores_bundle(self) -> None:
+        self.add_bundle()
+        self.write(self.upstream, "skills/unknown-mode/SKILL.md", "---\nname: unknown-mode\ndescription: Unknown.\n---\n# New\n")
+        self.commit(self.upstream, "unregistered mode")
+        with self.assertRaisesRegex(sync.SyncError, "Mode inventory changed"):
+            self.prepare()
+        self.assert_restored()
+
+    def test_upstream_cannot_replace_trusted_bundle_builder(self) -> None:
+        self.add_bundle()
+        self.write(self.upstream, "scripts/build-design-skill.py", "from pathlib import Path\nPath('executed.txt').touch()\n")
+        self.commit(self.upstream, "untrusted builder")
+        with self.assertRaisesRegex(sync.SyncError, "outside skill content require manual review"):
+            self.prepare()
+        self.assertFalse((self.fork / "executed.txt").exists())
+        self.assert_restored()
+
+    def test_metadata_failure_after_rebuild_restores_generated_files(self) -> None:
+        self.add_bundle()
+        self.write(self.upstream, "skills/animate/assets/new.md", "New resource\n")
+        self.write(self.upstream, "skills/animate/SKILL.md", "---\nname: animate\ndescription: Invalid.\ndisable-model-invocation: true\n---\n# Updated\n")
+        self.commit(self.upstream, "invalid metadata")
+        with self.assertRaisesRegex(sync.SyncError, "metadata failed validation"):
+            self.prepare()
+        self.assert_restored()
+        self.assertFalse((self.fork / "skills/design/references/animate/assets/new.md").exists())
 
     def assert_restored(self) -> None:
         self.assertEqual(self.git(self.fork, "rev-parse", "HEAD").stdout.strip(), self.initial)

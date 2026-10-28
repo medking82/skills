@@ -210,7 +210,7 @@ class CodexDesignSyncTests(unittest.TestCase):
 
     def test_current_published_package_manifest_is_valid(self) -> None:
         source = ROOT / "skills/design"
-        current = {p.relative_to(source).as_posix(): p.read_bytes().replace(b"\r\n", b"\n")
+        current = {p.relative_to(source).as_posix(): p.read_bytes()
                    for p in source.rglob("*") if p.is_file()}
         self.assertIn("animation-performance", updater.validate_package(current))
 

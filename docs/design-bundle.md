@@ -1,6 +1,6 @@
 # Combined Design skill
 
-`skills/design` is the self-contained `$design` entrypoint for this collection's 15 modes.
+`skills/design` is the self-contained `$design` entrypoint for this collection's 16 modes.
 Its short `SKILL.md` selects a mode; mode guides and their original supporting resources
 are loaded only for the current request. No separately installed specialist Skills are needed.
 Prototype exploration, library selection, motion review and worst-case UI data testing
@@ -23,9 +23,13 @@ discovery frontmatter, and records source hashes in the generated manifest. Only
 `SKILL.md` is discoverable in the combined package. New modes also need a route and invocation
 boundary in that root entrypoint before they can be bundled.
 
-The existing upstream-sync metadata validation also checks bundle freshness when the bundle
-is present. An upstream source change that needs a bundle rebuild stops publication until a
-maintainer reconciles it and reruns validation. The sync runner and workflow remain unchanged.
+The Emil upstream sync rebuilds combined references with the fork's trusted builder before
+metadata and freshness validation, then includes those generated files in the merge commit.
+Accepted source updates therefore refresh the bundle automatically. New unregistered modes,
+router mismatches, generated-file drift, and validation failures still stop publication and
+abort the merge. Upstream changes to the builder or other automation require manual review.
+The Impeccable fork and snapshot stages follow the separate review boundaries described in
+[upstream sync](upstream-sync.md); both upstreams are checked every six hours.
 
 For a combined installation, copy the whole `skills/design` directory to
 `<codex-home>/skills/design`. Disable previously installed specialist entrypoints using their

@@ -1,6 +1,6 @@
 ---
 name: design
-description: Design and polish web or native app interfaces, including motion, component feedback, mobile web, Apple interactions, Expo and Swift. Use for UI implementation or requested design audits, UI data stress tests, prototypes and UI library selection; not graphics, documents or backend work.
+description: Design and polish web or native app interfaces, including distinctive visual direction, motion, component feedback, mobile web, Apple interactions, Expo and Swift. Use for UI implementation or requested design audits, UI data stress tests, prototypes and UI library selection; not graphics, documents or backend work.
 ---
 
 # Design
@@ -14,6 +14,7 @@ for a component change.
 
 | Request | Mode and guide |
 | --- | --- |
+| Distinctive visual direction, broader UI composition or an explicitly requested visual critique | [impeccable](references/impeccable/guide.md) |
 | Component polish, feedback, spacing, cohesion or accessibility | [emil-design-eng](references/emil-design-eng/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
@@ -30,9 +31,11 @@ for a component change.
 | Explicitly choose or compare UI libraries | [pick-ui-library](references/pick-ui-library/guide.md) |
 | Explicitly explore different UI variants behind a visual picker | [prototype](references/prototype/guide.md) |
 
-For general interface work, start with `emil-design-eng`. Prefer `ask-sonner` for a Sonner
-problem and the platform-specific mode for mobile work. A naming question ends with the term;
-an audit ends with findings or a plan. Implement when implementation is part of the request.
+For a new or substantially redesigned interface, start with `impeccable` when its visual
+direction matters. For focused interface polish, start with `emil-design-eng`. Prefer
+`ask-sonner` for a Sonner problem and the platform-specific mode for mobile work. A naming
+question ends with the term; an audit ends with findings or a plan. Implement when
+implementation is part of the request.
 
 ## Jev-Assisted Mode Selection
 

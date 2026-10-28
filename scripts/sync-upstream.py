@@ -65,6 +65,23 @@ def prepare_sync(repo: Path, upstream_url: str = UPSTREAM_URL) -> bool:
 
     try:
         git(repo, *BOT_IDENTITY, "merge", "--no-ff", "--no-commit", upstream)
+        if (repo / "skills/design/SKILL.md").exists():
+            # The upstream path allowlist above prevents replacing this trusted
+            # builder. It admits only registered modes and manifest-owned output.
+            rebuild = subprocess.run(
+                [sys.executable, "-B", str(repo / "scripts/build-design-skill.py")],
+                cwd=repo,
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                creationflags=NO_WINDOW,
+            )
+            if rebuild.returncode:
+                raise SyncError("Combined design rebuild failed:\n" + rebuild.stdout + rebuild.stderr)
+            # Stage before validation so merge --abort also removes newly
+            # generated files if metadata validation rejects the merged source.
+            git(repo, "add", "--", "skills/design/references")
         validation = subprocess.run(
             [sys.executable, "-B", str(repo / "tests" / "test_skill_metadata.py")],
             cwd=repo,

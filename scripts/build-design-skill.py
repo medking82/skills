@@ -14,7 +14,7 @@ GENERATOR = "scripts/build-design-skill.py"
 MODE_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MODES = (
     "animate", "animate-expo", "animation-performance", "animation-vocabulary", "apple-design", "ask-sonner", "break-ui",
-    "emil-design-eng", "find-animation-opportunities", "improve-animations", "mobile-native",
+    "emil-design-eng", "find-animation-opportunities", "impeccable", "improve-animations", "mobile-native",
     "pick-ui-library", "prototype", "review-animations", "write-swift",
 )
 
