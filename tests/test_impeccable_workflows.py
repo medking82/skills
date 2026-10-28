@@ -80,7 +80,7 @@ class WorkflowFixtures(unittest.TestCase):
     def write(self, repo, path, text):
         target = repo / path
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(text, encoding="utf-8")
+        target.write_bytes(text.encode("utf-8"))
 
     def commit(self, repo):
         self.git(repo, "add", "-A")
@@ -99,12 +99,13 @@ class WorkflowFixtures(unittest.TestCase):
 
 class SparseCheckoutTests(WorkflowFixtures):
     def test_noncone_patterns_materialize_complete_skill_and_root_attribution(self):
-        expected = {".agents/skills/impeccable/SKILL.md",
+        expected = {".gitattributes", ".agents/skills/impeccable/SKILL.md",
                     ".agents/skills/impeccable/reference/deep/nested.md",
                     ".agents/skills/impeccable/scripts/impeccable.cmd",
                     ".agents/skills/impeccable/agents/openai.yaml", "LICENSE", "NOTICE.md"}
         for path in expected | {"other/LICENSE", "other/NOTICE.md", ".agents/skills/other/SKILL.md"}:
             self.write(self.source, path, path + "\n")
+        self.write(self.source, ".gitattributes", "*.cmd text eol=crlf\n")
         self.commit(self.source)
         checkout = self.root / "sparse"
         self.git(self.root, "clone", "--no-checkout", "--depth=1", self.source.as_uri(), str(checkout))
@@ -114,6 +115,8 @@ class SparseCheckoutTests(WorkflowFixtures):
         actual = {p.relative_to(checkout).as_posix() for p in checkout.rglob("*")
                   if p.is_file() and ".git" not in p.relative_to(checkout).parts}
         self.assertEqual(actual, expected)
+        self.assertIn(b"\r\n", (checkout / ".agents/skills/impeccable/scripts/impeccable.cmd").read_bytes())
+        self.assertNotIn(b"\r\n", (checkout / ".agents/skills/impeccable/SKILL.md").read_bytes())
         self.assertEqual(self.git(checkout, "rev-parse", "--is-shallow-repository").stdout.strip(), "true")
 
 

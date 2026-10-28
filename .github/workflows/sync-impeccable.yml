@@ -20,6 +20,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Use stable source line endings
+        run: git config --global core.autocrlf false
+
       - name: Check out the maintained design bundle
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -34,6 +37,7 @@ jobs:
           ref: main
           path: impeccable-source
           sparse-checkout: |
+            /.gitattributes
             /.agents/skills/impeccable/
             /LICENSE
             /NOTICE.md

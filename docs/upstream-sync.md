@@ -47,7 +47,15 @@ to activate the personal sync workflow.
 
 [`sync-impeccable.yml`](../.github/workflows/sync-impeccable.yml) checks out the
 personal fork as data. Root-anchored non-cone sparse patterns materialize the entire
-`.agents/skills/impeccable/` tree, root `LICENSE`, and root `NOTICE.md`. The ancestry
+`.agents/skills/impeccable/` tree, root `.gitattributes`, `LICENSE`, and `NOTICE.md`.
+The source checkout uses `core.autocrlf=false` and retains upstream attributes:
+ordinary text stays LF, while the Windows `.cmd` launcher stays CRLF. Manual source
+checkouts must use the same policy (`git clone -c core.autocrlf=false ...`); do not
+snapshot a checkout converted by a Windows-global `core.autocrlf=true` setting.
+The importer also canonicalizes UTF-8 text line endings before hashing: LF for
+ordinary text, CRLF for `.cmd`, and unchanged bytes for binary data. This prevents
+platform checkout differences from being misclassified as executable updates.
+The ancestry
 API comparison must be `ahead:0` or `identical:0` relative to the commit recorded in
 `skills/impeccable/upstream/source.json`. History rewrites, divergence, and API
 failures halt the import.

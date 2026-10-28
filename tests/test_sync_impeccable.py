@@ -64,6 +64,17 @@ class ImpeccableSnapshotTests(unittest.TestCase):
         sync.refresh(self.repo, self.source, "b" * 40)
         self.assertEqual((self.snapshot / "reference/craft-floor.md").read_bytes(), b"# Updated\n")
 
+    def test_windows_and_posix_checkouts_produce_identical_snapshots(self) -> None:
+        sync.refresh(self.repo, self.source, "a" * 40)
+        before = self.snapshot_files()
+        for path in self.source.rglob("*"):
+            if path.is_file():
+                path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+        self.assertTrue(sync.refresh(self.repo, self.source, "a" * 40, check=True))
+        self.assertEqual(self.snapshot_files(), before)
+        self.assertEqual((self.snapshot / "scripts/impeccable.cmd").read_bytes(), b"@echo off\r\n")
+        self.assertEqual(sync.canonical_bytes("asset.bin", b"\0\r\n"), b"\0\r\n")
+
     def test_executable_change_stops_the_whole_update_until_reviewed(self) -> None:
         sync.refresh(self.repo, self.source, "a" * 40)
         before = self.snapshot_files()

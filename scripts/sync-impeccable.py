@@ -25,6 +25,18 @@ def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def canonical_bytes(name: str, data: bytes) -> bytes:
+    """Hash portable text, preserving the CRLF required by Windows batch files."""
+    try:
+        data.decode("utf-8")
+    except UnicodeDecodeError:
+        return data
+    if b"\0" in data:
+        return data
+    data = data.replace(b"\r\n", b"\n")
+    return data.replace(b"\n", b"\r\n") if name.endswith(".cmd") else data
+
+
 def safe_name(name: str) -> str:
     path = PurePosixPath(name)
     if not name or path.is_absolute() or path.as_posix() != name:
@@ -58,12 +70,12 @@ def collect(source: Path) -> dict[str, bytes]:
             name = "guide.md"
         elif path.name.casefold() == "skill.md":
             raise SnapshotError(f"Unexpected nested skill entrypoint: {path}")
-        files[safe_name(name)] = path.read_bytes()
+        files[safe_name(name)] = canonical_bytes(name, path.read_bytes())
     for name in ("LICENSE", "NOTICE.md"):
         path = source / name
         if path.is_symlink() or not path.is_file():
             raise SnapshotError(f"Missing upstream attribution file: {name}")
-        files[name] = path.read_bytes()
+        files[name] = canonical_bytes(name, path.read_bytes())
     if not {"guide.md", "reference/craft-floor.md", "scripts/VERSION",
             "scripts/engine-checksums.txt", "scripts/impeccable.cmd"}.issubset(files):
         raise SnapshotError("Incomplete upstream skill snapshot")
