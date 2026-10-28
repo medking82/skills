@@ -10,12 +10,65 @@ request and read its linked guide; load additional modes only when the task cros
 boundaries. Each guide's relative resources live beside it. Do not read this whole collection
 for a component change.
 
+## Impeccable playbook selection
+
+For a UI design task, match the user's actual intent in Chinese or English to the
+playbooks below. Select only those relevant to the requested scope; use more than
+one when the user asks for distinct outcomes. Explicit user selections take
+precedence, including `$design layout <target>` and requests naming an Impeccable
+playbook. A negated playbook or forbidden action is not selected or performed.
+When the scope is unclear, choose conservatively; do not infer all five from a
+general request to improve a UI. Playbook selection precedes the general mode
+table and Jev mode selection; Jev cannot override an explicit user choice.
+
+| Name | Intent and examples | Impeccable playbook |
+| --- | --- | --- |
+| `layout` | spacing, grouping, alignment and layout; 间距、分组、布局 | [layout](references/impeccable/upstream/reference/layout.md) |
+| `typeset` | font choices, text hierarchy and reading; 字体、字号、排版层级 | [typeset](references/impeccable/upstream/reference/typeset.md) |
+| `distill` | simplify clutter, remove redundancy; 精简、去冗余 | [distill](references/impeccable/upstream/reference/distill.md) |
+| `polish` | final refinement and consistency before shipping; 上线前打磨、一致性收尾 | [polish](references/impeccable/upstream/reference/polish.md) |
+| `critique` | assess a design and identify issues; 设计评审、找问题 | [critique](references/impeccable/upstream/reference/critique.md) |
+
+Consider intent and context, not isolated keyword matches. A typography request
+is not automatically a layout request, and a request for component feedback is
+not automatically a full shipping polish. Explicit animation review still uses
+`review-animations` unless the user selects an Impeccable playbook too. Keep the
+other opt-in modes and the general mode table below available for their actual
+purposes. For multiple selected playbooks, follow any stated order; otherwise
+choose a sensible order within scope. Clarify only an actual unresolved conflict.
+A request for critique or a question seeking advice or comparison alone is not
+authorization to edit; answer or review without implementation unless the user
+requests changes too. An action request phrased as a question, such as “能帮我
+调整间距吗？”, is a request to make that change.
+
+Before using the selected playbooks, give one concise sentence naming them and
+why they fit. Read the Impeccable mode guide and each selected playbook. Only
+say a playbook was loaded after its file was successfully read. If a file is
+missing or unreadable, say which one failed and use the applicable general design
+mode as a clearly identified fallback; do not claim the playbook was followed.
+Report the concrete checks and actual verification performed; guidance or a
+clean detector result alone is not evidence of rendered or device behavior.
+Selection does not automatically start a browser, live mode, external reviewer or publication, or expand project changes or other permissions.
+Follow the user's tools, scope, explicit choices, and the mode guide's boundaries.
+
+Examples are routing expectations, not a claim that a model has been tested:
+
+- “调整间距和布局” → `layout`; “Improve the type scale” → `typeset`.
+  “能帮我调整间距吗？” is an action request → `layout` with implementation.
+- “精简设置页并优化字号” → `distill` + `typeset`.
+- “Review this design, then polish the issues” → `critique` then `polish`;
+  critique alone remains review-only.
+- “How should I simplify this screen?” may consult `distill` for advice, but
+  does not edit. “不要改字体，只调整间距” selects `layout`, not `typeset`.
+- “Review the animation” uses the explicit motion-review mode, not an automatic
+  full design critique. A non-UI backend request does not invoke these playbooks.
+
 ## Choose the mode
 
 | Request | Mode and guide |
 | --- | --- |
 | Distinctive visual direction, broader UI composition or an explicitly requested visual critique | [impeccable](references/impeccable/guide.md) |
-| Component polish, feedback, spacing, cohesion or accessibility | [emil-design-eng](references/emil-design-eng/guide.md) |
+| Component feedback, cohesion or accessibility outside selected playbooks | [emil-design-eng](references/emil-design-eng/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
 | Fix janky or dropping-frame web animation, or work inside the frame budget | [animation-performance](references/animation-performance/guide.md) |
@@ -32,7 +85,7 @@ for a component change.
 | Explicitly explore different UI variants behind a visual picker | [prototype](references/prototype/guide.md) |
 
 For a new or substantially redesigned interface, start with `impeccable` when its visual
-direction matters. For focused interface polish, start with `emil-design-eng`. Prefer
+direction matters. For focused component work outside selected playbooks, use `emil-design-eng`. Prefer
 `ask-sonner` for a Sonner problem and the platform-specific mode for mobile work. A naming
 question ends with the term; an audit ends with findings or a plan. Implement when
 implementation is part of the request.
@@ -46,6 +99,22 @@ Jev turn hook. On same-layer disagreement, recheck the request, opt-in constrain
 guide evidence once, then choose the mode and read its guide without another Jev call.
 Explicit mode names, clear single-mode requests and ordinary component polish need no
 extra routing call. If Jev abstains or is unavailable, choose from this table normally.
+
+Give a concise, truthful routing receipt with the selection: say whether this
+turn reused its hook recommendation, called the helper, or needed or allowed no
+call. For an actual hook or helper result, include only the returned `status`,
+`mode`, `source`, and `requests` when present. A helper invocation is not
+necessarily a remote Jev request: `source:local` with `requests:0` is local;
+`source:fallback` / `status:fail_open` is an abstention. Reusing a hook result
+is not a new call. An absent result stays absent; Jev `status`
+reports a previous observation and is not evidence that this turn called Jev.
+Send only minimal non-sensitive context to the helper, respecting tool bans and
+explicit model, effort, Fast, and scope choices. On failure, low confidence,
+malformed response, or local fallback, treat the result as an abstention, choose
+locally, and report the fallback without retrying. Jev selects among mode guides,
+not the five individual playbooks, and never grants permission or proves work.
+If a selected playbook leaves a genuine choice between additional mode guides,
+apply the same one-call Jev rule; a playbook selection does not suppress it.
 
 The helper's default candidate set excludes the four explicit modes below. Include one
 in `allowed_modes` only when the actual user request authorizes it; a Jev recommendation
