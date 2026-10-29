@@ -39,3 +39,18 @@ this guide. Use this helper for commands printed by the engine too. It verifies 
 and uses the workstation's hidden runner; the first use may download the engine. On other
 platforms, invoke `sh <mode-base>/upstream/scripts/impeccable <arguments>`. Keep the working
 directory at the user's project on both platforms.
+
+For Live on Windows, first check `live-status` for the intended app root. If no helper
+is running, start `live-server` through the same Windows helper in a yielded foreground
+session, passing the same `--target` as the eventual `live` command when applicable.
+Check `live-status` until it reports the server ready, then run `live` and follow the
+upstream poll loop. The hidden runner buffers the foreground server's output until it
+stops; do not wait for that output as a readiness signal. This avoids a pinned-engine
+startup hang caused by the background server retaining the boot command's output pipe.
+On exit or an aborted setup, stop the helper started for this session and collect its
+foreground process; do not stop a helper belonging to a different session.
+
+If Live reports `insufficient_locator` for a selected element without an id or classes,
+and it has distinct text, pass that text as `--query` alongside `--tag` and `--text`
+to `live-wrap`. Inspect the returned source range before publishing; if it cannot be
+matched safely, use the upstream fallback rather than guessing.
