@@ -163,6 +163,28 @@ class CodexDesignSyncTests(unittest.TestCase):
         self.assertEqual(self.receipt(), before)
         self.assertEqual(len(list((self.runtime / "backups").glob("*/failed-design/SKILL.md"))), 1)
 
+    def test_permissions_failure_rolls_back_package_and_receipt(self) -> None:
+        before = self.receipt()
+        with patch.object(updater, "restore_security", side_effect=updater.SyncError("permissions failed")):
+            with self.assertRaisesRegex(updater.SyncError, "permissions failed"):
+                self.update(package("animate", "future-mode"))
+        self.assertEqual(self.installed(), self.old_package)
+        self.assertEqual(self.receipt(), before)
+        self.assertEqual(len(list((self.runtime / "backups").glob("*/failed-design/SKILL.md"))), 1)
+
+    def test_update_preserves_existing_permission_entries(self) -> None:
+        before = updater.security_snapshot(self.destination)
+        self.update(package("animate", "future-mode"))
+        after = updater.security_snapshot(self.destination)
+        if before is not None:
+            for name in before.keys() & after.keys():
+                old_owner, _, old_dacl = before[name][0].partition("D:")
+                new_owner, _, new_dacl = after[name][0].partition("D:")
+                old_flags, _, old_entries = old_dacl.partition("(")
+                new_flags, _, new_entries = new_dacl.partition("(")
+                self.assertEqual((old_owner, old_flags.replace("AI", ""), old_entries, before[name][1]),
+                                 (new_owner, new_flags.replace("AI", ""), new_entries, after[name][1]), name)
+
     def test_check_only_does_not_replace_package(self) -> None:
         before = self.receipt()
         with patch.object(updater, "fetch_head", return_value=NEW), patch.object(updater, "check_ancestry"), \

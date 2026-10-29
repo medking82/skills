@@ -168,6 +168,118 @@ def atomic_json(path: Path, value: dict) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def windows_dacl(path: Path) -> tuple[str, bool]:
+    """Read the owner and DACL without relying on account names."""
+    import ctypes
+    from ctypes import wintypes
+
+    api = ctypes.WinDLL("advapi32", use_last_error=True)
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    pointer = ctypes.c_void_p
+    api.GetNamedSecurityInfoW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                                         pointer, pointer, ctypes.POINTER(pointer), pointer,
+                                         ctypes.POINTER(pointer)]
+    api.GetNamedSecurityInfoW.restype = wintypes.DWORD
+    api.GetSecurityDescriptorControl.argtypes = [pointer, ctypes.POINTER(wintypes.WORD),
+                                                 ctypes.POINTER(wintypes.DWORD)]
+    api.GetSecurityDescriptorControl.restype = wintypes.BOOL
+    api.ConvertSecurityDescriptorToStringSecurityDescriptorW.argtypes = [
+        pointer, wintypes.DWORD, wintypes.DWORD, ctypes.POINTER(pointer), pointer]
+    api.ConvertSecurityDescriptorToStringSecurityDescriptorW.restype = wintypes.BOOL
+    kernel.LocalFree.argtypes = [pointer]
+    kernel.LocalFree.restype = pointer
+
+    owner, dacl, descriptor, text = pointer(), pointer(), pointer(), pointer()
+    status = api.GetNamedSecurityInfoW(str(path), 1, 5, ctypes.byref(owner), None, ctypes.byref(dacl),
+                                       None, ctypes.byref(descriptor))
+    if status:
+        raise ctypes.WinError(status, "GetNamedSecurityInfoW")
+    try:
+        if not owner.value or not dacl.value:
+            raise SyncError("Cannot safely preserve an unknown owner or null DACL: " + str(path))
+        control, revision = wintypes.WORD(), wintypes.DWORD()
+        if not api.GetSecurityDescriptorControl(descriptor, ctypes.byref(control), ctypes.byref(revision)):
+            raise ctypes.WinError(ctypes.get_last_error(), "GetSecurityDescriptorControl")
+        if not api.ConvertSecurityDescriptorToStringSecurityDescriptorW(descriptor, 1, 5,
+                                                                         ctypes.byref(text), None):
+            raise ctypes.WinError(ctypes.get_last_error(), "ConvertSecurityDescriptorToStringSecurityDescriptorW")
+        return ctypes.wstring_at(text), bool(control.value & 0x1000)
+    finally:
+        if text.value:
+            kernel.LocalFree(text)
+        if descriptor.value:
+            kernel.LocalFree(descriptor)
+
+
+def windows_set_dacl(path: Path, saved: tuple[str, bool]) -> None:
+    """Restore only the saved DACL; Windows propagates its inheritable entries."""
+    import ctypes
+    from ctypes import wintypes
+
+    api = ctypes.WinDLL("advapi32", use_last_error=True)
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    pointer = ctypes.c_void_p
+    api.ConvertStringSecurityDescriptorToSecurityDescriptorW.argtypes = [
+        wintypes.LPCWSTR, wintypes.DWORD, ctypes.POINTER(pointer), pointer]
+    api.ConvertStringSecurityDescriptorToSecurityDescriptorW.restype = wintypes.BOOL
+    api.GetSecurityDescriptorDacl.argtypes = [pointer, ctypes.POINTER(wintypes.BOOL),
+                                               ctypes.POINTER(pointer), ctypes.POINTER(wintypes.BOOL)]
+    api.GetSecurityDescriptorDacl.restype = wintypes.BOOL
+    api.SetNamedSecurityInfoW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                                         pointer, pointer, pointer, pointer]
+    api.SetNamedSecurityInfoW.restype = wintypes.DWORD
+    kernel.LocalFree.argtypes = [pointer]
+    kernel.LocalFree.restype = pointer
+
+    descriptor, dacl = pointer(), pointer()
+    if not api.ConvertStringSecurityDescriptorToSecurityDescriptorW(saved[0], 1,
+                                                                     ctypes.byref(descriptor), None):
+        raise ctypes.WinError(ctypes.get_last_error(), "ConvertStringSecurityDescriptorToSecurityDescriptorW")
+    try:
+        present, defaulted = wintypes.BOOL(), wintypes.BOOL()
+        if not api.GetSecurityDescriptorDacl(descriptor, ctypes.byref(present),
+                                              ctypes.byref(dacl), ctypes.byref(defaulted)):
+            raise ctypes.WinError(ctypes.get_last_error(), "GetSecurityDescriptorDacl")
+        if not present.value or not dacl.value:
+            raise SyncError("Cannot safely restore a null DACL: " + str(path))
+        flags = 0x80000004 if saved[1] else 0x20000004
+        status = api.SetNamedSecurityInfoW(str(path), 1, flags, None, None, dacl, None)
+        if status:
+            raise ctypes.WinError(status, "SetNamedSecurityInfoW")
+    finally:
+        kernel.LocalFree(descriptor)
+
+
+def security_snapshot(root: Path) -> dict[str, tuple[str, bool]] | None:
+    if os.name != "nt":
+        return None
+    result = {".": windows_dacl(root)}
+    for base, directories, names in os.walk(root, followlinks=False):
+        for name in directories + names:
+            item = regular(Path(base) / name)
+            result[item.relative_to(root).as_posix()] = windows_dacl(item)
+    return result
+
+
+def restore_security(root: Path, saved: dict[str, tuple[str, bool]] | None) -> None:
+    if saved is None:
+        return
+    windows_set_dacl(root, saved["."])
+    restored = security_snapshot(root)
+    # Applying a DACL marks it auto-inherited. That control flag is bookkeeping;
+    # compare protection and the ordered ACEs, including their inheritance flags.
+    def comparable(value):
+        sddl, protected = value
+        owner, separator, dacl = sddl.partition("D:")
+        if not separator:
+            raise SyncError("Invalid saved design DACL")
+        flags, separator, entries = dacl.partition("(")
+        return owner + "D:" + flags.replace("AI", "") + separator + entries, protected
+    if any(comparable(restored[name]) != comparable(saved[name])
+           for name in saved.keys() & restored.keys()):
+        raise SyncError("Existing design permissions could not be preserved; update cancelled")
+
+
 def sync(runtime: Path, destination: Path, *, enroll: str | None = None, apply: bool = False) -> dict:
     regular(runtime)
     regular(destination)
@@ -221,9 +333,13 @@ def sync(runtime: Path, destination: Path, *, enroll: str | None = None, apply: 
         (backup / "state.before.json").write_bytes(before)
         if tree_files(destination) != installed or state_path.read_bytes() != before:
             raise SyncError("Installed package changed before replacement")
+        security = security_snapshot(destination)
         destination.rename(backup / "design")
         try:
+            if security_snapshot(backup / "design") != security:
+                raise SyncError("Installed permissions changed before replacement")
             stage.rename(destination)
+            restore_security(destination, security)
             atomic_json(state_path, desired)
             if tree_files(destination) != desired["files"]:
                 raise SyncError("Installed package changed during replacement")

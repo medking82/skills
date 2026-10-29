@@ -54,6 +54,11 @@ Other skills and `config.toml` are outside this updater's scope. Codex normally
 detects skill file changes automatically; the initial configuration restart remains
 a one-time step.
 
+On Windows, replacement preserves the existing design directory's DACL and checks
+the owner and permission entries of retained paths. If permissions cannot be safely
+preserved, the update rolls back and reports `attention` instead of replacing the
+installed package. Newly added paths inherit the restored directory permissions.
+
 Inspect `%USERPROFILE%\.codex\design-sync\last-run.json` for `enrolled`, `updated`,
 `unchanged`, or `attention`. Success returns 0; errors return 2. Local drift fails
 closed instead of overwriting edits. Resolve the reported issue before retrying;
