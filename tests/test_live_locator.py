@@ -117,6 +117,26 @@ class LiveLocatorTests(unittest.TestCase):
             locator.apply_selection(path,receipt,replacement,'abc12345',validation)
             self.assertEqual(path.read_bytes(),source.replace(original,replacement).encode('utf-8'))
 
+    def test_instance_and_template_validators_cannot_cross_scopes(self):
+        for kind, scope, validator, original, replacement in (
+            ('jsx-instance', 'instance', 'babel-jsx-instance-props-v1', '<Card label="Same"/>', '<Card label="Same" className="chosen"/>'),
+            ('jsx', 'template', 'babel-jsx-template-static-edits-v1', '<span>{label}</span>', '<span className="all">{label}</span>'),
+            ('jsx', 'template', 'babel-jsx-template-structural-edits-v1', '<span>{label}</span>', '<div><b>{label}</b></div>'),
+        ):
+            with self.subTest(kind=kind,validator=validator), tempfile.TemporaryDirectory(prefix='scope-commit-', dir=ROOT/'tests') as directory:
+                source='const View=()=> '+original+'; // Neighbor\r\n'
+                path=Path(directory)/'Scoped.jsx';path.write_bytes(source.encode())
+                receipt=dict(publishToSource=False,sourceKind=kind,editScope=scope,sessionId='abc12345',file=str(path),
+                    sourceSha256=hashlib.sha256(source.encode()).hexdigest(),original=original,
+                    replaceStartOffset=source.index(original),replaceEndOffset=source.index(original)+len(original))
+                validation=dict(ok=True,validator='babel-jsx-static-edits-v1',receipt=receipt,replacementSha256=hashlib.sha256(replacement.encode()).hexdigest())
+                with self.assertRaisesRegex(locator.LocatorError,'template_validation'):
+                    locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+                self.assertEqual(path.read_bytes(),source.encode())
+                validation['validator']=validator
+                locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+                self.assertEqual(path.read_bytes(),source.replace(original,replacement).encode())
+
 
 if __name__ == '__main__':
     unittest.main()

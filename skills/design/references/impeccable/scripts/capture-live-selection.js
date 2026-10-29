@@ -26,7 +26,13 @@
           const marker = el.getAttribute?.('data-design-live-source');
           const templateSource = marker ? {id: marker, occurrences: [...document.querySelectorAll('[data-design-live-source]')]
             .filter(n => n.getAttribute('data-design-live-source') === marker).length} : undefined;
-          records.set(id, {outerHTML: result.outerHTML, path: pathFor(el), parentHTML: el.parentElement.outerHTML, templateSource});
+          let root = el;
+          while (root && !root.getAttribute?.('data-design-live-instance')) root = root.parentElement;
+          const instanceId = root?.getAttribute?.('data-design-live-instance');
+          const instanceSource = instanceId ? {id: instanceId, rootSelected: root === el,
+            occurrences: [...document.querySelectorAll('[data-design-live-instance]')]
+              .filter(n => n.getAttribute('data-design-live-instance') === instanceId).length} : undefined;
+          records.set(id, {outerHTML: result.outerHTML, path: pathFor(el), parentHTML: el.parentElement.outerHTML, templateSource, instanceSource});
           if (records.size > 32) records.delete(records.keys().next().value);
         }
         return result;
@@ -43,7 +49,8 @@
     forEvent(event) {
       const match = records.get(event.id);
       if (!match?.path || match.outerHTML !== event.element.outerHTML) throw new Error('No matching session snapshot; capture again');
-      return {path: match.path, parentHTML: match.parentHTML, ...(match.templateSource ? {templateSource:match.templateSource} : {})};
+      return {path: match.path, parentHTML: match.parentHTML, ...(match.templateSource ? {templateSource:match.templateSource} : {}),
+        ...(match.instanceSource ? {instanceSource:match.instanceSource} : {})};
     },
     dispose() {
       active = false;

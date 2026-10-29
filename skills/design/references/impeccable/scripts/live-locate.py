@@ -169,10 +169,13 @@ def apply_selection(path, receipt, replacement, session_id=None, template_approv
     start, end = receipt['replaceStartOffset'], receipt['replaceEndOffset']
     if source[start:end] != receipt['original']:
         raise LocatorError('source_range_mismatch')
-    if receipt.get('sourceKind') == 'jsx':
+    if receipt.get('sourceKind') in ('jsx', 'jsx-instance'):
+        validators = ('babel-jsx-instance-props-v1',) if receipt['sourceKind'] == 'jsx-instance' else (
+            'babel-jsx-template-static-edits-v1', 'babel-jsx-template-structural-edits-v1'
+        ) if receipt.get('editScope') == 'template' else ('babel-jsx-static-edits-v1', 'babel-jsx-structural-edits-v1')
         if (path.suffix.lower() not in ('.jsx', '.tsx') or not template_approval
                 or template_approval.get('ok') is not True
-                or template_approval.get('validator') not in ('babel-jsx-static-edits-v1', 'babel-jsx-structural-edits-v1')
+                or template_approval.get('validator') not in validators
                 or template_approval.get('receipt') != receipt
                 or template_approval.get('replacementSha256') != hashlib.sha256(replacement.encode('utf-8')).hexdigest()):
             raise LocatorError('missing_or_mismatched_template_validation')

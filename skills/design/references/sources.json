@@ -230,13 +230,18 @@
     },
     "impeccable/references/live-jsx-source.md": {
       "source": "skills/impeccable/references/live-jsx-source.md",
-      "source_sha256": "2616ec87557078c19465a9d9d24c741e7f62d99ff139141acfb0437d5c8e10a2",
-      "sha256": "2616ec87557078c19465a9d9d24c741e7f62d99ff139141acfb0437d5c8e10a2"
+      "source_sha256": "a8c3caba9d9eafd664d4bdfeaea25917c449c1daa9a8c68c8e1f8364722118f7",
+      "sha256": "a8c3caba9d9eafd664d4bdfeaea25917c449c1daa9a8c68c8e1f8364722118f7"
     },
     "impeccable/scripts/capture-live-selection.js": {
       "source": "skills/impeccable/scripts/capture-live-selection.js",
-      "source_sha256": "4beb70f1d6d9a81aee3d08e96ba4b4c5fc4ea7ea108ad7dfd5be1b0450bbc6d9",
-      "sha256": "4beb70f1d6d9a81aee3d08e96ba4b4c5fc4ea7ea108ad7dfd5be1b0450bbc6d9"
+      "source_sha256": "e859a9fd358f34c130df0dc5dac404cc5c2c2d899fa5294e394d28ccd164d5e1",
+      "sha256": "e859a9fd358f34c130df0dc5dac404cc5c2c2d899fa5294e394d28ccd164d5e1"
+    },
+    "impeccable/scripts/live-jsx-instances.cjs": {
+      "source": "skills/impeccable/scripts/live-jsx-instances.cjs",
+      "source_sha256": "c01fd42477736c3173b4dc70831943322746acd9a4c175bf76e5bcd2738389b2",
+      "sha256": "c01fd42477736c3173b4dc70831943322746acd9a4c175bf76e5bcd2738389b2"
     },
     "impeccable/scripts/live-jsx-loader.cjs": {
       "source": "skills/impeccable/scripts/live-jsx-loader.cjs",
@@ -245,13 +250,13 @@
     },
     "impeccable/scripts/live-jsx-source.cjs": {
       "source": "skills/impeccable/scripts/live-jsx-source.cjs",
-      "source_sha256": "fb4f805c96299fde0a01a33d01f9f968ebea7146f612d199829d62f93ed558dc",
-      "sha256": "fb4f805c96299fde0a01a33d01f9f968ebea7146f612d199829d62f93ed558dc"
+      "source_sha256": "8e885405afebf6bb901b60a71a1cee374466784f54b9645c5bb48b7a3b524de5",
+      "sha256": "8e885405afebf6bb901b60a71a1cee374466784f54b9645c5bb48b7a3b524de5"
     },
     "impeccable/scripts/live-locate.py": {
       "source": "skills/impeccable/scripts/live-locate.py",
-      "source_sha256": "0350e8d9aa586c24338b2d2a31da62d3be2a203bb6a8683263f42bd2ce7efba7",
-      "sha256": "0350e8d9aa586c24338b2d2a31da62d3be2a203bb6a8683263f42bd2ce7efba7"
+      "source_sha256": "5fe1823530f2877357857f01bfed7a665e28f116d2ba472c5fcdd408f1ffe297",
+      "sha256": "5fe1823530f2877357857f01bfed7a665e28f116d2ba472c5fcdd408f1ffe297"
     },
     "impeccable/scripts/run-engine.ps1": {
       "source": "skills/impeccable/scripts/run-engine.ps1",

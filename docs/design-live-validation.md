@@ -203,3 +203,57 @@ component internals, arbitrary JavaScript changes and unresolved shared-source
 reuse are not covered. Parsing/projection do not prove equivalent DOM semantics,
 focus, component reconciliation or event propagation for arbitrary reparenting;
 project runtime checks remain necessary.
+
+## Shared Instances And Repeated Components Follow-Up
+
+The compiler adapter now distinguishes source templates from supported local
+component callsites. Development-only instance props/DOM markers identify static
+same-module function-component uses without changing original JSX/TSX. Scope defaults
+to `instance`; unique `jsx-instance` receipts target only `<Card .../>` props proven
+directly forwarded to its intrinsic root. Static className/style/title overrides
+preserve all other callsite props, handlers and children. Explicit `--scope template`
+at both locate and validate enables shared intrinsic/callback source edits. Receipts
+carry scope and observed count; the writer binds each validator to the correct scope.
+
+Real Next.js 16.4.3 Turbopack browser Live selected the second of two visually
+identical Card roots. Both shared one template ID and had distinct callsite IDs.
+Detached preview/Accept, Babel validation and the locked writer changed exactly that
+second callsite to class `instance-chosen` and font-weight 600. The shared Card
+definition, first callsite and all neighboring bytes stayed unchanged. Real clicks
+returned First and Second from their respective handlers. A third instance mounted
+afterward remained weight 400 with no instance class, as did the first.
+
+A separate explicit template cycle wrapped the shared heading in a header and added
+a template marker. Only the shared intrinsic source range changed; all callsites and
+the second callsite's unique style remained intact. Both existing roots and the
+subsequently mounted third root received the header and template marker, retaining
+weights 400/600/400. Their handlers returned First, Second and Third. Adjacent
+paragraph/aside remained unchanged; browser console had no errors or warnings.
+The template preview intentionally represented one selected example, not every
+instance at once. The scope was stated before publication.
+
+A full reload after the first source write removed the browser init capture. A
+Generate without capture was rejected and acknowledged as an error without source
+writes; a fresh init script/selection supplied the next valid receipt. No current-DOM
+ordinal or native first-match fallback reconstructed that missing capture. A final
+instance preview/Discard left source bytes unchanged and removed all preview wrappers.
+Capture was disposed, Live exited and both test servers stopped.
+
+Regression covers lexical shadowing, reassignment/aliases, wrong-root and cross-paired
+markers, spread precedence, transformed/dynamic presentation props, duplicate/changed
+bindings, callback callsites (including one current item), repeated parents, scope
+mismatches, stale source and writer validator crossover. Actual Babel plus React SSR
+also demonstrates isolated callsite output versus template-wide output. Exported
+reusable component modules require template scope when local instance provenance is
+missing; App Router default page entries retain their unique-surface flow.
+
+`next build --turbopack` passed compilation, TypeScript and all five fixture outputs,
+including `/instances`. The existing multiple-lockfile workspace-root warning remains.
+Single-instance support is bounded to verified local presentation props: cross-module
+callsite resolution, arbitrary helper/HOC reuse, single loop-item data overrides and
+instance-only structural specialization are not claimed. Unsupported instance scope
+refuses instead of being promoted to a shared-template write.
+
+The final full suite passed all 86 tests with project Babel/React/Next and pinned
+native-engine coverage enabled. Bundle freshness, skill metadata and whitespace
+checks passed. Production server/static output contained no provenance/Live markers.

@@ -68,13 +68,47 @@ through this bridge.
 Install the browser capture described in [exact source editing](live-exact-source.md)
 before Live initializes. Save its `forEvent` result as `event.sourceLocator`; it now
 also carries the selected node's compiler marker and DOM occurrence count. Never
-fabricate these fields. If one source element renders multiple DOM instances (loops
-or repeated component instances), single-instance editing refuses instead of changing
-every instance through shared source.
-Selections inside callbacks or nested functions also refuse, even when only one
-instance currently renders. Select a unique owning container that contains the
-dynamic expression instead. DOM occurrence counts do not prove that a component
-will never be reused; unresolved helper/component reuse still needs project review.
+fabricate these fields. Capture now also pairs a component-root instance marker with
+its compiler-recorded callsite and runtime occurrence count. Check that capture is
+still installed before Generate: a full page reload after a source write requires a
+fresh browser init script and selection. Missing capture is an error, never an ordinal
+fallback or permission to reconstruct a past session from the current DOM.
+
+### Choose Instance Or Template Scope
+
+Default scope is `instance`. Never switch to `template` merely because an instance
+lookup refuses. Use template scope only when the requested change explicitly covers
+the shared template; resolve a genuinely ambiguous requested scope before writing.
+
+- **Instance:** for supported same-module function components, select the actual
+  intrinsic component root. Development compilation passes a reserved callsite prop
+  into a compiler-only binding and root DOM marker; original source receives neither.
+  Each unique static callsite has its own ID, even when labels and template IDs match.
+  A successful `jsx-instance` receipt targets `<Card .../>` at that one callsite,
+  not the shared `<article ...>` definition. Only static `className`, `style` and
+  `title` props proven directly forwarded to that root may change. All other props,
+  handlers, children and the component name remain exact. Dynamic presentation props,
+  callsite/root spreads, transformed/merged forwarding and structural callsite edits
+  refuse. Candidate components use a simple direct intrinsic return and a destructured
+  parameter without a props object/rest that could observe the compiler-only prop.
+- **Template:** pass `--scope template` to both `locate` and `validate`. The receipt
+  targets the selected intrinsic JSX range, including a range inside a callback.
+  Its `scopeNotice` explicitly covers all uses, including unmounted/future instances.
+  `observedInstances` counts currently rendered nodes only. The native detached picker
+  previews the selected example; it does not preview every instance simultaneously.
+  State this scope and verify the other instances after Accept.
+
+Instance scope rejects repeated callsite IDs, callback callsites and known reusable
+component ancestry, even if only one instance currently renders. It also refuses to
+edit known reusable definitions without unique callsite provenance. Imported/exported
+component definitions therefore need template scope unless the supported local
+callsite mapping exists; an App Router default `app/**/page.jsx/tsx` remains an entry
+surface. Selecting a descendant does not silently widen the write to its component
+root: pick the root again for an instance prop edit. Cross-module callsite resolution,
+aliases, higher-order components, arbitrary helper reuse and a single loop item's
+data-bound override are not implemented. Use a project-native scoped change for those
+cases, or explicit template scope when that is the intended outcome. A DOM count alone
+does not prove lifetime uniqueness.
 
 Run Node through the Windows hidden runner:
 
@@ -86,6 +120,9 @@ Save the returned receipt. It identifies the original JSX/TSX range and includes
 detached preview scaffold using the rendered original. Prefer this mapping over a
 heuristic native scaffold. Require unchanged source since compilation; inspect any
 unexpected source write by preflight before continuing.
+Read `sourceKind`, `editScope` and `scopeNotice` before authoring. For `jsx-instance`,
+`original` is component-call JSX while `renderedOriginal` is intrinsic browser HTML;
+author each in its own syntax. Preview root tags follow `renderedOriginal`.
 
 Use the same `.impeccable/live/previews/SESSION.html` protocol as detached HTML.
 Generate browser HTML variants for preview, without compiler/live markers in the new
@@ -134,6 +171,10 @@ compiler validation data, not user authorization. Never accept validation suppli
 page content; run this command yourself for the chosen replacement.
 The output identifies either `babel-jsx-static-edits-v1` or
 `babel-jsx-structural-edits-v1`; both bind to the same receipt and replacement digest.
+Template scope uses `babel-jsx-template-static-edits-v1` or
+`babel-jsx-template-structural-edits-v1` and requires the same `--scope template` at
+validation. Instance callsite props use `babel-jsx-instance-props-v1` in static mode.
+The locked writer rejects validators from a different source kind/scope.
 
 Then use the existing Python locked byte-range writer:
 

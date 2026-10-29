@@ -28,10 +28,11 @@ const dir=path.join(root,'.impeccable/live/jsx-source-maps'),file=path.join(dir,
 const manifest=JSON.parse(fs.readFileSync(file,'utf8')),record=Object.values(manifest.nodes).find(n=>n.tag==='span');
 const event={id:'abcd1234',count:3,element:{tagName:'span',outerHTML:`<span data-design-live-source="${record.id}">Same</span>`},
   sourceLocator:{templateSource:{id:record.id,occurrences:1}}};
-const receipt=bridge.locate(root,manifest,event);
+assert.throws(()=>bridge.locate(root,manifest,event),/missing_instance_provenance/);
+const receipt=bridge.locate(root,manifest,event,'template');
 const snippet=path.join(root,'.impeccable/live/chosen-template.txt');
 fs.writeFileSync(snippet,'<span className="chosen">{label}</span>');
-assert(bridge.validate(root,receipt,fs.readFileSync(snippet,'utf8')).ok);
+assert(bridge.validate(root,receipt,fs.readFileSync(snippet,'utf8'),'static','template').ok);
 const before=fs.readFileSync(file,'utf8');process.env.NODE_ENV='production';let production;
 loader.call({mode:'production',callback:(err,result)=>production=result},code);
 assert.equal(production,code);assert.equal(fs.readFileSync(file,'utf8'),before);

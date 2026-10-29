@@ -19,9 +19,15 @@ helpers.cloneWithoutChrome(first); // Later clones must not overwrite this sessi
 const record=window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}});
 assert.deepEqual(JSON.parse(JSON.stringify(record.path)),[{tag:'p',index:0},{tag:'span',index:1}]);
 assert.throws(()=>window.__DESIGN_LIVE_SELECTION__.forEvent({id:'missing',element:{outerHTML:second.outerHTML}}));
-first.getAttribute=second.getAttribute=()=> 'a'.repeat(24);
+first.getAttribute=second.getAttribute=name=> name==='data-design-live-source'?'a'.repeat(24):name==='data-design-live-instance'?'b'.repeat(24):null;
 id='cccccccc';helpers.cloneWithoutChrome(second);
 assert.equal(window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}}).templateSource.occurrences,2);
+assert.equal(window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}}).instanceSource.occurrences,2);
+assert.equal(window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}}).instanceSource.rootSelected,true);
+second.getAttribute=name=>name==='data-design-live-source'?'a'.repeat(24):null;
+p.getAttribute=name=>name==='data-design-live-instance'?'b'.repeat(24):null;
+id='dddddddd';helpers.cloneWithoutChrome(second);
+assert.equal(window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}}).instanceSource.rootSelected,false);
 window.__DESIGN_LIVE_SELECTION__.dispose();
 assert.equal(window.__DESIGN_LIVE_SELECTION__,undefined);
 assert.equal(Object.getOwnPropertyDescriptor(window,'__IMPECCABLE_LIVE_DOM__').set,undefined);
