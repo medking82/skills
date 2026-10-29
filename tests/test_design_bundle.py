@@ -131,6 +131,14 @@ class DesignBundleTests(unittest.TestCase):
         self.assertFalse(mode["allow_implicit_invocation"])
         self.assertEqual((self.root / "new-mode/guide.md").read_text(), "# New\n")
 
+    def test_inventory_order_is_portable_across_windows_and_linux(self) -> None:
+        self.write("skills/animate/assets/Upper.md", "Upper\n")
+        self.write("skills/animate/assets/lower.md", "Lower\n")
+        bundle.build(self.repo)
+        manifest = json.loads((self.root / "sources.json").read_text())
+        paths = [name for name in manifest["files"] if name.startswith("animate/assets/")]
+        self.assertEqual(paths, sorted(paths))
+
     def test_missing_core_route_still_stops_without_mutation(self) -> None:
         self.write("skills/design/SKILL.md", "# No routes\n")
         before = self.snapshot()

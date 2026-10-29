@@ -167,7 +167,7 @@ def expected_bundle(repo: Path) -> tuple[dict[str, bytes], dict]:
             "source": entrypoint.relative_to(repo).as_posix(),
             "source_sha256": digest(content), "sha256": digest(output[guide]),
         }
-        for source in sorted(mode.rglob("*")):
+        for source in sorted(mode.rglob("*"), key=lambda path: path.relative_to(mode).as_posix()):
             relative = source.relative_to(mode)
             if excluded(relative):
                 continue
