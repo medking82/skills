@@ -67,7 +67,7 @@
     },
     "impeccable": {
       "entrypoint": "skills/impeccable/SKILL.md",
-      "source_sha256": "6e84847f1250a4cd758e20dce545341da6ac516260bcd2cc0d10945cda8a98bf",
+      "source_sha256": "78ebe073bb1e2a37da086190bdebfe1aea01a7472829c859a53a0fed658b0e4c",
       "guide": "impeccable/guide.md",
       "description": "Develop a distinctive visual direction and composition for web or native UI, or critique its design when requested.",
       "allow_implicit_invocation": true
@@ -220,13 +220,23 @@
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",
-      "source_sha256": "6e84847f1250a4cd758e20dce545341da6ac516260bcd2cc0d10945cda8a98bf",
-      "sha256": "49a72f96bae241a7a766cf3483051319d55acd28602f1c471b71040319ad052d"
+      "source_sha256": "78ebe073bb1e2a37da086190bdebfe1aea01a7472829c859a53a0fed658b0e4c",
+      "sha256": "adfa66b19fb753ab5bcec700de74cf5fd8b8daf7ce215182cac8d052fa1f4bd0"
+    },
+    "impeccable/references/live-exact-source.md": {
+      "source": "skills/impeccable/references/live-exact-source.md",
+      "source_sha256": "79b64189fc11f2dc1768e2b766bb6145e9545168bbcd9f6bae1faddb0f1261ff",
+      "sha256": "79b64189fc11f2dc1768e2b766bb6145e9545168bbcd9f6bae1faddb0f1261ff"
+    },
+    "impeccable/scripts/capture-live-selection.js": {
+      "source": "skills/impeccable/scripts/capture-live-selection.js",
+      "source_sha256": "9ce2318be65d91fc07426b579f36a59e93cb101f4e3a2ad8845327c294dbfa90",
+      "sha256": "9ce2318be65d91fc07426b579f36a59e93cb101f4e3a2ad8845327c294dbfa90"
     },
     "impeccable/scripts/live-locate.py": {
       "source": "skills/impeccable/scripts/live-locate.py",
-      "source_sha256": "fa2b9da0439d3cd0071c647037dca82c49d27c1f2fd7244ea9db08721a7235e3",
-      "sha256": "fa2b9da0439d3cd0071c647037dca82c49d27c1f2fd7244ea9db08721a7235e3"
+      "source_sha256": "24d4462c7ddb98e2983242a291ef578d5c6f4e9e1610642389372721fc4c4cac",
+      "sha256": "24d4462c7ddb98e2983242a291ef578d5c6f4e9e1610642389372721fc4c4cac"
     },
     "impeccable/scripts/run-engine.ps1": {
       "source": "skills/impeccable/scripts/run-engine.ps1",

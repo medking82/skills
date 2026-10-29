@@ -46,7 +46,36 @@ Windows by setting `IMPECCABLE_TEST_ENGINE_WRAPPER` to the installed `run-engine
 and running `python -B -m unittest discover -s tests -p test_live_locator_engine.py`.
 Without this opt-in, that integration test skips; unit tests remain portable.
 
-Boundaries: the adapter supports uniquely matched, well-formed true HTML block source.
-Identical siblings without a distinguishing parent, inline-sensitive elements,
-framework templates, generated HTML, and parser/browser structural disagreement
-require the existing source-aware fallback. It refuses rather than guessing.
+## Inline And Repeated-Sibling Follow-Up
+
+A second real-browser fixture used minified HTML containing
+`Before<span>Same</span><span>Same</span>After &amp; 中文`. Neither span had an id/class.
+An init-script capture at the native context-clone seam recorded the exact Generate
+session and body-relative element path, including the selected second sibling.
+The production capture script also passed Node VM checks for session correlation,
+later unrelated clones, missing captures, disposal and late-install refusal.
+
+Inline previews lived only under `.impeccable/live/previews/`, with compact span
+shells and a locally scoped display override. Real computed styles showed only the
+chosen slot as `display:contents`, all other slots hidden. Visible text remained
+`BeforeSameSameAfter & 中文`; source hashes were unchanged throughout preview and
+native Accept. The native missing-marker result was expected and inspected.
+
+After Accept of variant 2, the source adapter replaced only the second span under a
+file lock and hash/range guard. Exact byte comparison against the expected one-range
+replacement passed. Reload showed two span elements, surrounding text nodes unchanged,
+and font weights 400/600. No wrapper or whitespace node was added to source.
+
+A further browser test clicked the first identical sibling, used ArrowDown to select
+the second, and generated again. Capture still reported sibling index 1. Discard
+left true-source bytes exactly unchanged; explicit discarded acknowledgement cleared
+the cycle, with no residual wrappers. Native-engine regression covers detached
+Accept/Discard source safety and exact inline promotion; portable tests cover source
+drift, DOM/source mismatch and byte preservation. Browser capture was disposed and
+test servers stopped after acceptance.
+
+Boundaries: use well-formed true HTML source and a fresh session-correlated capture
+for indistinguishable siblings. Missing captures, parser/browser disagreement,
+framework templates, generated HTML and parser-sensitive table/select targets still
+require the source-aware fallback. Detached cycles must not rely on the native
+first-match recovery heuristic after reload. Source drift refuses the write.

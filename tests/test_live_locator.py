@@ -1,5 +1,6 @@
 import importlib.util
 import unittest
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,9 +63,39 @@ class LiveLocatorTests(unittest.TestCase):
         a, b = locator.locate(source, event('<img src="a.png" alt="">', 'img'))
         self.assertEqual(source[a:b], '<img src="a.png" alt="">')
 
-    def test_scaffold_refuses_inline_whitespace_changes(self):
-        with self.assertRaisesRegex(locator.LocatorError, 'inline_source'):
-            locator.scaffold('<p>A<span>B</span>C</p>', event('<span>B</span>', 'span'))
+    def test_inline_scaffold_is_detached_without_added_whitespace(self):
+        result = locator.scaffold('<p>A<span>B</span>C</p>', event('<span>B</span>', 'span'))
+        self.assertFalse(result['publishToSource'])
+        self.assertNotIn('\n', result['wrapperBlock'])
+
+    def test_repeated_sibling_uses_captured_dom_path(self):
+        parent = '<p>A<span>X</span><span>X</span>B</p>'
+        source = '<html><body>' + parent + '</body></html>'
+        e = event('<span>X</span>', 'span')
+        e['sourceLocator'] = dict(path=[dict(tag='p', index=0), dict(tag='span', index=1)], parentHTML=parent)
+        a, b = locator.locate(source, e)
+        self.assertEqual(a, source.rindex('<span>'))
+        self.assertEqual(source[a:b], '<span>X</span>')
+        e['sourceLocator']['parentHTML'] = '<p>Changed<span>X</span><span>X</span>B</p>'
+        with self.assertRaisesRegex(locator.LocatorError, 'parent_mismatch'):
+            locator.locate(source, e)
+
+    def test_inline_apply_preserves_exact_neighbor_bytes_and_refuses_drift(self):
+        source = '\ufeff<html>\r\n<body><p>A<span>X</span>B &amp; 中文</p></body></html>'
+        with tempfile.TemporaryDirectory(prefix='inline-locator-', dir=ROOT / 'tests') as directory:
+            path = Path(directory) / 'index.html'
+            path.write_bytes(source.encode('utf-8'))
+            receipt = locator.scaffold(source, event('<span>X</span>', 'span'))
+            receipt['file'] = str(path)
+            with self.assertRaisesRegex(locator.LocatorError, 'session_mismatch'):
+                locator.apply_selection(path, receipt, '<span>Wrong</span>', 'badbad00')
+            self.assertEqual(path.read_bytes(), source.encode('utf-8'))
+            locator.apply_selection(path, receipt, '<span>Chosen</span>', receipt['sessionId'])
+            self.assertEqual(path.read_bytes(), source.replace('<span>X</span>', '<span>Chosen</span>').encode('utf-8'))
+            before = path.read_bytes()
+            with self.assertRaisesRegex(locator.LocatorError, 'source_changed'):
+                locator.apply_selection(path, receipt, '<span>Wrong</span>', receipt['sessionId'])
+            self.assertEqual(path.read_bytes(), before)
 
 
 if __name__ == '__main__':

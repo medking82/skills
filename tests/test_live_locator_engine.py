@@ -57,6 +57,38 @@ class NativeLocatorTests(unittest.TestCase):
                 self.assertIn('<h2>Target</h2>' if discard else '<h2>Chosen</h2>', result)
                 self.assertNotIn('impeccable-variant', result)
 
+    def test_detached_inline_never_enters_native_source_mutation(self):
+        runner = Path.home() / '.codex/bin/invoke-hidden.ps1'
+        wrapper = Path(os.environ['IMPECCABLE_TEST_ENGINE_WRAPPER']).resolve()
+        with tempfile.TemporaryDirectory(prefix='locator-detached-', dir=ROOT / 'tests') as directory:
+            cwd = Path(directory)
+            q = self.quote
+            self.run_ps(f'& {q(runner)} -FilePath {q(shutil.which("git"))} -ArgumentList @(\'init\',\'-q\') -WorkingDirectory {q(cwd)}', cwd)
+            baseline = '<html><body><p>A<span>X</span><span>X</span>B &amp; 中文</p></body></html>'
+            source = cwd / 'index.html'
+            source.write_bytes(baseline.encode('utf-8'))
+            self.run_ps(f'& {q(runner)} -FilePath {q(shutil.which("git"))} -ArgumentList @(\'add\',\'index.html\') -WorkingDirectory {q(cwd)}', cwd)
+            for discard in (False, True):
+                source.write_bytes(baseline.encode('utf-8'))
+                session = 'ac123456' if discard else 'ac123457'
+                parent = '<p>A<span>X</span><span>X</span>B &amp; 中文</p>'
+                e = dict(id=session,count=1,element=dict(tagName='span',outerHTML='<span>X</span>'),
+                         sourceLocator=dict(path=[dict(tag='p',index=0),dict(tag='span',index=1)],parentHTML=parent))
+                receipt = locator.scaffold(baseline,e)
+                receipt['file'] = str(source)
+                preview = cwd / '.impeccable/live/previews' / f'{session}.html'
+                preview.parent.mkdir(parents=True,exist_ok=True)
+                preview.write_text(receipt['wrapperBlock'].replace('<!-- Variants: insert below this line -->',
+                    '<span data-impeccable-variant="1"><span>Chosen</span></span>'),encoding='utf-8')
+                args=['live-accept','--id',session]+(['--discard'] if discard else ['--variant','1'])
+                result=json.loads(self.run_ps(f'& {q(wrapper)} -EngineArguments @('+','.join(map(q,args))+')',cwd))
+                self.assertFalse(result['handled'])
+                self.assertIn('Session markers not found',result['error'])
+                self.assertEqual(source.read_bytes(),baseline.encode('utf-8'))
+                if not discard:
+                    locator.apply_selection(source,receipt,'<span>Chosen</span>',receipt['sessionId'])
+                    self.assertEqual(source.read_bytes(),baseline.replace('<span>X</span>B','<span>Chosen</span>B').encode('utf-8'))
+
 
 if __name__ == '__main__':
     unittest.main()

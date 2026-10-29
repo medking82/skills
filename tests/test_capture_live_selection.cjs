@@ -1,0 +1,26 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const code = fs.readFileSync(path.join(__dirname, '../skills/impeccable/scripts/capture-live-selection.js'), 'utf8');
+const first = {tagName:'SPAN', outerHTML:'<span>X</span>'};
+const second = {tagName:'SPAN', outerHTML:'<span>X</span>'};
+const p = {tagName:'P', outerHTML:'<p><span>X</span><span>X</span></p>', children:[first,second]};
+const body = {tagName:'BODY',children:[p]};
+first.parentElement=second.parentElement=p;p.parentElement=body;
+let id='aaaaaaaa';
+const window = {__IMPECCABLE_LIVE_CHROME_CORE__:{debugState:()=>({currentSessionId:id})}};
+vm.runInNewContext(code, {window,document:{body}});
+window.__IMPECCABLE_LIVE_DOM__={createLiveBrowserDomHelpers:()=>({cloneWithoutChrome:el=>({outerHTML:el.outerHTML})})};
+const helpers=window.__IMPECCABLE_LIVE_DOM__.createLiveBrowserDomHelpers();
+helpers.cloneWithoutChrome(first);
+id='bbbbbbbb';helpers.cloneWithoutChrome(second); // Generate after keyboard selection moved.
+helpers.cloneWithoutChrome(first); // Later clones must not overwrite this session's capture.
+const record=window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}});
+assert.deepEqual(JSON.parse(JSON.stringify(record.path)),[{tag:'p',index:0},{tag:'span',index:1}]);
+assert.throws(()=>window.__DESIGN_LIVE_SELECTION__.forEvent({id:'missing',element:{outerHTML:second.outerHTML}}));
+window.__DESIGN_LIVE_SELECTION__.dispose();
+assert.equal(window.__DESIGN_LIVE_SELECTION__,undefined);
+assert.equal(Object.getOwnPropertyDescriptor(window,'__IMPECCABLE_LIVE_DOM__').set,undefined);
+assert.throws(()=>vm.runInNewContext(code,{window:{__IMPECCABLE_LIVE_INIT__:true}}));
+console.log('Session Capture And Disposal Passed');

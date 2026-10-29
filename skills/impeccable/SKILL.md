@@ -54,23 +54,7 @@ startup hang caused by the background server retaining the boot command's output
 On exit or an aborted setup, stop the helper started for this session and collect its
 foreground process; do not stop a helper belonging to a different session.
 
-If Live cannot scaffold an element without an id or classes, or its line-based locator
-fails on minified HTML, use `scripts/live-locate.py --file <true-source.html> --event
-<saved-generate-event.json>` beside this guide. Run the available Python interpreter
-through the Windows hidden runner. This read-only HTML adapter compares the browser's
-element structure, attributes and text with source and can narrow duplicates by the
-supplied parent id/class. It returns a scaffold and exact character offsets, without
-adding selectors or changing source. Use it only for a verified true HTML source file;
-framework templates and generated HTML still follow the upstream fallback.
-The scaffold isolates marker lines for native accept/discard to preserve adjacent source.
-It adds boundary newlines and therefore refuses inline elements; inline-sensitive or
-whitespace-preserving surfaces require their framework/source-aware editing path.
-
-Splice CSS and all variants into its `wrapperBlock`, then replace the half-open range
-`replaceStartOffset:replaceEndOffset` in ONE Python write. Decode and encode UTF-8
-without newline conversion, and verify `sourceSha256` against the current bytes before
-writing; a changed hash requires locating again. These are Python Unicode offsets,
-not byte or JavaScript offsets. Retain the original slot and use the upstream scoped
-CSS contract. Then reply `done --file <path>` and follow normal accept/discard cleanup.
-An ambiguous match, malformed markup or unsupported source is a refusal: do not guess
-or publish its range.
+For missing selectors, minified HTML, inline elements or repeated siblings, read
+[exact HTML source editing](references/live-exact-source.md). It provides a source
+locator, session-correlated DOM capture and detached inline previews. Framework
+templates and generated HTML still require their source-aware upstream fallback.
