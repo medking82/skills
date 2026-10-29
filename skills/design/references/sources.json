@@ -67,7 +67,7 @@
     },
     "impeccable": {
       "entrypoint": "skills/impeccable/SKILL.md",
-      "source_sha256": "cafce6f8ec0b1a93f63ee91991b40a08ca9162bd5f279e20ba317e1bafabcf19",
+      "source_sha256": "6e84847f1250a4cd758e20dce545341da6ac516260bcd2cc0d10945cda8a98bf",
       "guide": "impeccable/guide.md",
       "description": "Develop a distinctive visual direction and composition for web or native UI, or critique its design when requested.",
       "allow_implicit_invocation": true
@@ -220,8 +220,13 @@
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",
-      "source_sha256": "cafce6f8ec0b1a93f63ee91991b40a08ca9162bd5f279e20ba317e1bafabcf19",
-      "sha256": "c510811b3b2a6945f43913b4ab202f7d47af85aff6fc6bd6a7bb0289febf4982"
+      "source_sha256": "6e84847f1250a4cd758e20dce545341da6ac516260bcd2cc0d10945cda8a98bf",
+      "sha256": "49a72f96bae241a7a766cf3483051319d55acd28602f1c471b71040319ad052d"
+    },
+    "impeccable/scripts/live-locate.py": {
+      "source": "skills/impeccable/scripts/live-locate.py",
+      "source_sha256": "fa2b9da0439d3cd0071c647037dca82c49d27c1f2fd7244ea9db08721a7235e3",
+      "sha256": "fa2b9da0439d3cd0071c647037dca82c49d27c1f2fd7244ea9db08721a7235e3"
     },
     "impeccable/scripts/run-engine.ps1": {
       "source": "skills/impeccable/scripts/run-engine.ps1",
