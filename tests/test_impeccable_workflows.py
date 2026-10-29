@@ -259,6 +259,11 @@ class WorkflowPolicyTests(unittest.TestCase):
                 self.assertRegex(text, r"if: steps\.\w+\.outputs\.changed == 'true'")
         self.assertIn("group: sync-upstream-main", BUNDLE.read_text())
         self.assertIn("group: sync-upstream-main", (ROOT / ".github/workflows/sync-upstream.yml").read_text())
+        self.assertIn("--allow-code-updates", step_run(BUNDLE, "Refresh the owned snapshot"))
+        self.assertLess(BUNDLE.read_text().index("- name: Check source ancestry"),
+                        BUNDLE.read_text().index("- name: Refresh the owned snapshot"))
+        self.assertLess(BUNDLE.read_text().index("- name: Validate the combined package"),
+                        BUNDLE.read_text().index("- name: Publish the verified snapshot"))
         for step in BUNDLE.read_text().split("      - name: ")[1:]:
             if "GH_TOKEN:" in step:
                 self.assertIn(step.splitlines()[0], {"Check source ancestry", "Publish the verified snapshot"})

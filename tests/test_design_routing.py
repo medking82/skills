@@ -35,6 +35,8 @@ class DesignRoutingTests(unittest.TestCase):
             '“能帮我调整间距吗？” is an action request → `layout` with implementation',
             '“精简设置页并优化字号” → `distill` + `typeset`',
             '“Review this design, then polish the issues” → `critique` then `polish`',
+            '“让配色更有活力” → `colorize`', '“改善新用户引导” → `onboard`',
+            '“修复手机页面的触控和布局” may combine `adapt` with `mobile-native`',
             '“不要改字体，只调整间距” selects `layout`, not `typeset`',
             '“Review the animation” uses the explicit motion-review mode',
             'A non-UI backend request does not invoke these playbooks',
@@ -44,12 +46,35 @@ class DesignRoutingTests(unittest.TestCase):
                 self.assertIn(example, self.section)
         self.assertIn("does not edit", self.section)
 
+    def test_upstream_commands_remain_discoverable_and_have_owned_guides(self):
+        upstream = DESIGN / "references/impeccable/upstream"
+        commands = json.loads((upstream / "scripts/command-metadata.json").read_text(encoding="utf-8"))
+        guide = (upstream / "guide.md").read_text(encoding="utf-8")
+        rows = {}
+        for line in guide.splitlines():
+            match = re.match(r"^\| `([a-z]+)(?: [^`]*)?` \|", line)
+            if match:
+                rows[match.group(1)] = re.findall(r"\]\((reference/[^)]+\.md)\)", line)
+        self.assertEqual(set(commands), set(rows))
+        manifest = json.loads((DESIGN / "references/sources.json").read_text(encoding="utf-8"))
+        for name, paths in rows.items():
+            with self.subTest(command=name):
+                self.assertTrue(paths, f"{name} has no guide")
+                for relative in paths:
+                    target = upstream / relative
+                    self.assertTrue(target.is_file(), relative)
+                    record = manifest["files"]["impeccable/upstream/" + relative]
+                    self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), record["sha256"])
+        self.assertIn("not the full set", self.section)
+        self.assertIn("upstream/guide.md#commands", self.section)
+        self.assertIn("does not start them", self.section)
+
     def test_jev_receipt_and_fail_open_contract_are_visible(self):
         section = self.router.split("## Jev-Assisted Mode Selection\n", 1)[1].split("\n## ", 1)[0]
         for rule in ("Reuse a design-mode recommendation already supplied by the",
                      "two or more modes plausibly fit", "no\nextra routing call",
                      "`mode`, `source`, and `requests` when present", "not evidence that this turn called Jev",
-                     "minimal non-sensitive context", "without retrying", "not the five individual playbooks",
+                     "minimal non-sensitive context", "without retrying", "main LLM selects the applicable Impeccable playbooks",
                      "does not expand task scope"):
             with self.subTest(rule=rule):
                 self.assertIn(rule, section)

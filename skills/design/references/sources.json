@@ -5,82 +5,121 @@
     "animate": {
       "entrypoint": "skills/animate/SKILL.md",
       "source_sha256": "be1096e27365b3983fdb42bc4f04aeb75049fce21d8c66de23b22ded79295493",
-      "guide": "animate/guide.md"
+      "guide": "animate/guide.md",
+      "description": "Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.",
+      "allow_implicit_invocation": true
     },
     "animate-expo": {
       "entrypoint": "skills/animate-expo/SKILL.md",
       "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
-      "guide": "animate-expo/guide.md"
+      "guide": "animate-expo/guide.md",
+      "description": "Build animations in React Native and Expo, making the decisions in the order that determines whether they feel right — should it animate, which thread it runs on, which properties, spring or timing, how the gesture hands off, how it degrades. Writes the implementation with Reanimated, Gesture Handler, Expo Router and expo-haptics. Use when animating anything in an Expo app, adding gestures, sheets, screen transitions, press feedback or haptics, or fixing motion that stutters on device. For web animation use `animate`.",
+      "allow_implicit_invocation": true
     },
     "animation-performance": {
       "entrypoint": "skills/animation-performance/SKILL.md",
       "source_sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
-      "guide": "animation-performance/guide.md"
+      "guide": "animation-performance/guide.md",
+      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Framer Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
+      "allow_implicit_invocation": true
     },
     "animation-vocabulary": {
       "entrypoint": "skills/animation-vocabulary/SKILL.md",
       "source_sha256": "d53852f2fb7310c03c2dfbb47901ea4a68ffe07628d0bd5ebe17d17b5ce7d8e0",
-      "guide": "animation-vocabulary/guide.md"
+      "guide": "animation-vocabulary/guide.md",
+      "description": "Name a web animation or motion effect from a user's visual description. Use for \"what's this effect called?\" questions and terminology clarification; for implementation use animate.",
+      "allow_implicit_invocation": true
     },
     "apple-design": {
       "entrypoint": "skills/apple-design/SKILL.md",
       "source_sha256": "69081e0c7a80ff55e52d72624925ede6eeb976e94683e058542adccf7ab11838",
-      "guide": "apple-design/guide.md"
+      "guide": "apple-design/guide.md",
+      "description": "Apple's interface principles translated for web work involving gesture-driven UI, spring motion, sheets, momentum, materials, typography, accessibility, or iPhone-focused PWAs. Use the smallest relevant reference for the request.",
+      "allow_implicit_invocation": true
     },
     "ask-sonner": {
       "entrypoint": "skills/ask-sonner/SKILL.md",
       "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
-      "guide": "ask-sonner/guide.md"
+      "guide": "ask-sonner/guide.md",
+      "description": "Guide to Sonner, the React toast library — install and wire up the Toaster, pick the right toast() call, promise and loading toasts, updating, dismissing and persisting toasts, styling, theming and icons, positioning and multiple toasters. Use when working with Sonner or troubleshooting it — toasts that don't appear, appear twice, lose their styles, ignore Tailwind classes, sit behind a modal, or don't follow dark mode.",
+      "allow_implicit_invocation": true
     },
     "break-ui": {
       "entrypoint": "skills/break-ui/SKILL.md",
       "source_sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
-      "guide": "break-ui/guide.md"
+      "guide": "break-ui/guide.md",
+      "description": "Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts, zero items, long labels, non-Latin text, emoji, extreme numbers — then render it behind a \"Demo data / Worst case\" toggle and report everything that broke, with the fix for each. Use when the user asks to stress-test, break, or find edge cases in a component or screen, or to \"try the worst case\". For visual design critique use emil-design-eng; for motion use review-animations.",
+      "allow_implicit_invocation": false
     },
     "emil-design-eng": {
       "entrypoint": "skills/emil-design-eng/SKILL.md",
       "source_sha256": "bffa3135d676ff7e4618ab8873dc246e6bb497f0d00f337b83c5b14cd9da1ea0",
-      "guide": "emil-design-eng/guide.md"
+      "guide": "emil-design-eng/guide.md",
+      "description": "Apply Emil Kowalski's design-engineering principles to UI polish, component feedback, and interaction quality. Use when implementing or assessing interface details; route focused motion tasks to the specialized animation skills.",
+      "allow_implicit_invocation": true
     },
     "find-animation-opportunities": {
       "entrypoint": "skills/find-animation-opportunities/SKILL.md",
       "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
-      "guide": "find-animation-opportunities/guide.md"
+      "guide": "find-animation-opportunities/guide.md",
+      "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
+      "allow_implicit_invocation": true
     },
     "impeccable": {
       "entrypoint": "skills/impeccable/SKILL.md",
       "source_sha256": "981d8557c5b11367aed16d36a2b950763a618e5547de82d8666b90e8c9acb76f",
-      "guide": "impeccable/guide.md"
+      "guide": "impeccable/guide.md",
+      "description": "Develop a distinctive visual direction and composition for web or native UI, or critique its design when requested.",
+      "allow_implicit_invocation": true
     },
     "improve-animations": {
       "entrypoint": "skills/improve-animations/SKILL.md",
       "source_sha256": "39f8338e6fb19814e6b94d2ad40ae4a5d6046e081b5d074678dd8db54d96d810",
-      "guide": "improve-animations/guide.md"
+      "guide": "improve-animations/guide.md",
+      "description": "Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them. Use when the user asks to \"improve the animations\", \"audit the motion\", \"make this app feel better\", or wants a roadmap of animation fixes rather than a review of a single diff.",
+      "allow_implicit_invocation": true
     },
     "mobile-native": {
       "entrypoint": "skills/mobile-native/SKILL.md",
       "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
-      "guide": "mobile-native/guide.md"
+      "guide": "mobile-native/guide.md",
+      "description": "Make a web app feel native on a phone — the small CSS and meta-tag fixes that separate \"a website in a browser\" from something that feels installed. Covers sticky hover states, tap highlight flashes, the 100vh bug, inputs that zoom the page, laggy taps, pull-to-refresh hijacking scroll, content under the notch, long-press selecting button text, carousels that scroll the wrong way, mismatched status bars, and the rule that you test on real hardware. Use when a web app is being built for or reviewed on mobile, when something \"works in Chrome but feels wrong on my phone\", when building a PWA, a bottom sheet, a carousel, a full-screen layout, or any touch interaction. For motion itself use animate; for React Native use animate-expo.",
+      "allow_implicit_invocation": true
     },
     "pick-ui-library": {
       "entrypoint": "skills/pick-ui-library/SKILL.md",
       "source_sha256": "54ee1b6b2a4e5fe6fc6fb7851329c15b26a870d75c6ff988cb7745d3bece2d19",
-      "guide": "pick-ui-library/guide.md"
+      "guide": "pick-ui-library/guide.md",
+      "description": "Pick the right library for a given frontend task from a curated, opinionated list — numbers, OTP inputs, charts, command menus, virtualization, drag and drop, toasts, state, styling, and more. Only runs when explicitly invoked; it does not trigger on its own.",
+      "allow_implicit_invocation": false
     },
     "prototype": {
       "entrypoint": "skills/prototype/SKILL.md",
       "source_sha256": "f9f1dcccbd5769e15f6eafe0e832ee57f5e07765f4afb626166d7545a805a180",
-      "guide": "prototype/guide.md"
+      "guide": "prototype/guide.md",
+      "description": "Build multiple genuinely different versions of a UI piece you describe, rendered behind a visual picker so you can flip through them live and promote the one that feels right. Only runs when explicitly invoked; it does not trigger on its own.",
+      "allow_implicit_invocation": false
+    },
+    "remove-animations": {
+      "entrypoint": "skills/remove-animations/SKILL.md",
+      "source_sha256": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
+      "guide": "remove-animations/guide.md",
+      "description": "Find the animations an interface doesn't need and remove them — motion on keyboard actions, high-frequency surfaces, functional data, and decoration with no purpose — then clean up what they leave behind. Edits code, but only to subtract; it never adds or retunes motion. Use when the user says the app \"feels slow\", \"has too much animation\", \"feels over-animated\", wants to \"tone down the motion\", or asks what animations to remove. For finding places that should animate, use find-animation-opportunities; for fixing animations that should stay, use improve-animations or review-animations.",
+      "allow_implicit_invocation": true
     },
     "review-animations": {
       "entrypoint": "skills/review-animations/SKILL.md",
       "source_sha256": "18265c933507ddc66d7719dc63619b7f64576271f9575705b97f2fda2bc28946",
-      "guide": "review-animations/guide.md"
+      "guide": "review-animations/guide.md",
+      "description": "Review existing animation and motion code for purpose, responsiveness, interruption, performance, and accessibility. Use when explicitly asked to critique motion or review an animation diff; report evidence and verification gaps.",
+      "allow_implicit_invocation": false
     },
     "write-swift": {
       "entrypoint": "skills/write-swift/SKILL.md",
       "source_sha256": "287e500d2d6d6bd5e9577bc77fc95807dfd8b43c320f275c45a87a1b8beb2ef6",
-      "guide": "write-swift/guide.md"
+      "guide": "write-swift/guide.md",
+      "description": "How to write modern Swift well — modeling with value types, Swift 6 data-race safety and approachable concurrency (@concurrent, main-actor-by-default, actors, task groups), protocols and generics (some vs any), API design, performance and ARC, Swift Testing, macros, and the modern language features agents don't know about yet. Use when writing, reviewing, or migrating Swift, or when a concurrency error, a hang, a data race, a retain cycle, or a performance problem needs fixing.",
+      "allow_implicit_invocation": true
     }
   },
   "files": {
@@ -206,8 +245,8 @@
     },
     "impeccable/upstream/agents/impeccable_manual_edit_applier.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_manual_edit_applier.toml",
-      "source_sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe",
-      "sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe"
+      "source_sha256": "4b01f4eb8a49fb00bc88248735c3b5442beb1791ec71d98e6d203f268a24010b",
+      "sha256": "4b01f4eb8a49fb00bc88248735c3b5442beb1791ec71d98e6d203f268a24010b"
     },
     "impeccable/upstream/guide.md": {
       "source": "skills/impeccable/upstream/guide.md",
@@ -306,8 +345,8 @@
     },
     "impeccable/upstream/reference/degraded/manual-edit-applier.md": {
       "source": "skills/impeccable/upstream/reference/degraded/manual-edit-applier.md",
-      "source_sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58",
-      "sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58"
+      "source_sha256": "cf9048c15e1b0935d8b38be54c4d21f77cce60e7c1ef28a6d9bab4b008977c4b",
+      "sha256": "cf9048c15e1b0935d8b38be54c4d21f77cce60e7c1ef28a6d9bab4b008977c4b"
     },
     "impeccable/upstream/reference/delight.md": {
       "source": "skills/impeccable/upstream/reference/delight.md",
@@ -346,8 +385,8 @@
     },
     "impeccable/upstream/reference/hooks.md": {
       "source": "skills/impeccable/upstream/reference/hooks.md",
-      "source_sha256": "827c9018836942166536c5e4f087f6523d058e94b161fcf7d3e04f0fb599434c",
-      "sha256": "827c9018836942166536c5e4f087f6523d058e94b161fcf7d3e04f0fb599434c"
+      "source_sha256": "ed38f149e04740707942465a2b2c75851b773fd52a2b52132c2a8e7f4b07f9dc",
+      "sha256": "ed38f149e04740707942465a2b2c75851b773fd52a2b52132c2a8e7f4b07f9dc"
     },
     "impeccable/upstream/reference/init.md": {
       "source": "skills/impeccable/upstream/reference/init.md",
@@ -371,8 +410,8 @@
     },
     "impeccable/upstream/reference/live.md": {
       "source": "skills/impeccable/upstream/reference/live.md",
-      "source_sha256": "a4251b0282f987d723f9d1bcff8f1bcde87d25cdd297bcc2343695082903535a",
-      "sha256": "a4251b0282f987d723f9d1bcff8f1bcde87d25cdd297bcc2343695082903535a"
+      "source_sha256": "8735aa99406752a1d4bf903051ee9e9e6e3be1f4821c044b1f63d2a0556a6935",
+      "sha256": "8735aa99406752a1d4bf903051ee9e9e6e3be1f4821c044b1f63d2a0556a6935"
     },
     "impeccable/upstream/reference/mode-operate.md": {
       "source": "skills/impeccable/upstream/reference/mode-operate.md",
@@ -496,8 +535,8 @@
     },
     "impeccable/upstream/scripts/live-browser.js": {
       "source": "skills/impeccable/upstream/scripts/live-browser.js",
-      "source_sha256": "718b7e3c5c9cc3cc8fb75ed99b32a7ebce627e3b6a108e21656fa0fd298e34f0",
-      "sha256": "718b7e3c5c9cc3cc8fb75ed99b32a7ebce627e3b6a108e21656fa0fd298e34f0"
+      "source_sha256": "3beaec74d362b64fd32656b22e3bd09f3b983ed2b3068625475dbe46b6867ed9",
+      "sha256": "3beaec74d362b64fd32656b22e3bd09f3b983ed2b3068625475dbe46b6867ed9"
     },
     "impeccable/upstream/scripts/modern-screenshot.umd.js": {
       "source": "skills/impeccable/upstream/scripts/modern-screenshot.umd.js",
@@ -511,8 +550,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "66311adaa02b5b0acbd316bada76172aacdf0626da204a065b0aa7b5d8db814a",
-      "sha256": "66311adaa02b5b0acbd316bada76172aacdf0626da204a065b0aa7b5d8db814a"
+      "source_sha256": "ea5a5b9b1ee2c76ce564049de64effdbec86daa5420ba6df155a7139b1f0ac47",
+      "sha256": "ea5a5b9b1ee2c76ce564049de64effdbec86daa5420ba6df155a7139b1f0ac47"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
@@ -548,6 +587,11 @@
       "source": "skills/prototype/PICKER.md",
       "source_sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65",
       "sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65"
+    },
+    "remove-animations/guide.md": {
+      "source": "skills/remove-animations/SKILL.md",
+      "source_sha256": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
+      "sha256": "0ac974216f64f30889e9a0e4984e9eb550229b0d6d15c4fbc3d34553a3e3d958"
     },
     "review-animations/guide.md": {
       "source": "skills/review-animations/SKILL.md",

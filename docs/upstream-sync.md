@@ -23,13 +23,12 @@ combined references with the fork's trusted `scripts/build-design-skill.py`, and
 validates metadata and bundle freshness before a normal push. Generated references
 and their manifest are committed with the merge. An already-merged upstream is a no-op.
 
-Only upstream changes under `skills/`, plus root `README.md` and `LICENSE`, are
-eligible. Top-level scripts, tests, hooks, workflows, and other automation require
-manual review; upstream cannot replace the executed builder or validator through
-this automatic path. This is the existing Emil allowlist, not the Impeccable-specific
-script/license policy below. New unregistered modes, missing routes, generated-file
-drift, invalid metadata, and merge conflicts still halt publication and abort the
-merge. Review new modes and explicitly update the accepted inventory and router.
+Upstream changes under `skills/`, root Markdown files, Markdown under `docs/`, and
+the root `LICENSE` are eligible. Top-level scripts, tests, hooks, workflows, and
+other automation remain outside the automatic path. New modes are bundled and
+indexed with their descriptions and invocation policies. Missing core routes,
+generated-file drift, invalid metadata, and merge conflicts halt publication and
+abort the merge.
 
 The fork retains the iPhone Home Screen web-app profile in
 [`apple-design`](../skills/apple-design/SKILL.md), Codex-compatible frontmatter,
@@ -60,12 +59,12 @@ API comparison must be `ahead:0` or `identical:0` relative to the commit recorde
 `skills/impeccable/upstream/source.json`. History rewrites, divergence, and API
 failures halt the import.
 
-The importer checks provenance and ownership before writing. Changes to imported
-`scripts/`, imported `agents/`, `LICENSE`, or `NOTICE.md` require manual review;
-automatic runs never pass `--allow-code-updates`. Upstream `agents/openai.yaml` is
-deliberately excluded and cannot replace the bundle's invocation policy; other
-imported agent files remain protected. Guidance changes are imported, all combined
-references are rebuilt, and the full test suite must pass. The commit includes the
+The importer checks provenance and ownership before writing. The scheduled workflow
+follows the user's personal fork, including changes to its scripts, agents and
+attribution files, by passing `--allow-code-updates`. It treats that fork as source
+data; it does not execute the imported scripts during sync. Upstream
+`agents/openai.yaml` is excluded and cannot replace the bundle's invocation policy.
+All combined references are rebuilt and the full test suite must pass. The commit includes the
 owned snapshot and entire generated references directory, keeping every rebuilt
 mode consistent with the manifest.
 
@@ -82,10 +81,9 @@ Inspect the failed step and exact upstream diff before retrying:
 - Workflow/top-level automation changes: reconcile manually in a clean review
   checkout, preserving the personal sync workflow and trusted validation code.
   Keep inherited workflows disabled until separately reviewed.
-- Impeccable script, agent, or attribution changes: review additions and deletions
-  at the exact fork SHA. In a clean Skills review checkout, run
-  `scripts/sync-impeccable.py --source <clean-fork-checkout> --commit <full-SHA> --allow-code-updates`
-  only for reviewed changes, then rebuild and test. Never add this override to automation.
+- Impeccable snapshot failures: inspect the fork SHA, ownership and failing tests.
+  Direct invocations require `--allow-code-updates` for script, agent or attribution
+  changes; the scheduled workflow uses it for the configured personal fork.
 - History rewrites, ownership drift, or conflicts: reconcile source commits and owned
   files explicitly. Do not delete manifests or force-push to bypass checks.
 
@@ -143,6 +141,6 @@ in a Skills-only CI checkout. Hosted Actions still require a real run to verify
 permissions and scheduling.
 
 The Emil tests cover accepted-source rebuilds, trusted builder preservation,
-unknown-mode rejection, rollback after metadata failure, dirty checkouts, and
+new-mode propagation, rollback after metadata failure, dirty checkouts, and
 concurrent pushes. `scripts/sync-upstream.py` never pushes; reproduce a failure in
 a clean disposable `main` checkout, not one containing user work.

@@ -52,13 +52,14 @@ def prepare_sync(repo: Path, upstream_url: str = UPSTREAM_URL) -> bool:
     if ancestry.returncode != 1:
         raise SyncError(ancestry.stderr)
 
-    # Only content is eligible for unattended updates. The fork owns executable
-    # validation, workflow permissions, hooks, and all other automation surfaces.
+    # Documentation and skill content may follow upstream. The fork owns
+    # executable validation, workflow permissions, hooks, and other automation.
     paths = git(repo, "diff", "--name-only", "--no-renames", "-z", f"HEAD...{upstream}").stdout
     blocked = [
         path for path in paths.split("\0") if path
-        and path not in {"README.md", "LICENSE"}
+        and path != "LICENSE"
         and not path.startswith("skills/")
+        and not (path.lower().endswith(".md") and ("/" not in path or path.startswith("docs/")))
     ]
     if blocked:
         raise SyncError("Upstream changes outside skill content require manual review: " + ", ".join(blocked))

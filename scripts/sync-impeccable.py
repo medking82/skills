@@ -129,10 +129,11 @@ def refresh(repo: Path, source: Path, commit: str, *, check: bool = False,
     previous, old = existing(root)
     files = collect(source)
     desired = manifest(commit, files)
+    desired_manifest = (json.dumps(desired, indent=2) + "\n").encode("utf-8")
     changed = {name for name in old.keys() | files.keys() if old.get(name) != files.get(name)}
     if previous and not allow_code_updates and any(protected(name) for name in changed):
         raise SnapshotError("Upstream executable, agent, or license changes require manual review")
-    if previous == desired:
+    if previous == desired and (root / "source.json").read_bytes() == desired_manifest:
         return True
     if check:
         return False
@@ -145,7 +146,7 @@ def refresh(repo: Path, source: Path, commit: str, *, check: bool = False,
             target.write_bytes(data)
     for name in old.keys() - files.keys():
         root.joinpath(*PurePosixPath(name).parts).unlink()
-    (root / "source.json").write_text(json.dumps(desired, indent=2) + "\n", encoding="utf-8")
+    (root / "source.json").write_bytes(desired_manifest)
     return True
 
 

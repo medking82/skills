@@ -13,7 +13,7 @@ for a component change.
 ## Impeccable playbook selection
 
 For a UI design task, match the user's actual intent in Chinese or English to the
-playbooks below. Select only those relevant to the requested scope; use more than
+Impeccable playbooks. Select only those relevant to the requested scope; use more than
 one when the user asks for distinct outcomes. Explicit user selections take
 precedence, including `$design layout <target>` and requests naming an Impeccable
 playbook. A negated playbook or forbidden action is not selected or performed.
@@ -28,6 +28,16 @@ table and Jev mode selection; Jev cannot override an explicit user choice.
 | `distill` | simplify clutter, remove redundancy; 精简、去冗余 | [distill](references/impeccable/upstream/reference/distill.md) |
 | `polish` | final refinement and consistency before shipping; 上线前打磨、一致性收尾 | [polish](references/impeccable/upstream/reference/polish.md) |
 | `critique` | assess a design and identify issues; 设计评审、找问题 | [critique](references/impeccable/upstream/reference/critique.md) |
+
+These five are common examples, not the full set. For other requests, consult the
+current [Impeccable command table](references/impeccable/upstream/guide.md#commands)
+and load the matching reference by explicit command or actual intent. This covers,
+for example, color, UX copy, onboarding, accessibility, responsive adaptation,
+design-system extraction and planning. Honor aliases and platform-specific references
+in that table. Combine an Impeccable playbook with an Emil mode when both contribute
+to the requested work; a shared name does not force an either-or choice. `live` and
+`generate` remain available for requested visual iteration, within the user's tool
+permissions; an ordinary design request does not start them.
 
 Consider intent and context, not isolated keyword matches. A typography request
 is not automatically a layout request, and a request for component feedback is
@@ -58,6 +68,8 @@ Examples are routing expectations, not a claim that a model has been tested:
 - “精简设置页并优化字号” → `distill` + `typeset`.
 - “Review this design, then polish the issues” → `critique` then `polish`;
   critique alone remains review-only.
+- “让配色更有活力” → `colorize`; “改善新用户引导” → `onboard`.
+- “修复手机页面的触控和布局” may combine `adapt` with `mobile-native`.
 - “How should I simplify this screen?” may consult `distill` for advice, but
   does not edit. “不要改字体，只调整间距” selects `layout`, not `typeset`.
 - “Review the animation” uses the explicit motion-review mode, not an automatic
@@ -72,6 +84,7 @@ Examples are routing expectations, not a claim that a model has been tested:
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
 | Fix janky or dropping-frame web animation, or work inside the frame budget | [animation-performance](references/animation-performance/guide.md) |
+| Remove excessive or unnecessary motion | [remove-animations](references/remove-animations/guide.md) |
 | Name a described animation or effect | [animation-vocabulary](references/animation-vocabulary/guide.md) |
 | Apple interaction principles, springs, materials, typography or iPhone Home Screen apps | [apple-design](references/apple-design/guide.md) |
 | Fix mobile-web viewport, touch, scroll, safe-area or browser behavior | [mobile-native](references/mobile-native/guide.md) |
@@ -83,6 +96,13 @@ Examples are routing expectations, not a claim that a model has been tested:
 | Explicitly critique motion or review an animation diff | [review-animations](references/review-animations/guide.md) |
 | Explicitly choose or compare UI libraries | [pick-ui-library](references/pick-ui-library/guide.md) |
 | Explicitly explore different UI variants behind a visual picker | [prototype](references/prototype/guide.md) |
+
+The [mode inventory](references/sources.json) lists all bundled modes, including
+new modes from upstream, with descriptions, guide paths and invocation policy.
+When the table does not cover the request or the user names another mode, inspect
+the inventory's `modes` section and read the relevant guide. Respect
+`allow_implicit_invocation: false` and the user's scope. The main LLM can select a
+newly bundled mode even if the current Jev helper does not yet recognize its name.
 
 For a new or substantially redesigned interface, start with `impeccable` when its visual
 direction matters. For focused component work outside selected playbooks, use `emil-design-eng`. Prefer
@@ -111,8 +131,9 @@ reports a previous observation and is not evidence that this turn called Jev.
 Send only minimal non-sensitive context to the helper, respecting tool bans and
 explicit model, effort, Fast, and scope choices. On failure, low confidence,
 malformed response, or local fallback, treat the result as an abstention, choose
-locally, and report the fallback without retrying. Jev selects among mode guides,
-not the five individual playbooks, and never grants permission or proves work.
+locally, and report the fallback without retrying. Jev selects among mode guides;
+the main LLM selects the applicable Impeccable playbooks. Neither grants permission
+or proves work.
 If a selected playbook leaves a genuine choice between additional mode guides,
 apply the same one-call Jev rule; a playbook selection does not suppress it.
 

@@ -21,7 +21,7 @@ class DesignBundleTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.repo = Path(self.temporary.name)
         self.root = self.repo / "skills/design/references"
-        self.write("skills/design/SKILL.md", "# Design\n" + "\n".join(
+        self.write("skills/design/SKILL.md", "# Design\n[mode inventory](references/sources.json)\n" + "\n".join(
             f"[{mode}](references/{mode}/guide.md)" for mode in bundle.MODES
         ))
         for mode in bundle.MODES:
@@ -121,13 +121,17 @@ class DesignBundleTests(unittest.TestCase):
             bundle.build(self.repo)
         self.assertEqual(self.snapshot(), before)
 
-    def test_source_inventory_and_router_must_be_explicitly_updated(self) -> None:
-        self.write("skills/new-mode/SKILL.md", "---\nname: new-mode\n---\n# New\n")
-        before = self.snapshot()
-        with self.assertRaisesRegex(bundle.BundleError, "Mode inventory changed"):
-            bundle.build(self.repo)
-        self.assertEqual(self.snapshot(), before)
-        (self.repo / "skills/new-mode/SKILL.md").unlink()
+    def test_new_upstream_mode_is_discoverable_with_its_invocation_policy(self) -> None:
+        self.write("skills/new-mode/SKILL.md", "---\nname: new-mode\ndescription: An explicit test mode.\n---\n# New\n")
+        self.write("skills/new-mode/agents/openai.yaml", "policy:\n  allow_implicit_invocation: false\n")
+        bundle.build(self.repo)
+        manifest = json.loads((self.root / "sources.json").read_text())
+        mode = manifest["modes"]["new-mode"]
+        self.assertEqual(mode["description"], "An explicit test mode.")
+        self.assertFalse(mode["allow_implicit_invocation"])
+        self.assertEqual((self.root / "new-mode/guide.md").read_text(), "# New\n")
+
+    def test_missing_core_route_still_stops_without_mutation(self) -> None:
         self.write("skills/design/SKILL.md", "# No routes\n")
         before = self.snapshot()
         with self.assertRaisesRegex(bundle.BundleError, "router must link"):

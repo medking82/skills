@@ -41,6 +41,62 @@ def without_frontmatter(content: bytes, source: Path) -> bytes:
     raise BundleError(f"Unclosed frontmatter: {source}")
 
 
+def mode_metadata(entrypoint: Path, content: bytes) -> tuple[str, bool]:
+    """Expose routing metadata while retaining each source's invocation policy."""
+    try:
+        lines = content.decode("utf-8").splitlines()
+    except UnicodeDecodeError as error:
+        raise BundleError(f"Invalid UTF-8 metadata: {entrypoint}") from error
+    end = next((i for i, line in enumerate(lines[1:], 1) if line.strip() == "---"), None)
+    if end is None:
+        raise BundleError(f"Unclosed frontmatter: {entrypoint}")
+    descriptions = [(i, line.partition(":")[2].strip()) for i, line in enumerate(lines[1:end], 1)
+                    if line.startswith("description:")]
+    if len(descriptions) != 1:
+        raise BundleError(f"Missing or duplicate description: {entrypoint}")
+    index, description = descriptions[0]
+    if description in {">", ">-", "|", "|-"}:
+        parts = []
+        for line in lines[index + 1:end]:
+            if line and not line[0].isspace():
+                break
+            parts.append(line.strip())
+        description = " ".join(part for part in parts if part)
+    elif len(description) >= 2 and description[0] == description[-1] and description[0] in "\"'":
+        if description[0] == '"':
+            try:
+                description = json.loads(description)
+            except ValueError as error:
+                raise BundleError(f"Invalid description: {entrypoint}") from error
+        else:
+            description = description[1:-1].replace("''", "'")
+    if not isinstance(description, str) or not description.strip() or len(description) > 4096:
+        raise BundleError(f"Invalid description: {entrypoint}")
+    metadata = entrypoint.parent / "agents/openai.yaml"
+    if metadata.is_symlink():
+        raise BundleError(f"Symlink invocation metadata: {metadata}")
+    implicit = True
+    if metadata.exists():
+        lines = metadata.read_text(encoding="utf-8").splitlines()
+        starts = [i for i, line in enumerate(lines) if line.strip() == "policy:" and not line[0].isspace()]
+        if len(starts) > 1:
+            raise BundleError(f"Duplicate invocation policy: {metadata}")
+        if starts:
+            values = []
+            for line in lines[starts[0] + 1:]:
+                if line.strip() and not line[0].isspace() and not line.lstrip().startswith("#"):
+                    break
+                if re.match(r"\s+allow_implicit_invocation\s*:", line):
+                    match = re.fullmatch(r"\s+allow_implicit_invocation:\s*(true|false)\s*", line)
+                    if not match:
+                        raise BundleError(f"Invalid invocation policy: {metadata}")
+                    values.append(match.group(1) == "true")
+            if len(values) != 1:
+                raise BundleError(f"Invalid invocation policy: {metadata}")
+            implicit = values[0]
+    return description.strip(), implicit
+
+
 def safe_path(root: Path, relative: str) -> Path:
     path = PurePosixPath(relative)
     if path.is_absolute() or not path.parts or any(
@@ -75,18 +131,19 @@ def expected_bundle(repo: Path) -> tuple[dict[str, bytes], dict]:
         mode.name for mode in skills.iterdir()
         if mode.name != "design" and (mode / "SKILL.md").is_file()
     }
-    if discovered != set(MODES):
+    if not set(MODES).issubset(discovered):
         raise BundleError(
-            "Mode inventory changed; update the accepted scope and design router before building. "
-            f"Missing: {sorted(set(MODES) - discovered)}; new: {sorted(discovered - set(MODES))}"
+            "Mode inventory changed; required modes are missing: " + str(sorted(set(MODES) - discovered))
         )
     router = skills / "design" / "SKILL.md"
     if not router.is_file() or router.is_symlink():
         raise BundleError(f"Missing design router: {router}")
     router_text = router.read_text(encoding="utf-8")
     routed = set(re.findall(r"\]\(references/([a-z0-9-]+)/guide\.md\)", router_text))
-    if routed != set(MODES):
-        raise BundleError("Design router must link every accepted mode guide, and no unknown modes")
+    if not set(MODES).issubset(routed) or not routed.issubset(discovered):
+        raise BundleError("Design router must link every core mode guide, and no unknown modes")
+    if discovered - routed and "references/sources.json" not in router_text:
+        raise BundleError("Design router must expose the full mode inventory")
     output: dict[str, bytes] = {}
     manifest = {"schema_version": 1, "generator": GENERATOR, "modes": {}, "files": {}}
     for mode in sorted(skills.iterdir()):
@@ -100,9 +157,11 @@ def expected_bundle(repo: Path) -> tuple[dict[str, bytes], dict]:
         content = entrypoint.read_bytes()
         guide = f"{mode.name}/guide.md"
         output[guide] = without_frontmatter(content, entrypoint)
+        description, implicit = mode_metadata(entrypoint, content)
         manifest["modes"][mode.name] = {
             "entrypoint": entrypoint.relative_to(repo).as_posix(),
             "source_sha256": digest(content), "guide": guide,
+            "description": description, "allow_implicit_invocation": implicit,
         }
         manifest["files"][guide] = {
             "source": entrypoint.relative_to(repo).as_posix(),
@@ -144,10 +203,15 @@ def read_owned_manifest(path: Path) -> dict | None:
         if not isinstance(manifest["modes"], dict) or not isinstance(manifest["files"], dict):
             raise ValueError("Invalid manifest collections")
         for mode, info in manifest["modes"].items():
-            if not MODE_PATTERN.fullmatch(mode) or info != {
-                "entrypoint": f"skills/{mode}/SKILL.md",
-                "source_sha256": info["source_sha256"], "guide": f"{mode}/guide.md",
-            } or not re.fullmatch(r"[0-9a-f]{64}", info["source_sha256"]):
+            base = {"entrypoint", "source_sha256", "guide"}
+            if (not MODE_PATTERN.fullmatch(mode) or set(info) not in
+                    (base, base | {"description", "allow_implicit_invocation"})
+                    or info["entrypoint"] != f"skills/{mode}/SKILL.md"
+                    or info["guide"] != f"{mode}/guide.md"
+                    or not re.fullmatch(r"[0-9a-f]{64}", info["source_sha256"])
+                    or ("description" in info and (not isinstance(info["description"], str)
+                        or not info["description"].strip() or len(info["description"]) > 4096
+                        or type(info["allow_implicit_invocation"]) is not bool))):
                 raise ValueError("Invalid mode ownership")
         for relative, info in manifest["files"].items():
             target = PurePosixPath(relative)

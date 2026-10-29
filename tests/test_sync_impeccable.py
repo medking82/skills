@@ -74,17 +74,27 @@ class ImpeccableSnapshotTests(unittest.TestCase):
         self.assertEqual(self.snapshot_files(), before)
         self.assertEqual((self.snapshot / "scripts/impeccable.cmd").read_bytes(), b"@echo off\r\n")
         self.assertEqual(sync.canonical_bytes("asset.bin", b"\0\r\n"), b"\0\r\n")
+        manifest = self.snapshot / "source.json"
+        self.assertNotIn(b"\r\n", manifest.read_bytes())
+        manifest.write_bytes(manifest.read_bytes().replace(b"\n", b"\r\n"))
+        self.assertFalse(sync.refresh(self.repo, self.source, "a" * 40, check=True))
+        sync.refresh(self.repo, self.source, "a" * 40)
+        self.assertNotIn(b"\r\n", manifest.read_bytes())
 
     def test_executable_change_stops_the_whole_update_until_reviewed(self) -> None:
         sync.refresh(self.repo, self.source, "a" * 40)
         before = self.snapshot_files()
         self.write(".agents/skills/impeccable/reference/craft-floor.md", b"# Updated\n")
         self.write(".agents/skills/impeccable/scripts/VERSION", b"0.1.19\n")
+        self.write(".agents/skills/impeccable/scripts/live-browser.js", b"// fork browser update\n")
+        self.write(".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml", b"name = 'applier'\n")
         with self.assertRaisesRegex(sync.SnapshotError, "manual review"):
             sync.refresh(self.repo, self.source, "b" * 40)
         self.assertEqual(self.snapshot_files(), before)
         sync.refresh(self.repo, self.source, "b" * 40, allow_code_updates=True)
         self.assertEqual((self.snapshot / "scripts/VERSION").read_bytes(), b"0.1.19\n")
+        self.assertEqual((self.snapshot / "scripts/live-browser.js").read_bytes(), b"// fork browser update\n")
+        self.assertTrue((self.snapshot / "agents/impeccable_manual_edit_applier.toml").is_file())
 
     def test_local_edits_and_unowned_files_are_not_overwritten(self) -> None:
         sync.refresh(self.repo, self.source, "a" * 40)

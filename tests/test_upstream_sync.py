@@ -75,7 +75,7 @@ class UpstreamSyncTests(unittest.TestCase):
         self.git(self.fork, "fetch", str(self.upstream), "main")
         self.git(self.fork, "merge", "--no-edit", "FETCH_HEAD")
         self.write(self.fork, "scripts/build-design-skill.py", (REPO_ROOT / "scripts/build-design-skill.py").read_text(encoding="utf-8"))
-        self.write(self.fork, "skills/design/SKILL.md", "---\nname: design\ndescription: Fixture router.\n---\n" + "\n".join(
+        self.write(self.fork, "skills/design/SKILL.md", "---\nname: design\ndescription: Fixture router.\n---\n[mode inventory](references/sources.json)\n" + "\n".join(
             f"[{mode}](references/{mode}/guide.md)" for mode in builder.MODES))
         builder.build(self.fork)
         self.initial = self.commit(self.fork, "maintained bundle")
@@ -94,13 +94,18 @@ class UpstreamSyncTests(unittest.TestCase):
         self.assertEqual(self.git(self.fork, "status", "--porcelain").stdout, "")
         self.assertFalse(self.prepare())
 
-    def test_unknown_mode_stops_and_restores_bundle(self) -> None:
+    def test_new_upstream_mode_is_bundled_and_indexed(self) -> None:
         self.add_bundle()
         self.write(self.upstream, "skills/unknown-mode/SKILL.md", "---\nname: unknown-mode\ndescription: Unknown.\n---\n# New\n")
-        self.commit(self.upstream, "unregistered mode")
-        with self.assertRaisesRegex(sync.SyncError, "Mode inventory changed"):
-            self.prepare()
-        self.assert_restored()
+        self.write(self.upstream, "skills/unknown-mode/agents/openai.yaml", "policy:\n  allow_implicit_invocation: false\n")
+        upstream = self.commit(self.upstream, "new mode")
+        self.assertTrue(self.prepare())
+        self.git(self.fork, "merge-base", "--is-ancestor", upstream, "HEAD")
+        self.assertTrue((self.fork / "skills/design/references/unknown-mode/guide.md").is_file())
+        import json
+        mode = json.loads((self.fork / "skills/design/references/sources.json").read_text())["modes"]["unknown-mode"]
+        self.assertEqual(mode["description"], "Unknown.")
+        self.assertFalse(mode["allow_implicit_invocation"])
 
     def test_upstream_cannot_replace_trusted_bundle_builder(self) -> None:
         self.add_bundle()
@@ -141,6 +146,14 @@ class UpstreamSyncTests(unittest.TestCase):
         self.assertFalse(self.prepare())
         self.assertEqual(self.git(self.fork, "rev-parse", "HEAD").stdout.strip(), merged)
         self.assertEqual(self.git(self.fork, "status", "--porcelain").stdout, "")
+
+    def test_upstream_markdown_is_synced_without_allowing_automation(self) -> None:
+        self.write(self.upstream, "ui-cheatsheet.md", "# Upstream UI guidance\n")
+        self.write(self.upstream, "docs/motion.md", "# Upstream motion guidance\n")
+        self.commit(self.upstream, "upstream documentation")
+        self.assertTrue(self.prepare())
+        self.assertEqual((self.fork / "ui-cheatsheet.md").read_text(), "# Upstream UI guidance\n")
+        self.assertEqual((self.fork / "docs/motion.md").read_text(), "# Upstream motion guidance\n")
 
     def test_conflict_restores_fork(self) -> None:
         self.write(self.fork, "README.md", "# Customized skills\n")
