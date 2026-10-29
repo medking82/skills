@@ -62,6 +62,23 @@ function findElement(tree,start,end) {
   }
   return null;
 }
+function assertSourceContext(tree,target) {
+  function visit(node,ancestors) {
+    if(!node || typeof node!=='object')return false;
+    if(node===target) {
+      const functions=ancestors.filter(n=>/^(ArrowFunctionExpression|FunctionExpression|FunctionDeclaration|ObjectMethod|ClassMethod)$/.test(n.type));
+      if(functions.length>1 || functions.some(n=>ancestors.some(p=>
+        /^(CallExpression|OptionalCallExpression|NewExpression)$/.test(p.type)&&p.arguments.includes(n))))fail('callback_template_source');
+      return true;
+    }
+    for(const [key,value] of Object.entries(node)) {
+      if(['loc','extra','comments','tokens'].includes(key))continue;
+      for(const child of Array.isArray(value)?value:[value])if(visit(child,[...ancestors,node]))return true;
+    }
+    return false;
+  }
+  visit(tree,[]);
+}
 function mappedNode(root,map,event) {
   root=fs.realpathSync(root);
   const captured=event.sourceLocator?.templateSource;
@@ -71,9 +88,10 @@ function mappedNode(root,map,event) {
   if(map.version!==1 || map.root!==root || !r || nodeId(r.file,r.start,r.end,r.hash)!==captured.id) fail('invalid_compiler_map');
   const location=sourceFile(root,r.file), code=fs.readFileSync(location.full,'utf8');
   if(digest(code)!==r.hash) fail('source_changed_since_render');
-  const node=findElement(parser(root,location.full)(code),r.start,r.end);
+  const tree=parser(root,location.full)(code),node=findElement(tree,r.start,r.end);
   if(!node || node.openingElement.name.type!=='JSXIdentifier' || node.openingElement.name.name!==r.tag
      || event.element.tagName!==r.tag || !event.element.outerHTML.includes(`${MARKER}="${captured.id}"`)) fail('render_source_mismatch');
+  assertSourceContext(tree,node);
   return {r,location,code,node};
 }
 function readMap(target,event) {
@@ -113,21 +131,61 @@ function contract(n,code) {
   const dynamic=opening.attributes.filter(a=>a.type==='JSXSpreadAttribute' || !safe(a.name?.name||'')
     || (a.value?.type==='JSXExpressionContainer'&&!staticExpression(a.value.expression)))
     .map(a=>code.slice(a.start,a.end));
+  // A static override after a spread can change protected runtime props.
+  if(opening.attributes.some(a=>a.type==='JSXSpreadAttribute'))return {kind:n.type,name:code.slice(opening.name.start,opening.name.end),dynamic:opening.attributes.map(a=>code.slice(a.start,a.end)),children:n.children.map(c=>contract(c,code))};
   return {kind:n.type,name:code.slice(opening.name.start,opening.name.end),dynamic,children:n.children.map(c=>contract(c,code))};
 }
-function validate(root,receipt,replacement) {
+const LAYOUT_TAGS=new Set('div span section article aside header footer main nav h1 h2 h3 h4 h5 h6 p strong em small b i u s br hr img picture source figure figcaption'.split(' '));
+function structuralContract(node,code) {
+  const tokens=[];
+  function expression(n) {
+    const islands=[];
+    function collect(value) {
+      if(!value || typeof value!=='object')return;
+      if(value.type==='JSXElement' || value.type==='JSXFragment'){islands.push(value);return;}
+      for(const [key,child] of Object.entries(value)) {
+        if(['loc','extra','comments','tokens'].includes(key))continue;
+        for(const x of Array.isArray(child)?child:[child])collect(x);
+      }
+    }
+    collect(n.expression||n.argument);
+    islands.sort((a,b)=>a.start-b.start);
+    let cursor=n.start;const parts=[];
+    for(const island of islands){parts.push(code.slice(cursor,island.start));parts.push(structuralContract(island,code));cursor=island.end;}
+    parts.push(code.slice(cursor,n.end));
+    return {kind:n.type,parts};
+  }
+  function visit(n) {
+    if(n.type==='JSXText')return;
+    if(n.type==='JSXExpressionContainer'||n.type==='JSXSpreadChild'){tokens.push(expression(n));return;}
+    if(n.type==='JSXFragment'){n.children.forEach(visit);return;}
+    if(n.type!=='JSXElement')fail('unsupported_jsx_structure');
+    const c=contract(n,code),protectedNode=c.dynamic.length>0||!LAYOUT_TAGS.has(c.name);
+    if(!/^[a-z][a-z0-9]*$/.test(c.name)) {tokens.push({kind:'component',raw:code.slice(n.start,n.end)});return;}
+    if(protectedNode)tokens.push({kind:'open',name:c.name,dynamic:c.dynamic});
+    n.children.forEach(visit);
+    if(protectedNode)tokens.push({kind:'close',name:c.name});
+  }
+  // A keyed/ref root must stay at the expression/selection boundary, not below a new wrapper.
+  const boundary=node.openingElement?.attributes.filter(a=>a.type==='JSXAttribute'&&['key','ref'].includes(a.name.name)).map(a=>code.slice(a.start,a.end))||[];
+  visit(node);return {boundary,tokens};
+}
+function validate(root,receipt,replacement,mode='static') {
+  if(!['static','structural'].includes(mode))fail('unknown_validation_mode');
   const location=sourceFile(root,receipt.file),code=fs.readFileSync(location.full,'utf8');
   if(receipt.sourceKind!=='jsx' || receipt.publishToSource!==false || digest(code)!==receipt.sourceSha256) fail('source_changed');
-  const parse=parser(location.root,location.full), node=findElement(parse(code),receipt.startUTF16,receipt.endUTF16);
+  const parse=parser(location.root,location.full),tree=parse(code),node=findElement(tree,receipt.startUTF16,receipt.endUTF16);
   if(!node || code.slice(node.start,node.end)!==receipt.original
     || [...code.slice(0,node.start)].length!==receipt.replaceStartOffset
     || [...code.slice(0,node.end)].length!==receipt.replaceEndOffset) fail('source_range_mismatch');
+  assertSourceContext(tree,node);
   const ast=parse(replacement),next=ast.program.body[0]?.expression;
   if(ast.program.body.length!==1 || next?.type!=='JSXElement' || next.start!==0 || next.end!==replacement.length) fail('replacement_must_be_one_jsx_element');
   if(replacement.includes(MARKER) || /data-impeccable-|data-p-/.test(replacement)) fail('replacement_has_live_markers');
-  if(JSON.stringify(contract(node,code))!==JSON.stringify(contract(next,replacement))) fail('template_bindings_or_structure_changed');
+  const compare=mode==='structural'?structuralContract:contract;
+  if(JSON.stringify(compare(node,code))!==JSON.stringify(compare(next,replacement))) fail('template_bindings_or_structure_changed');
   parse(code.slice(0,node.start)+replacement+code.slice(node.end));
-  return {ok:true,validator:'babel-jsx-static-edits-v1',receipt,replacementSha256:digest(replacement)};
+  return {ok:true,validator:mode==='structural'?'babel-jsx-structural-edits-v1':'babel-jsx-static-edits-v1',receipt,replacementSha256:digest(replacement)};
 }
 module.exports=plugin;
 Object.assign(module.exports,{locate,validate,sourceFile,readMap});
@@ -139,7 +197,7 @@ if(require.main===module) {
     const json=file=>JSON.parse(fs.readFileSync(file,'utf8').replace(/^\uFEFF/,''));
     const event=command==='locate'?json(args.event):null;
     const result=command==='locate'?locate(root,readMap(args.map,event),event)
-      :command==='validate'?validate(root,json(args.receipt),fs.readFileSync(args.replacement,'utf8')):fail('unknown_command');
+      :command==='validate'?validate(root,json(args.receipt),fs.readFileSync(args.replacement,'utf8'),args.mode||'static'):fail('unknown_command');
     process.stdout.write(JSON.stringify(result)+'\n');
   } catch(error) {console.log(JSON.stringify({ok:false,sourceWritten:false,error:error.message}));process.exitCode=1;}
 }

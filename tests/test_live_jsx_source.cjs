@@ -51,6 +51,61 @@ const markers=[...html.matchAll(/data-design-live-source="([a-f0-9]+)"/g)].map(m
 assert.equal(markers.length,2);assert.equal(markers[0],markers[1]);
 const loopEvent={id:'1234abce',count:3,element:{tagName:'span',outerHTML:`<span data-design-live-source="${markers[0]}">A</span>`},sourceLocator:{templateSource:{id:markers[0],occurrences:2}}};
 assert.throws(()=>bridge.locate(root,bridge.readMap(maps,loopEvent),loopEvent),/shared_template_source/);
+assert.throws(()=>bridge.locate(root,bridge.readMap(maps,loopEvent),{...loopEvent,sourceLocator:{templateSource:{id:markers[0],occurrences:1}}}),/callback_template_source/);
+const loopRecord=bridge.readMap(maps,loopEvent).nodes[markers[0]];
+const loopReceipt={sourceKind:'jsx',publishToSource:false,file:repeated,sourceSha256:loopRecord.hash,
+  startUTF16:loopRecord.start,endUTF16:loopRecord.end,replaceStartOffset:loopRecord.start,replaceEndOffset:loopRecord.end,
+  original:repeatedCode.slice(loopRecord.start,loopRecord.end)};
+assert.throws(()=>bridge.validate(root,loopReceipt,loopReceipt.original,'structural'),/callback_template_source/);
+// Reproduce the structural restriction; only an explicit structural lane may relax it.
+const structuralFile=path.join(root,'src/Structural.tsx');
+function structuralReceipt(original) {
+  const code=`const View=()=> ${original};`;
+  fs.writeFileSync(structuralFile,code);
+  babel.transformSync(code,{filename:structuralFile,configFile:false,babelrc:false,parserOpts:{plugins:['jsx','typescript']},plugins:[[bridge,{development:true,root}]]});
+  const manifest=fs.readdirSync(maps).map(n=>JSON.parse(fs.readFileSync(path.join(maps,n),'utf8'))).find(m=>Object.values(m.nodes).some(r=>r.file==='src/Structural.tsx'));
+  const record=Object.values(manifest.nodes).sort((a,b)=>a.start-b.start)[0];
+  return bridge.locate(root,manifest,{id:'abcd9876',count:3,element:{tagName:record.tag,outerHTML:`<${record.tag} data-design-live-source="${record.id}"></${record.tag}>`},sourceLocator:{templateSource:{id:record.id,occurrences:1}}});
+}
+let structural=structuralReceipt('<div><span>{label}</span><button onClick={save}>Save</button></div>');
+const reorganized='<section><header><strong>{label}</strong></header><aside><button className="primary" onClick={save}>Save Now</button></aside></section>';
+assert.throws(()=>bridge.validate(root,structural,reorganized),/template_bindings_or_structure_changed/);
+assert.equal(bridge.validate(root,structural,reorganized,'structural').validator,'babel-jsx-structural-edits-v1');
+for(const bad of [
+  '<section><button onClick={save}>Save</button></section>',
+  '<section>{label}{label}<button onClick={save}>Save</button></section>',
+  '<section>{label.trim()}<button onClick={save}>Save</button></section>',
+  '<section onClick={save}>{label}<button>Save</button></section>',
+  '<section>{label}<a onClick={save}>Save</a></section>',
+  '<section><button onClick={save}>{label}</button></section>',
+  '<section><button onClick={save}>Save</button>{label}</section>',
+  '<form>{label}<button onClick={save}>Save</button></form>'
+])assert.throws(()=>bridge.validate(root,structural,bad,'structural'),/template_bindings_or_structure_changed/);
+const conditional='<div>{ready ? <span>{label}</span> : <i>{fallback}</i>}{items.map(item => <button key={item.id} onClick={() => choose(item)}>{item.name}</button>)}</div>';
+structural=structuralReceipt(conditional);
+const dynamicChosen='<section>{ready ? <header><strong>{label}</strong></header> : <aside><em>{fallback}</em></aside>}{items.map(item => <button key={item.id} onClick={() => choose(item)}><span>{item.name}</span></button>)}</section>';
+assert(bridge.validate(root,structural,dynamicChosen,'structural').ok);
+for(const bad of [dynamicChosen.replace('ready ?', '!ready ?'),dynamicChosen.replace('item =>','other =>'),
+  dynamicChosen.replace('items.map','others.map'),dynamicChosen.replace('key={item.id} ',''),
+  dynamicChosen.replace('<button key=', '<article><button key=').replace('</button>)','</button></article>)'),
+  dynamicChosen.replace('choose(item)','choose(other)'),dynamicChosen.replace('{item.name}','{item.name.toUpperCase()}'),
+  dynamicChosen.replace('<strong>{label}</strong>','<strong/>').replace('</section>','{label}</section>')]) {
+  assert.throws(()=>bridge.validate(root,structural,bad,'structural'),/template_bindings_or_structure_changed/);
+}
+// Spread order and added static overrides are locked in both lanes.
+structural=structuralReceipt('<button {...props} disabled={locked}>{label}</button>');
+for(const mode of ['static','structural'])for(const bad of [
+  '<button disabled={locked} {...props}>{label}</button>',
+  '<button {...props} disabled={locked} className="override">{label}</button>'
+])assert.throws(()=>bridge.validate(root,structural,bad,mode),/template_bindings_or_structure_changed/);
+structural=structuralReceipt('<div><Provider value={context}><span>{label}</span></Provider>{first()}{second()}</div>');
+assert(bridge.validate(root,structural,'<section><Provider value={context}><span>{label}</span></Provider>{first()}{second()}</section>','structural').ok);
+for(const bad of [
+  '<div><Provider value={context}><strong>{label}</strong></Provider>{first()}{second()}</div>',
+  '<div><Provider value={context}><span>{label}</span></Provider>{second()}{first()}</div>'
+])assert.throws(()=>bridge.validate(root,structural,bad,'structural'),/template_bindings_or_structure_changed/);
+assert.throws(()=>bridge.validate(root,structural,structural.original,'unknown'),/unknown_validation_mode/);
+assert.equal(fs.readFileSync(structuralFile,'utf8'),`const View=()=> ${structural.original};`);
 fs.writeFileSync(file,code+'\n// concurrent edit');
 assert.throws(()=>bridge.locate(root,map,event),/source_changed_since_render/);
 assert.throws(()=>bridge.validate(root,receipt,chosen),/source_changed/);

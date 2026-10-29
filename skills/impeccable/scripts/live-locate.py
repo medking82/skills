@@ -172,7 +172,7 @@ def apply_selection(path, receipt, replacement, session_id=None, template_approv
     if receipt.get('sourceKind') == 'jsx':
         if (path.suffix.lower() not in ('.jsx', '.tsx') or not template_approval
                 or template_approval.get('ok') is not True
-                or template_approval.get('validator') != 'babel-jsx-static-edits-v1'
+                or template_approval.get('validator') not in ('babel-jsx-static-edits-v1', 'babel-jsx-structural-edits-v1')
                 or template_approval.get('receipt') != receipt
                 or template_approval.get('replacementSha256') != hashlib.sha256(replacement.encode('utf-8')).hexdigest()):
             raise LocatorError('missing_or_mismatched_template_validation')

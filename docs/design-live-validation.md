@@ -151,3 +151,55 @@ JSX/TSX snippet text independently of its `.txt` extension. Set
 regression and real production build are separate evidence; it does not claim browser
 debugger source-map resolution was verified. Missing/stale provenance, shared runtime
 instances and dynamic/structural edits retain their previous refusal boundaries.
+
+## Structural JSX And Dynamic Template Follow-Up
+
+An explicit `--mode structural` validator now permits layout changes around an
+ordered projection of protected bindings. The default static lane still refuses
+tree changes. Dynamic conditionals/map callbacks allow recursive changes only to
+their JSX islands: all surrounding JavaScript remains byte-identical. Protected
+elements retain their tag, ordered dynamic attributes and binding ownership;
+custom components stay opaque. Spread-bearing elements freeze all ordered props.
+Key/ref island roots cannot be wrapped below a new unkeyed boundary.
+
+The compiler regression reproduces the default structural refusal, then accepts
+passive wrappers, conditional branch layouts and layout inside keyed map items.
+It rejects expression loss/duplication/rewrites, handler transfer/tag changes,
+evaluation reordering, changed conditions/callback parameters/data sources,
+key loss or wrapper displacement, custom-component changes and spread overrides.
+A source-context guard now rejects callback/nested-function selections at locate
+and validate, including a loop reporting only one current DOM occurrence.
+
+Real Next.js 16.4.3 Turbopack browser Live exercised a unique section containing
+stateful conditionals, a keyed list, selection output and handlers. Detached
+preview showed three variants; only the active slot was visible. Accept of
+variant 2 left native source untouched until Babel validation and the locked
+writer replaced exactly the selected range. Exact source comparison preserved
+all preceding/following bytes, expressions and handlers. The accepted JSX added
+a header wrapper, changed the conditional branch layout and wrapped list button
+contents without moving their keys or handlers.
+
+After hot refresh and a clean reload, the accepted section retained its class,
+2px border and header. Real clicks toggled both conditional branches, selected
+Beta, appended a third item and selected the newly generated Added button.
+All three dynamic list labels rendered in their new nested markup. Adjacent
+paragraph/aside remained unchanged; the browser had no warning/error messages.
+A second Generate/preview/Discard cycle on the updated source left bytes exactly
+unchanged and removed every preview wrapper. Capture was disposed, Live exited,
+and both local servers were stopped.
+
+`next build --turbopack` compiled and passed TypeScript, then prerendered all four
+fixture outputs, including `/structural`. The fixture's existing multiple-lockfile
+workspace-root warning remains; no bundler-root or dependency configuration was
+changed for this follow-up.
+
+The full 84-test suite passed with real project Babel/Next and pinned native-engine
+checks enabled. Bundle freshness, skill metadata and whitespace checks passed.
+Production server/static output contained no Live/provenance markers.
+
+Scope: structural layout within the validated React/Next source contract, with
+unchanged executable expressions/handlers. Other template languages, custom
+component internals, arbitrary JavaScript changes and unresolved shared-source
+reuse are not covered. Parsing/projection do not prove equivalent DOM semantics,
+focus, component reconciliation or event propagation for arbitrary reparenting;
+project runtime checks remain necessary.

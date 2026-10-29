@@ -230,8 +230,8 @@
     },
     "impeccable/references/live-jsx-source.md": {
       "source": "skills/impeccable/references/live-jsx-source.md",
-      "source_sha256": "13dfa2f89e8ed0b2d60f99352960a94aecd49820874689218b4188968787a9ce",
-      "sha256": "13dfa2f89e8ed0b2d60f99352960a94aecd49820874689218b4188968787a9ce"
+      "source_sha256": "2616ec87557078c19465a9d9d24c741e7f62d99ff139141acfb0437d5c8e10a2",
+      "sha256": "2616ec87557078c19465a9d9d24c741e7f62d99ff139141acfb0437d5c8e10a2"
     },
     "impeccable/scripts/capture-live-selection.js": {
       "source": "skills/impeccable/scripts/capture-live-selection.js",
@@ -245,13 +245,13 @@
     },
     "impeccable/scripts/live-jsx-source.cjs": {
       "source": "skills/impeccable/scripts/live-jsx-source.cjs",
-      "source_sha256": "b66f40de212c803e030c7439939d29ee346851065bc1490ae47d053c92a8edcf",
-      "sha256": "b66f40de212c803e030c7439939d29ee346851065bc1490ae47d053c92a8edcf"
+      "source_sha256": "fb4f805c96299fde0a01a33d01f9f968ebea7146f612d199829d62f93ed558dc",
+      "sha256": "fb4f805c96299fde0a01a33d01f9f968ebea7146f612d199829d62f93ed558dc"
     },
     "impeccable/scripts/live-locate.py": {
       "source": "skills/impeccable/scripts/live-locate.py",
-      "source_sha256": "c62b153260c84dd4b1a9dadc2a652a79a942daa57994a4682be649d7c3435fad",
-      "sha256": "c62b153260c84dd4b1a9dadc2a652a79a942daa57994a4682be649d7c3435fad"
+      "source_sha256": "0350e8d9aa586c24338b2d2a31da62d3be2a203bb6a8683263f42bd2ce7efba7",
+      "sha256": "0350e8d9aa586c24338b2d2a31da62d3be2a203bb6a8683263f42bd2ce7efba7"
     },
     "impeccable/scripts/run-engine.ps1": {
       "source": "skills/impeccable/scripts/run-engine.ps1",
