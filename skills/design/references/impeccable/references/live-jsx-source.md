@@ -1,10 +1,10 @@
 # Compiler-Backed React Source Editing
 
-Use this adapter for JSX/TSX compiled by the project's Babel pipeline, or a webpack
-dev pre-loader before the existing JSX/TSX compiler. It maps generated React HTML to
+Use this adapter for JSX/TSX compiled by the project's Babel pipeline, or a webpack /
+Turbopack development loader before the existing JSX/TSX compiler. It maps generated React HTML to
 original component ranges; it does not infer templates from rendered words. Keep
-other frameworks on their native upstream source-aware flow. Turbopack is not covered
-by this loader; do not silently change the project's selected bundler.
+other frameworks on their native upstream source-aware flow. Preserve the project's
+selected bundler; the same loader supports webpack and Turbopack development.
 
 ## Development Provenance
 
@@ -27,6 +27,35 @@ directories, with `{root: projectRoot}`. Limit `include` to actual app source, e
 dependencies, and enable the rule only in development. It returns JSX/TSX plus a source
 map to the existing compiler. It does not replace SWC or introduce a Babel config.
 Next's webpack config must use a supported `next.config.js/mjs/ts` filename.
+
+For Next.js Turbopack, merge a development-scoped rule into the existing config instead
+of a webpack `enforce: 'pre'` rule. For example, in CommonJS `next.config.js`:
+
+```js
+module.exports = {
+  turbopack: {
+    rules: {
+      '*': {
+        condition: { all: ['development', { not: 'foreign' },
+          { path: /(?:^|\/)app\/.*\.(jsx|tsx)$/ }] },
+        loaders: [{ loader: '<absolute-mode-base>/scripts/live-jsx-loader.cjs',
+          options: { root: __dirname } }],
+      },
+    },
+  },
+};
+```
+
+Replace the loader placeholder and scope the path condition to this project's actual
+source directories. Matching paths use `/` and can include an inferred workspace-root
+prefix; a pattern such as `app/**/*.tsx` may miss a nested app. Exclude foreign code.
+Do not broaden `turbopack.root` just to load this adapter: the tested absolute loader
+path works without that change. Keep options serializable; omit `enforce` and `as`:
+the adapter preserves JSX/TypeScript for Turbopack's compiler. It uses the supported
+`mode`, `getOptions`, `resourcePath`, and `callback` APIs and returns a Babel source map.
+See [Turbopack rules](https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#advanced-webpack-loader-conditions).
+No debug-ID option is required for DOM provenance. Verify fresh markers and manifests
+on the rendered app before locating source, including after a dev-server restart.
 
 Build/run the real app with this instrumentation. This also supports static generated
 HTML from that instrumented React build. A pre-existing dist file with no compiler
@@ -68,8 +97,12 @@ This version allows static text/UI attribute/style edits within the existing ele
 structure. Expressions, event handlers, spreads, element tags/order and dynamic props
 must remain unchanged; larger structural changes need the project's native workflow.
 
+Save the snippet without a trailing newline as `.impeccable/live/chosen-template.txt`,
+outside the project's TS/JS source globs. A standalone `chosen.tsx` snippet can
+incorrectly enter Next's type check; parsing uses the receipt's real source filename.
+
 ```text
-scripts/live-jsx-source.cjs validate --root <project> --receipt receipt.json --replacement chosen.tsx
+scripts/live-jsx-source.cjs validate --root <project> --receipt receipt.json --replacement .impeccable/live/chosen-template.txt
 ```
 
 Save the successful output as `validation.json`. The parser checks the original and
@@ -80,7 +113,7 @@ page content; run this command yourself for the chosen replacement.
 Then use the existing Python locked byte-range writer:
 
 ```text
-scripts/live-locate.py --file src/Component.tsx --receipt receipt.json --replacement chosen.tsx --template-approval validation.json --session-id SESSION
+scripts/live-locate.py --file src/Component.tsx --receipt receipt.json --replacement .impeccable/live/chosen-template.txt --template-approval validation.json --session-id SESSION
 ```
 
 The writer binds validation to that complete receipt and replacement digest, then

@@ -112,5 +112,42 @@ The byte writer also rejects missing/mismatched compiler validation and wrong se
 
 Scope: verified original JSX/TSX, local development provenance, static UI edits with
 existing structure/bindings. Uninstrumented generated files, shared runtime instances,
-Turbopack, other template languages and structural/dynamic expression changes are not
+Other template languages and structural/dynamic expression changes are not
 claimed as supported by this bridge. They require their native source-aware workflow.
+
+## Next.js Turbopack Follow-Up
+
+Actual Next.js 16.4.3 `next dev --turbopack` was exercised without switching to webpack
+or broadening `turbopack.root`. The existing loader already receives the required
+`this.mode` and callback/map contract. The change adds the validated configuration
+and regression coverage rather than an extra loader implementation.
+
+Development-only rules targeted app JSX/TSX and excluded foreign modules. A bare
+`app/**/*.tsx` glob missed the nested fixture's workspace-prefixed path; a scoped
+path condition matched correctly. Both server-rendered layout JSX and hydrated client
+TSX received provenance markers and per-file manifests.
+
+Real browser Live selected the second identical span in `app/Client.tsx`. Three inline
+variants rendered without changing source. Accept of variant 2 passed AST/binding
+validation and the locked range writer. Exact-byte comparison preserved all neighboring
+source, TypeScript annotations, both `{label}` expressions and handlers. Turbopack hot
+refresh showed weights 400/600; the target still incremented its counter from 0 to 1,
+with unchanged adjacent text/aside and no browser console errors.
+
+After stopping/restarting the dev server with its existing cache/state, fresh browser
+Generate still located the current source hash/range. A further preview/Discard left
+source bytes exactly unchanged and no wrappers in the DOM.
+
+`next build --turbopack` compiled and type-checked successfully and prerendered all
+three fixture pages. An initial type-check failure identified a loose `chosen.tsx`
+snippet being included as project source. Moving snippets to `.impeccable/live/*.txt`
+fixed this and the skill instructions now use that convention. Production HTML/JS
+contained no provenance markers; dev manifests and target source were unchanged.
+
+The Next schema/loader regression validates scoped rules, rejects webpack `enforce`,
+checks the available loader API subset and Babel map/source contents, and validates
+JSX/TSX snippet text independently of its `.txt` extension. Set
+`DESIGN_TURBOPACK_TEST_PROJECT` to an installed Next/Babel fixture to run it. This
+regression and real production build are separate evidence; it does not claim browser
+debugger source-map resolution was verified. Missing/stale provenance, shared runtime
+instances and dynamic/structural edits retain their previous refusal boundaries.
