@@ -73,9 +73,9 @@ class DesignRoutingTests(unittest.TestCase):
         section = self.router.split("## Jev-Assisted Mode Selection\n", 1)[1].split("\n## ", 1)[0]
         for rule in ("Reuse a design-mode recommendation already supplied by the",
                      "two or more modes plausibly fit", "no\nextra routing call",
-                     "`mode`, `source`, and `requests` when present", "not evidence that this turn called Jev",
+                     "`mode` or `choice`, `source`, and `requests` when present", "not evidence that this turn called Jev",
                      "minimal non-sensitive context", "without retrying", "main LLM selects the applicable Impeccable playbooks",
-                     "does not expand task scope"):
+                     "does not expand task scope", "`decision` helper instead", "a\nno-match option"):
             with self.subTest(rule=rule):
                 self.assertIn(rule, section)
 

@@ -94,6 +94,17 @@ def prepare_sync(repo: Path, upstream_url: str = UPSTREAM_URL) -> bool:
         )
         if validation.returncode:
             raise SyncError("Merged skill metadata failed validation:\n" + validation.stdout + validation.stderr)
+        regression = subprocess.run(
+            [sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-q"],
+            cwd=repo,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            creationflags=NO_WINDOW,
+        )
+        if regression.returncode:
+            raise SyncError("Merged regression tests failed:\n" + regression.stdout + regression.stderr)
         git(repo, *BOT_IDENTITY, "commit", "-m", f"chore: sync emilkowalski/skills at {upstream[:12]}")
     except Exception:
         if git(repo, "rev-parse", "--verify", "-q", "MERGE_HEAD", check=False).returncode == 0:

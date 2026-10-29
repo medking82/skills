@@ -126,6 +126,21 @@ class UpstreamSyncTests(unittest.TestCase):
         self.assert_restored()
         self.assertFalse((self.fork / "skills/design/references/animate/assets/new.md").exists())
 
+    def test_post_merge_regression_failure_restores_fork(self) -> None:
+        self.write(self.fork, "tests/test_post_merge.py", (
+            "import unittest\nfrom pathlib import Path\n"
+            "class Regression(unittest.TestCase):\n"
+            "    def test_no_bad_marker(self):\n"
+            "        self.assertFalse(Path('bad-upstream.md').exists())\n"
+        ))
+        self.initial = self.commit(self.fork, "add regression")
+        self.git(self.fork, "push", "origin", "main")
+        self.write(self.upstream, "bad-upstream.md", "upstream content\n")
+        self.commit(self.upstream, "upstream regression")
+        with self.assertRaisesRegex(sync.SyncError, "regression tests failed"):
+            self.prepare()
+        self.assert_restored()
+
     def assert_restored(self) -> None:
         self.assertEqual(self.git(self.fork, "rev-parse", "HEAD").stdout.strip(), self.initial)
         self.assertEqual(self.git(self.remote, "rev-parse", "main").stdout.strip(), self.initial)

@@ -19,8 +19,8 @@ leave the bundle stage one cycle behind. The next run checks the latest fork hea
 
 [`sync-upstream.yml`](../.github/workflows/sync-upstream.yml) checks
 `emilkowalski/skills:main`. It runs regression tests, prepares a merge, rebuilds
-combined references with the fork's trusted `scripts/build-design-skill.py`, and
-validates metadata and bundle freshness before a normal push. Generated references
+combined references with the fork's trusted `scripts/build-design-skill.py`, then
+validates metadata, bundle freshness and the full regression suite before a normal push. Generated references
 and their manifest are committed with the merge. An already-merged upstream is a no-op.
 
 Upstream changes under `skills/`, root Markdown files, Markdown under `docs/`, and

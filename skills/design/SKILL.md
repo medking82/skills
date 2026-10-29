@@ -120,10 +120,17 @@ guide evidence once, then choose the mode and read its guide without another Jev
 Explicit mode names, clear single-mode requests and ordinary component polish need no
 extra routing call. If Jev abstains or is unavailable, choose from this table normally.
 
+For an unresolved choice involving `remove-animations` or a newly indexed mode that the
+`design` helper may not recognize, use `$jev`'s `decision` helper instead. Supply only
+the short task, relevant allowed mode names and descriptions from the inventory, and a
+no-match option; use the main LLM's choice as the fallback. Follow `$jev`'s guidance
+for that helper. Reuse a same-layer hook result when present, and make at most one Jev
+call for the choice. Explicit modes and independent requested outcomes need no choice.
+
 Give a concise, truthful routing receipt with the selection: say whether this
 turn reused its hook recommendation, called the helper, or needed or allowed no
 call. For an actual hook or helper result, include only the returned `status`,
-`mode`, `source`, and `requests` when present. A helper invocation is not
+`mode` or `choice`, `source`, and `requests` when present. A helper invocation is not
 necessarily a remote Jev request: `source:local` with `requests:0` is local;
 `source:fallback` / `status:fail_open` is an abstention. Reusing a hook result
 is not a new call. An absent result stays absent; Jev `status`
