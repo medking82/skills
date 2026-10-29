@@ -17,6 +17,10 @@ class JsxSourceTests(unittest.TestCase):
     def test_shared_instance_scopes(self):
         self.run_script('test_live_jsx_instances.cjs')
 
+    @unittest.skipUnless(os.environ.get('DESIGN_TURBOPACK_TEST_PROJECT') and shutil.which('node'), 'Project Next/Babel/React are required')
+    def test_cross_module_hoc_and_keyed_instances(self):
+        self.run_script('test_live_jsx_modules.cjs')
+
     def run_script(self, script):
         project = os.environ.get('DESIGN_JSX_TEST_PROJECT')
         parent = Path(project) if project else ROOT / 'tests'
@@ -32,5 +36,6 @@ class JsxSourceTests(unittest.TestCase):
             else:
                 command = [shutil.which('node'), 'tests/' + script]
             result = subprocess.run(command, cwd=ROOT, env=env, capture_output=True, text=True,
-                                    timeout=30, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                                    timeout=30,
+                                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

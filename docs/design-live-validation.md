@@ -257,3 +257,50 @@ refuses instead of being promoted to a shared-template write.
 The final full suite passed all 86 tests with project Babel/React/Next and pinned
 native-engine coverage enabled. Bundle freshness, skill metadata and whitespace
 checks passed. Production server/static output contained no provenance/Live markers.
+
+## Cross-Module, HOC And Keyed Item Follow-Up
+
+Read-only lexical resolution now follows relative local imports, aliases, named/default
+exports, namespace imports and unambiguous barrels. React import bindings identify
+memo/forwardRef; simple HOC factories must prove unchanged prop forwarding. Receipts
+bind caller, component, barrel and HOC hashes. The writer locks these sources through
+flush; Windows read sharing prevents writes, appends and path replacement without ACL
+changes. Contention/drift refuses before writing.
+
+Direct synchronous map items use React-normalized keys. Index/duplicate keys, duplicate
+key attrs, spreads, nested shared parents and mismatched dependencies/scopes refuse.
+The canonical patch constructs the original element, then cloneElement overrides only
+the selected key's presentation props. Both component and intrinsic rows are covered.
+A needed React helper/type import and expression change commit in one write. Reorder
+retains identity; prior specializations can be selected again and helpers are reused.
+
+Project Babel/React SSR exposed that automatic JSX evaluates props before its separate
+key argument. An initial pre-key cache design would have changed getter order and was
+replaced before installation. Final checks compare original and specialized getter
+order/count under classic and automatic transforms, repeated edits and reorder. Other
+checks cover dependency drift, helper/type shadowing, normalized key collisions,
+read/write contention, append/rename prevention and exact multi-edit source bytes.
+
+Real Next.js 16.4.3 Turbopack Live selected the second identical static Card through
+caller → barrel → memo/forwardRef component plus a separate pass-through HOC. Accept
+changed only that callsite to 600. First Card and loop rows stayed 400. Exact source
+comparison and hashes preserved component, barrel, HOC and all neighboring source.
+
+Another real cycle selected loop key b (Beta). Its canonical patch added only the React
+helper/type import and selected expression wrapper. Beta rendered at 700; Alpha stayed
+400 and the static pair stayed 400/600. Reverse Items moved Beta ahead of Alpha without
+transferring style; Add Item mounted Gamma at 400. Actual handlers returned Static
+First, Static Second, a, b and c. Adjacent paragraph/aside were unchanged, with no browser
+console warnings/errors. A fresh capture selected the keyed specialization again;
+preview/Discard left source bytes unchanged and removed preview wrappers. Live then
+reported no pending sessions; capture and both test servers were stopped.
+
+`next build --turbopack` passed compilation, TypeScript and all six fixture outputs,
+including `/module-items`. The existing multiple-lockfile warning remains. Support is
+verified presentation props, not data/handler changes, structural specialization,
+config/package aliases, opaque HOCs or custom memo comparators. Unsupported instance
+identity is never widened into a template write.
+
+The final full suite passed all 88 tests with actual project Babel/React/Next and
+pinned native-engine checks enabled. Bundle freshness, skill metadata and whitespace
+checks passed. Production server/static output contained no provenance/Live markers.

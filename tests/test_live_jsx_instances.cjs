@@ -15,8 +15,8 @@ function render(code,target=file) {
 }
 function eventFor(html,number=1,instanceCount=1) {
   const articles=[...html.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/g)].map(m=>m[0]),outerHTML=articles[number];
-  const id=outerHTML.match(/data-design-live-source="([a-f0-9]+)"/)[1],instance=outerHTML.match(/data-design-live-instance="([a-f0-9]+)"/)[1];
-  return {id:'abc12345',count:3,element:{tagName:'article',outerHTML},sourceLocator:{templateSource:{id,occurrences:articles.length},instanceSource:{id:instance,rootSelected:true,occurrences:instanceCount}}};
+  const id=outerHTML.match(/data-design-live-source="([a-f0-9]+)"/)[1],instance=outerHTML.match(/data-design-live-instance="([^"]+)"/)?.[1];
+  return {id:'abc12345',count:3,element:{tagName:'article',outerHTML},sourceLocator:{templateSource:{id,occurrences:articles.length},...(instance?{instanceSource:{id:instance,rootSelected:true,occurrences:instanceCount}}:{})}};
 }
 const base="const React=require('react'); const handler=()=>1; const Card=({className,style,title,label,onClick})=><article className={className} style={style} title={title}><button onClick={onClick}>{label}</button></article>;";
 const code=base+'const View=()=> <main><Card label="Same" onClick={handler}/><Card label="Same" onClick={handler}/></main>; module.exports=View;';
@@ -58,14 +58,16 @@ assert.throws(()=>bridge.locate(root,sample.map,eventFor(sample.html,1,2)),/shar
 assert.throws(()=>bridge.locate(root,sample.map,eventFor(sample.html,1,1)),/nested_component_instance_not_supported/);
 // One current loop item is not a unique source use.
 sample=render(base+'const View=()=> <main>{[1].map(n=><Card key={n} label="Same" onClick={handler}/>)}</main>;module.exports=View;');
+const loopGraph=require('../skills/impeccable/scripts/live-jsx-modules.cjs').graph(root,file,babel,bridge.sourceFile);
+assert(loopGraph.describe([...loopGraph.main.elements.values()].find(n=>n.openingElement.name.name==='Card')).loop);
 const loopEvent=eventFor(sample.html,0,1);
-assert.throws(()=>bridge.locate(root,sample.map,loopEvent),/callback_template_source/);
+assert.equal(bridge.locate(root,sample.map,loopEvent).sourceKind,'jsx-loop-instance');
 assert(bridge.locate(root,sample.map,loopEvent,'template').ok);
 // Lexical shadowing must not inherit the real local Card's provenance.
 sample=render(base+'function Shadow(Card){return <Card label="Other"/>} const View=()=> <Card label="Same" onClick={handler}/>;module.exports=View;');
 assert.equal(Object.keys(sample.map.instances).length,1);
 sample=render(base+'const View=()=> <Card {...{label:"Same"}} onClick={handler}/>;module.exports=View;');
-assert.throws(()=>bridge.locate(root,sample.map,eventFor(sample.html,0)),/instance_spread_not_supported/);
+assert.throws(()=>bridge.locate(root,sample.map,eventFor(sample.html,0)),/missing_instance_provenance/);
 sample=render(base+'const theme="x";const View=()=> <Card label="Same" className={theme} onClick={handler}/>;module.exports=View;');
 assert.throws(()=>bridge.locate(root,sample.map,eventFor(sample.html,0)),/dynamic_instance_presentation_prop/);
 for(const altered of [base.replace('className={className}','className={className || "fallback"}').replace('style={style} title={title}',''),
@@ -73,14 +75,16 @@ for(const altered of [base.replace('className={className}','className={className
   sample=render(altered+'const View=()=> <main><Card label="Same"/><Card label="Same"/></main>;module.exports=View;');
   assert.equal(Object.keys(sample.map.instances).length,0);
 }
-for(const variant of [base.replace('const Card=', 'let Card=')+'Card=Card;const View=()=> <Card label="Same"/>;module.exports=View;',
-  base+'const Alias=Card;const View=()=> <Alias label="Same"/>;module.exports=View;',
-  base+'const Wrapped=((C)=>C)(Card);const View=()=> <Wrapped label="Same"/>;module.exports=View;']) {
+for(const variant of [base.replace('const Card=', 'let Card=')+'Card=Card;const View=()=> <Card label="Same"/>;module.exports=View;']) {
   sample=render(variant);assert.equal(Object.keys(sample.map.instances).length,0);
   const outerHTML=sample.html.match(/<article\b[^>]*>[\s\S]*?<\/article>/)[0],id=outerHTML.match(/data-design-live-source="([a-f0-9]+)"/)[1];
   const unresolved={id:'abcd1234',count:3,element:{tagName:'article',outerHTML},sourceLocator:{templateSource:{id,occurrences:1}}};
   assert.throws(()=>bridge.locate(root,sample.map,unresolved),/missing_instance_provenance/);
   assert(bridge.locate(root,sample.map,unresolved,'template').ok);
+}
+for(const variant of [base+'const Alias=Card;const View=()=> <Alias label="Same"/>;module.exports=View;',
+  base+'const Wrapped=((C)=>C)(Card);const View=()=> <Wrapped label="Same"/>;module.exports=View;']) {
+  sample=render(variant);assert.equal(bridge.locate(root,sample.map,eventFor(sample.html,0)).sourceKind,'jsx-instance');
 }
 console.log('Instance Callsite Isolation, Explicit Template Scope And Adversarial Checks Passed');
 fs.mkdirSync(path.join(root,'src'),{recursive:true});

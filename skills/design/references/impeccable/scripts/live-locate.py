@@ -6,6 +6,7 @@ import hashlib
 import json
 import re
 import os
+from contextlib import contextmanager, ExitStack
 from html.parser import HTMLParser
 from html import unescape
 from pathlib import Path
@@ -154,6 +155,81 @@ def scaffold(source, event, detached=False):
                 styleTag=f'<style data-impeccable-css="{session}">')
 
 
+@contextmanager
+def locked_dependencies(receipt, target):
+    dependencies = receipt.get('dependencies', [])
+    if not dependencies:
+        yield
+        return
+    if not receipt.get('projectRoot'):
+        raise LocatorError('invalid_dependency_root')
+    root = Path(receipt['projectRoot']).resolve()
+    if not root.is_dir() or not target.resolve().is_relative_to(root) or len(dependencies) > 64:
+        raise LocatorError('invalid_dependency_root')
+    entries = {}
+    for dependency in dependencies:
+        path = Path(dependency['file'])
+        resolved = path.resolve()
+        if not path.is_absolute() or path.is_symlink() or not resolved.is_relative_to(root) or not re.fullmatch('[a-f0-9]{64}', dependency['sha256']):
+            raise LocatorError('invalid_dependency_source')
+        key = os.path.normcase(str(resolved))
+        if key in entries:
+            raise LocatorError('duplicate_dependency_source')
+        entries[key] = (resolved, dependency['sha256'])
+    with ExitStack() as stack:
+        handles = []
+        for path, expected in (entries[key] for key in sorted(entries)):
+            if path == target.resolve():
+                continue  # The existing writer exclusively locks and checks this file.
+            handle = stack.enter_context(source_handle(path))
+            length = max(os.fstat(handle.fileno()).st_size, 1)
+            if os.name == 'nt':
+                import msvcrt
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBRLCK, length)
+                def unlock(h=handle, size=length):
+                    h.seek(0)
+                    msvcrt.locking(h.fileno(), msvcrt.LK_UNLCK, size)
+            else:
+                import fcntl
+                fcntl.flock(handle, fcntl.LOCK_SH | fcntl.LOCK_NB)
+                def unlock(h=handle):
+                    fcntl.flock(h.fileno(), fcntl.LOCK_UN)
+            stack.callback(unlock)
+            handles.append((path, expected, handle))
+        # Recheck all sources after every lock is held, including file identity.
+        for path, expected, handle in handles:
+            actual = os.fstat(handle.fileno())
+            current = path.stat()
+            handle.seek(0)
+            if (actual.st_dev, actual.st_ino) != (current.st_dev, current.st_ino) or hashlib.sha256(handle.read()).hexdigest() != expected:
+                raise LocatorError('dependency_source_changed')
+        yield
+
+
+def source_handle(path, write=False):
+    """Windows shares reads only: writers, appends and path replacement must wait/fail."""
+    if os.name != 'nt':
+        return path.open('r+b' if write else 'rb')
+    import ctypes
+    import msvcrt
+    from ctypes import wintypes
+    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+    create = kernel.CreateFileW
+    create.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, wintypes.LPVOID,
+                       wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+    create.restype = wintypes.HANDLE
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    handle = create(str(path), 0x80000000 | (0x40000000 if write else 0), 1, None, 3, 0x80, None)
+    if handle == ctypes.c_void_p(-1).value:
+        raise ctypes.WinError(ctypes.get_last_error())
+    try:
+        fd = msvcrt.open_osfhandle(handle, (os.O_RDWR if write else os.O_RDONLY) | os.O_BINARY)
+    except BaseException:
+        kernel.CloseHandle(handle)
+        raise
+    return os.fdopen(fd, 'r+b' if write else 'rb')
+
+
 def apply_selection(path, receipt, replacement, session_id=None, template_approval=None):
     """Commit one accepted detached variant; refuse any source drift before writing."""
     if receipt.get('publishToSource') is not False or path.is_symlink():
@@ -169,8 +245,8 @@ def apply_selection(path, receipt, replacement, session_id=None, template_approv
     start, end = receipt['replaceStartOffset'], receipt['replaceEndOffset']
     if source[start:end] != receipt['original']:
         raise LocatorError('source_range_mismatch')
-    if receipt.get('sourceKind') in ('jsx', 'jsx-instance'):
-        validators = ('babel-jsx-instance-props-v1',) if receipt['sourceKind'] == 'jsx-instance' else (
+    if receipt.get('sourceKind') in ('jsx', 'jsx-instance', 'jsx-loop-instance'):
+        validators = ('babel-jsx-keyed-props-v1',) if receipt['sourceKind'] == 'jsx-loop-instance' else ('babel-jsx-instance-props-v1',) if receipt['sourceKind'] == 'jsx-instance' else (
             'babel-jsx-template-static-edits-v1', 'babel-jsx-template-structural-edits-v1'
         ) if receipt.get('editScope') == 'template' else ('babel-jsx-static-edits-v1', 'babel-jsx-structural-edits-v1')
         if (path.suffix.lower() not in ('.jsx', '.tsx') or not template_approval
@@ -187,9 +263,21 @@ def apply_selection(path, receipt, replacement, session_id=None, template_approv
             raise LocatorError('replacement_must_be_one_matching_element')
         if any(k.startswith(('data-impeccable-', 'data-p-')) for n in parsed.nodes for k, _ in n['attrs']):
             raise LocatorError('replacement_has_live_markers')
-    desired = (source[:start] + replacement + source[end:]).encode('utf-8')
+    additions = receipt.get('additionalEdits', [])
+    if additions and receipt.get('sourceKind') != 'jsx-loop-instance':
+        raise LocatorError('unexpected_additional_edits')
+    edits = [dict(start=start, end=end, original=receipt['original'], replacement=replacement), *additions]
+    desired_text, boundary = source, len(source) + 1
+    for edit in sorted(edits, key=lambda e: e['start'], reverse=True):
+        a, b = edit['start'], edit['end']
+        if (type(a) is not int or type(b) is not int or not 0 <= a <= b <= len(source)
+                or b > boundary or source[a:b] != edit['original']):
+            raise LocatorError('overlapping_or_changed_source_edits')
+        desired_text = desired_text[:a] + edit['replacement'] + desired_text[b:]
+        boundary = a
+    desired = desired_text.encode('utf-8')
     # Preserve the existing file object/permissions. Opening r+b does not truncate.
-    with path.open('r+b') as handle:
+    with locked_dependencies(receipt, path), source_handle(path, write=True) as handle:
         if os.name == 'nt':
             import msvcrt
             length = max(len(raw), len(desired), 1)

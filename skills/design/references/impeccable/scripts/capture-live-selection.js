@@ -5,6 +5,11 @@
   const records = new Map();
   let active = true;
   let module = window.__IMPECCABLE_LIVE_DOM__;
+  function identity(value) {
+    const match=/^([a-f0-9]{24}):(.+)$/.exec(value||'');
+    if(!match)return value;
+    try {const key=JSON.parse(decodeURIComponent(match[2]));return match[1]+':'+String(key[1]);}catch{return value;}
+  }
   function pathFor(el) {
     const path = [];
     for (let node = el; node && node !== document.body; node = node.parentElement) {
@@ -31,7 +36,7 @@
           const instanceId = root?.getAttribute?.('data-design-live-instance');
           const instanceSource = instanceId ? {id: instanceId, rootSelected: root === el,
             occurrences: [...document.querySelectorAll('[data-design-live-instance]')]
-              .filter(n => n.getAttribute('data-design-live-instance') === instanceId).length} : undefined;
+              .filter(n => identity(n.getAttribute('data-design-live-instance')) === identity(instanceId)).length} : undefined;
           records.set(id, {outerHTML: result.outerHTML, path: pathFor(el), parentHTML: el.parentElement.outerHTML, templateSource, instanceSource});
           if (records.size > 32) records.delete(records.keys().next().value);
         }

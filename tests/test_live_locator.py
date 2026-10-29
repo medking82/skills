@@ -2,6 +2,7 @@ import importlib.util
 import unittest
 import tempfile
 import hashlib
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -136,6 +137,41 @@ class LiveLocatorTests(unittest.TestCase):
                 validation['validator']=validator
                 locator.apply_selection(path,receipt,replacement,'abc12345',validation)
                 self.assertEqual(path.read_bytes(),source.replace(original,replacement).encode())
+
+    def test_dependency_drift_locks_and_keyed_import_commit(self):
+        with tempfile.TemporaryDirectory(prefix='module-commit-',dir=ROOT/'tests') as directory:
+            root=Path(directory);path=root/'Page.tsx';dependency=root/'Card.tsx'
+            source="'use client';\n// 😀 Neighbor\nconst View=()=> <Card key={item.id}/>; // Keep\r\n"
+            original='<Card key={item.id}/>';replacement='((element)=>element)(<Card key={item.id}/>)'
+            path.write_bytes(source.encode());dependency.write_text('export const Card=1;',encoding='utf-8')
+            receipt=dict(publishToSource=False,sourceKind='jsx-loop-instance',editScope='instance',sessionId='abc12345',file=str(path),projectRoot=str(root),
+                sourceSha256=hashlib.sha256(source.encode()).hexdigest(),original=original,replaceStartOffset=source.index(original),replaceEndOffset=source.index(original)+len(original),
+                additionalEdits=[dict(start=13,end=13,original='',replacement='\nimport {cloneElement} from "react";\n')],
+                dependencies=[dict(file=str(dependency),sha256=hashlib.sha256(dependency.read_bytes()).hexdigest())])
+            validation=dict(ok=True,validator='babel-jsx-keyed-props-v1',receipt=receipt,replacementSha256=hashlib.sha256(replacement.encode()).hexdigest())
+            dependency.write_text('export const Card=2;',encoding='utf-8')
+            with self.assertRaisesRegex(locator.LocatorError,'dependency_source_changed'):
+                locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+            self.assertEqual(path.read_bytes(),source.encode())
+            dependency.write_text('export const Card=1;',encoding='utf-8')
+            with locator.source_handle(dependency,write=True) as occupied:
+                if os.name!='nt':
+                    import fcntl
+                    fcntl.flock(occupied,fcntl.LOCK_EX|fcntl.LOCK_NB)
+                with self.assertRaises(OSError):
+                    locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+            self.assertEqual(path.read_bytes(),source.encode())
+            if os.name=='nt':
+                with locator.locked_dependencies(receipt,path):
+                    with self.assertRaises(OSError):
+                        os.replace(dependency,root/'Renamed.tsx')
+                    with self.assertRaises(OSError):
+                        dependency.open('ab')
+            locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+            expected=source.replace(original,replacement)
+            expected=expected[:13]+receipt['additionalEdits'][0]['replacement']+expected[13:]
+            self.assertEqual(path.read_bytes(),expected.encode())
+            self.assertEqual(dependency.read_text(), 'export const Card=1;')
 
 
 if __name__ == '__main__':
