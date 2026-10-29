@@ -1,0 +1,57 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const bridge=require('../skills/impeccable/scripts/live-jsx-source.cjs');
+const root=process.env.DESIGN_JSX_TEST_ROOT;
+assert(root,'Test root required');fs.mkdirSync(path.join(root,'src'),{recursive:true});
+fs.writeFileSync(path.join(root,'package.json'),'{"private":true}');
+const file=path.join(root,'src/Panel.tsx');
+const code="const emoji = '😀'; const label: string='Same'; const handler=()=>1; const View=()=> <p>Before<span onClick={handler}>{label}</span><span onClick={handler}>{label}</span>After</p>;";
+fs.writeFileSync(file,code);
+process.env.NODE_ENV='production';
+assert.deepEqual(bridge({}, {development:true,root}),{});
+fs.mkdirSync(path.join(root,'dist'),{recursive:true});fs.writeFileSync(path.join(root,'dist/Bad.tsx'),'<span/>');
+assert.throws(()=>bridge.sourceFile(root,'dist/Bad.tsx'),/not_true_jsx_source/);
+if(!process.env.DESIGN_JSX_WITH_COMPILER){console.log('JSX Boundary Checks Passed');process.exit(0);}
+process.env.NODE_ENV='development';
+const {createRequire}=require('node:module'),req=createRequire(path.join(root,'package.json')),babel=req('@babel/core');
+const output=babel.transformSync(code,{filename:file,configFile:false,babelrc:false,parserOpts:{plugins:['jsx','typescript']},plugins:[[bridge,{development:true,root}]]});
+assert(output.code.includes('data-design-live-source'));
+const maps=path.join(root,'.impeccable/live/jsx-source-maps');
+const map=JSON.parse(fs.readFileSync(path.join(maps,fs.readdirSync(maps)[0]),'utf8'));
+const spans=Object.values(map.nodes).filter(r=>r.tag==='span').sort((a,b)=>a.start-b.start);
+assert.equal(spans.length,2);assert.notEqual(spans[0].id,spans[1].id);
+const r=spans[1];
+const event={id:'1234abcd',count:3,element:{tagName:'span',outerHTML:`<span data-design-live-source="${r.id}">Same</span>`},sourceLocator:{templateSource:{id:r.id,occurrences:1}}};
+const receipt=bridge.locate(root,bridge.readMap(maps,event),event);
+assert.equal(receipt.original,'<span onClick={handler}>{label}</span>');
+assert.equal(receipt.replaceStartOffset,[...code.slice(0,r.start)].length);
+assert(receipt.replaceStartOffset<receipt.startUTF16);
+const chosen='<span className="chosen" style={{fontWeight:600}} onClick={handler}>{label}</span>';
+assert.equal(bridge.validate(root,receipt,chosen).ok,true);
+for(const bad of ['<span>Same</span>','<span onClick={()=>2}>{label}</span>','<a onClick={handler}>{label}</a>',
+  '<span onClick={handler}>{label}<b>Extra</b></span>'])assert.throws(()=>bridge.validate(root,receipt,bad),/template_bindings_or_structure_changed/);
+assert.throws(()=>bridge.locate(root,map,{...event,sourceLocator:{templateSource:{id:r.id,occurrences:2}}}),/shared_template_source/);
+assert.throws(()=>bridge.locate(root,map,{...event,sourceLocator:{}}),/missing_compiler_provenance/);
+const loader=require('../skills/impeccable/scripts/live-jsx-loader.cjs');let transformed;
+loader.call({mode:'development',resourcePath:file,getOptions:()=>({root}),callback:(err,result,map)=>{assert.ifError(err);transformed=result;assert.equal(map.version,3);}},code);
+assert(transformed.includes('<span'));assert(transformed.includes('data-design-live-source'));
+let unchanged;loader.call({mode:'production',callback:(err,result)=>unchanged=result},code);assert.equal(unchanged,code);
+// Another source module cannot erase the first module's manifest shard.
+const other=path.join(root,'src/Other.jsx');fs.writeFileSync(other,'const Other=()=> <h2>Other</h2>;');
+babel.transformSync(fs.readFileSync(other,'utf8'),{filename:other,configFile:false,babelrc:false,parserOpts:{plugins:['jsx']},plugins:[[bridge,{development:true,root}]]});
+assert.equal(bridge.readMap(maps,event).nodes[r.id].file,'src/Panel.tsx');
+const repeated=path.join(root,'src/Repeated.jsx');
+const repeatedCode="const React=require('react'); module.exports=()=> ['A','B'].map(item=><span>{item}</span>);";
+fs.writeFileSync(repeated,repeatedCode);
+const compiled=babel.transformSync(repeatedCode,{filename:repeated,configFile:false,babelrc:false,
+  plugins:[[bridge,{development:true,root}],req('@babel/plugin-transform-react-jsx')]});
+const moduleScope={exports:{}};
+vm.runInNewContext(compiled.code,{require:req,module:moduleScope});
+const React=req('react'),html=req('react-dom/server').renderToStaticMarkup(React.createElement(moduleScope.exports));
+const markers=[...html.matchAll(/data-design-live-source="([a-f0-9]+)"/g)].map(m=>m[1]);
+assert.equal(markers.length,2);assert.equal(markers[0],markers[1]);
+const loopEvent={id:'1234abce',count:3,element:{tagName:'span',outerHTML:`<span data-design-live-source="${markers[0]}">A</span>`},sourceLocator:{templateSource:{id:markers[0],occurrences:2}}};
+assert.throws(()=>bridge.locate(root,bridge.readMap(maps,loopEvent),loopEvent),/shared_template_source/);
+fs.writeFileSync(file,code+'\n// concurrent edit');
+assert.throws(()=>bridge.locate(root,map,event),/source_changed_since_render/);
+assert.throws(()=>bridge.validate(root,receipt,chosen),/source_changed/);
+console.log('Compiler Mapping, Binding Preservation, Loader And Drift Checks Passed');

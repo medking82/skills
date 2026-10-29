@@ -67,7 +67,7 @@
     },
     "impeccable": {
       "entrypoint": "skills/impeccable/SKILL.md",
-      "source_sha256": "78ebe073bb1e2a37da086190bdebfe1aea01a7472829c859a53a0fed658b0e4c",
+      "source_sha256": "2ac2100bafc808bf96caa29b63d7fd577af0294245a765528b7b22eb29ee057c",
       "guide": "impeccable/guide.md",
       "description": "Develop a distinctive visual direction and composition for web or native UI, or critique its design when requested.",
       "allow_implicit_invocation": true
@@ -220,23 +220,38 @@
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",
-      "source_sha256": "78ebe073bb1e2a37da086190bdebfe1aea01a7472829c859a53a0fed658b0e4c",
-      "sha256": "adfa66b19fb753ab5bcec700de74cf5fd8b8daf7ce215182cac8d052fa1f4bd0"
+      "source_sha256": "2ac2100bafc808bf96caa29b63d7fd577af0294245a765528b7b22eb29ee057c",
+      "sha256": "5ccf017870a52bdfff6e9f47a85c4609611c1a00c27ddd6085db321687cfc369"
     },
     "impeccable/references/live-exact-source.md": {
       "source": "skills/impeccable/references/live-exact-source.md",
-      "source_sha256": "79b64189fc11f2dc1768e2b766bb6145e9545168bbcd9f6bae1faddb0f1261ff",
-      "sha256": "79b64189fc11f2dc1768e2b766bb6145e9545168bbcd9f6bae1faddb0f1261ff"
+      "source_sha256": "d8cf0443728d28a1c3c5f30d1c47559e424bbb43011fbeeb3c375a4064cee3d1",
+      "sha256": "d8cf0443728d28a1c3c5f30d1c47559e424bbb43011fbeeb3c375a4064cee3d1"
+    },
+    "impeccable/references/live-jsx-source.md": {
+      "source": "skills/impeccable/references/live-jsx-source.md",
+      "source_sha256": "cefc3bc44a5d0b4229fa6c018cb0d0cd267870fa09c129b6deda2ce668fb9038",
+      "sha256": "cefc3bc44a5d0b4229fa6c018cb0d0cd267870fa09c129b6deda2ce668fb9038"
     },
     "impeccable/scripts/capture-live-selection.js": {
       "source": "skills/impeccable/scripts/capture-live-selection.js",
-      "source_sha256": "9ce2318be65d91fc07426b579f36a59e93cb101f4e3a2ad8845327c294dbfa90",
-      "sha256": "9ce2318be65d91fc07426b579f36a59e93cb101f4e3a2ad8845327c294dbfa90"
+      "source_sha256": "4beb70f1d6d9a81aee3d08e96ba4b4c5fc4ea7ea108ad7dfd5be1b0450bbc6d9",
+      "sha256": "4beb70f1d6d9a81aee3d08e96ba4b4c5fc4ea7ea108ad7dfd5be1b0450bbc6d9"
+    },
+    "impeccable/scripts/live-jsx-loader.cjs": {
+      "source": "skills/impeccable/scripts/live-jsx-loader.cjs",
+      "source_sha256": "7d116c72e833fa4ebc4ae08b9bda3f12d5c439d727712348b11dcda055bbb92e",
+      "sha256": "7d116c72e833fa4ebc4ae08b9bda3f12d5c439d727712348b11dcda055bbb92e"
+    },
+    "impeccable/scripts/live-jsx-source.cjs": {
+      "source": "skills/impeccable/scripts/live-jsx-source.cjs",
+      "source_sha256": "b66f40de212c803e030c7439939d29ee346851065bc1490ae47d053c92a8edcf",
+      "sha256": "b66f40de212c803e030c7439939d29ee346851065bc1490ae47d053c92a8edcf"
     },
     "impeccable/scripts/live-locate.py": {
       "source": "skills/impeccable/scripts/live-locate.py",
-      "source_sha256": "24d4462c7ddb98e2983242a291ef578d5c6f4e9e1610642389372721fc4c4cac",
-      "sha256": "24d4462c7ddb98e2983242a291ef578d5c6f4e9e1610642389372721fc4c4cac"
+      "source_sha256": "c62b153260c84dd4b1a9dadc2a652a79a942daa57994a4682be649d7c3435fad",
+      "sha256": "c62b153260c84dd4b1a9dadc2a652a79a942daa57994a4682be649d7c3435fad"
     },
     "impeccable/scripts/run-engine.ps1": {
       "source": "skills/impeccable/scripts/run-engine.ps1",

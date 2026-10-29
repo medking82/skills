@@ -57,4 +57,6 @@ foreground process; do not stop a helper belonging to a different session.
 For missing selectors, minified HTML, inline elements or repeated siblings, read
 [exact HTML source editing](references/live-exact-source.md). It provides a source
 locator, session-correlated DOM capture and detached inline previews. Framework
-templates and generated HTML still require their source-aware upstream fallback.
+templates must use their source-aware adapter: for React JSX/TSX and generated React
+HTML read [compiler-backed source editing](references/live-jsx-source.md). Preserve
+the native Svelte component-preview flow when supplied by the upstream engine.

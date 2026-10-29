@@ -23,7 +23,10 @@
         const result = clone.call(this, el);
         const id = window.__IMPECCABLE_LIVE_CHROME_CORE__?.debugState().currentSessionId;
         if (active && id && !records.has(id) && el.parentElement && result.outerHTML.length <= 10000) {
-          records.set(id, {outerHTML: result.outerHTML, path: pathFor(el), parentHTML: el.parentElement.outerHTML});
+          const marker = el.getAttribute?.('data-design-live-source');
+          const templateSource = marker ? {id: marker, occurrences: [...document.querySelectorAll('[data-design-live-source]')]
+            .filter(n => n.getAttribute('data-design-live-source') === marker).length} : undefined;
+          records.set(id, {outerHTML: result.outerHTML, path: pathFor(el), parentHTML: el.parentElement.outerHTML, templateSource});
           if (records.size > 32) records.delete(records.keys().next().value);
         }
         return result;
@@ -40,7 +43,7 @@
     forEvent(event) {
       const match = records.get(event.id);
       if (!match?.path || match.outerHTML !== event.element.outerHTML) throw new Error('No matching session snapshot; capture again');
-      return {path: match.path, parentHTML: match.parentHTML};
+      return {path: match.path, parentHTML: match.parentHTML, ...(match.templateSource ? {templateSource:match.templateSource} : {})};
     },
     dispose() {
       active = false;

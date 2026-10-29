@@ -10,7 +10,7 @@ const body = {tagName:'BODY',children:[p]};
 first.parentElement=second.parentElement=p;p.parentElement=body;
 let id='aaaaaaaa';
 const window = {__IMPECCABLE_LIVE_CHROME_CORE__:{debugState:()=>({currentSessionId:id})}};
-vm.runInNewContext(code, {window,document:{body}});
+vm.runInNewContext(code, {window,document:{body,querySelectorAll:()=>[first,second]}});
 window.__IMPECCABLE_LIVE_DOM__={createLiveBrowserDomHelpers:()=>({cloneWithoutChrome:el=>({outerHTML:el.outerHTML})})};
 const helpers=window.__IMPECCABLE_LIVE_DOM__.createLiveBrowserDomHelpers();
 helpers.cloneWithoutChrome(first);
@@ -19,6 +19,9 @@ helpers.cloneWithoutChrome(first); // Later clones must not overwrite this sessi
 const record=window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}});
 assert.deepEqual(JSON.parse(JSON.stringify(record.path)),[{tag:'p',index:0},{tag:'span',index:1}]);
 assert.throws(()=>window.__DESIGN_LIVE_SELECTION__.forEvent({id:'missing',element:{outerHTML:second.outerHTML}}));
+first.getAttribute=second.getAttribute=()=> 'a'.repeat(24);
+id='cccccccc';helpers.cloneWithoutChrome(second);
+assert.equal(window.__DESIGN_LIVE_SELECTION__.forEvent({id,element:{outerHTML:second.outerHTML}}).templateSource.occurrences,2);
 window.__DESIGN_LIVE_SELECTION__.dispose();
 assert.equal(window.__DESIGN_LIVE_SELECTION__,undefined);
 assert.equal(Object.getOwnPropertyDescriptor(window,'__IMPECCABLE_LIVE_DOM__').set,undefined);

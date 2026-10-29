@@ -154,7 +154,7 @@ def scaffold(source, event, detached=False):
                 styleTag=f'<style data-impeccable-css="{session}">')
 
 
-def apply_selection(path, receipt, replacement, session_id=None):
+def apply_selection(path, receipt, replacement, session_id=None, template_approval=None):
     """Commit one accepted detached variant; refuse any source drift before writing."""
     if receipt.get('publishToSource') is not False or path.is_symlink():
         raise LocatorError('not_a_detached_receipt')
@@ -169,13 +169,21 @@ def apply_selection(path, receipt, replacement, session_id=None):
     start, end = receipt['replaceStartOffset'], receipt['replaceEndOffset']
     if source[start:end] != receipt['original']:
         raise LocatorError('source_range_mismatch')
-    parsed = Tree(replacement)
-    roots = [n for n in parsed.nodes if n['parent'] is None]
-    original = Tree(receipt['original']).nodes[0]
-    if len(roots) != 1 or roots[0]['tag'] != original['tag'] or replacement[roots[0]['start']:roots[0]['end']] != replacement:
-        raise LocatorError('replacement_must_be_one_matching_element')
-    if any(k.startswith(('data-impeccable-', 'data-p-')) for n in parsed.nodes for k, _ in n['attrs']):
-        raise LocatorError('replacement_has_live_markers')
+    if receipt.get('sourceKind') == 'jsx':
+        if (path.suffix.lower() not in ('.jsx', '.tsx') or not template_approval
+                or template_approval.get('ok') is not True
+                or template_approval.get('validator') != 'babel-jsx-static-edits-v1'
+                or template_approval.get('receipt') != receipt
+                or template_approval.get('replacementSha256') != hashlib.sha256(replacement.encode('utf-8')).hexdigest()):
+            raise LocatorError('missing_or_mismatched_template_validation')
+    else:
+        parsed = Tree(replacement)
+        roots = [n for n in parsed.nodes if n['parent'] is None]
+        original = Tree(receipt['original']).nodes[0]
+        if len(roots) != 1 or roots[0]['tag'] != original['tag'] or replacement[roots[0]['start']:roots[0]['end']] != replacement:
+            raise LocatorError('replacement_must_be_one_matching_element')
+        if any(k.startswith(('data-impeccable-', 'data-p-')) for n in parsed.nodes for k, _ in n['attrs']):
+            raise LocatorError('replacement_has_live_markers')
     desired = (source[:start] + replacement + source[end:]).encode('utf-8')
     # Preserve the existing file object/permissions. Opening r+b does not truncate.
     with path.open('r+b') as handle:
@@ -211,15 +219,18 @@ def main():
     parser.add_argument('--receipt', type=Path)
     parser.add_argument('--replacement', type=Path)
     parser.add_argument('--session-id')
+    parser.add_argument('--template-approval', type=Path)
     args = parser.parse_args()
     try:
-        if args.file.is_symlink() or args.file.suffix.lower() not in ('.html', '.htm'):
+        allowed = ('.html', '.htm', '.jsx', '.tsx') if args.template_approval else ('.html', '.htm')
+        if args.file.is_symlink() or args.file.suffix.lower() not in allowed:
             raise LocatorError('unsupported_source')
         # Preserve CRLF and Unicode exactly: offsets address this decoded byte sequence.
         source = args.file.read_bytes().decode('utf-8')
         if args.receipt and args.replacement:
             result = apply_selection(args.file, json.loads(args.receipt.read_text(encoding='utf-8-sig')),
-                                     args.replacement.read_bytes().decode('utf-8'), args.session_id)
+                                     args.replacement.read_bytes().decode('utf-8'), args.session_id,
+                                     json.loads(args.template_approval.read_text(encoding='utf-8-sig')) if args.template_approval else None)
         elif args.event:
             result = scaffold(source, json.loads(args.event.read_text(encoding='utf-8-sig')), args.detached)
         else:

@@ -1,6 +1,7 @@
 import importlib.util
 import unittest
 import tempfile
+import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,6 +97,25 @@ class LiveLocatorTests(unittest.TestCase):
             with self.assertRaisesRegex(locator.LocatorError, 'source_changed'):
                 locator.apply_selection(path, receipt, '<span>Wrong</span>', receipt['sessionId'])
             self.assertEqual(path.read_bytes(), before)
+
+    def test_template_commit_requires_matching_validation_and_preserves_neighbors(self):
+        source="const label='X'; const node=<span>{label}</span>; // Keep\r\n"
+        original='<span>{label}</span>'
+        replacement='<span className="chosen">{label}</span>'
+        with tempfile.TemporaryDirectory(prefix='template-commit-',dir=ROOT/'tests') as directory:
+            path=Path(directory)/'Panel.jsx';path.write_bytes(source.encode('utf-8'))
+            receipt=dict(publishToSource=False,sourceKind='jsx',sessionId='abc12345',file=str(path),
+                         sourceSha256=hashlib.sha256(source.encode('utf-8')).hexdigest(),
+                         replaceStartOffset=source.index(original),replaceEndOffset=source.index(original)+len(original),original=original)
+            with self.assertRaisesRegex(locator.LocatorError,'template_validation'):
+                locator.apply_selection(path,receipt,replacement,'abc12345')
+            self.assertEqual(path.read_bytes(),source.encode('utf-8'))
+            validation=dict(ok=True,validator='babel-jsx-static-edits-v1',receipt=receipt,
+                            replacementSha256=hashlib.sha256(replacement.encode('utf-8')).hexdigest())
+            with self.assertRaisesRegex(locator.LocatorError,'template_validation'):
+                locator.apply_selection(path,receipt,replacement+' ','abc12345',validation)
+            locator.apply_selection(path,receipt,replacement,'abc12345',validation)
+            self.assertEqual(path.read_bytes(),source.replace(original,replacement).encode('utf-8'))
 
 
 if __name__ == '__main__':

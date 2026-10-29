@@ -2,6 +2,8 @@
 
 Use only with verified true HTML source. The adapter does not interpret JSX, framework
 templates, generated HTML, implicit/optional HTML closures or table/select parsing.
+For React JSX/TSX compiled into generated HTML, use the separate
+[compiler-backed source workflow](live-jsx-source.md).
 Never infer a sibling index from identical text. On mismatch or ambiguity, stop that
 operation without writing source.
 

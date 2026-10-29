@@ -79,3 +79,38 @@ for indistinguishable siblings. Missing captures, parser/browser disagreement,
 framework templates, generated HTML and parser-sensitive table/select targets still
 require the source-aware fallback. Detached cycles must not rely on the native
 first-match recovery heuristic after reload. Source drift refuses the write.
+
+## React JSX/TSX And Generated HTML Follow-Up
+
+The user selected React/Next.js as the priority framework. A development-only Babel
+plugin now emits per-file provenance manifests and compiled DOM markers from original
+JSX/TSX AST ranges. A webpack pre-loader preserves the existing JSX/TSX compiler and
+passes through a source map. Original component files receive no instrumentation.
+The capture includes the compiler marker and actual DOM occurrence count.
+
+Two actual runtime paths were exercised:
+
+- **Generated static HTML:** Babel 7.28.5 compiled a TSX component, then React 19
+  `renderToStaticMarkup` generated ignored `dist/index.html`. The selected second span
+  mapped to its real TSX range. Preview and native Accept left component bytes unchanged.
+  After parser validation, the locked writer changed only that range. Exact byte
+  comparison preserved neighboring source, both `{label}` bindings and handlers.
+  Rebuilding regenerated the page with weights 400/600 and intact adjacent content.
+- **Next.js 16.4.3 webpack dev:** a real App Router client component hydrated, and its
+  click handler incremented a counter. Live selected the second span, displayed three
+  detached variants and accepted variant 2 into `app/page.jsx`. Exact source comparison
+  passed. Fast Refresh displayed the chosen class/weight; the target still incremented
+  the counter from 0 to 1. Adjacent paragraph text and aside remained intact. Browser
+  console reported no errors after the source write. This used `next dev --webpack`,
+  not Turbopack; no production Next build was claimed.
+
+Compiler tests exercised JSX and TSX, astral-character offset conversion, static style
+edits, preservation/refusal of expressions/handlers/structure, stale source rejection,
+manifest sharding and production no-op behavior. A real React render of a loop produced
+two DOM nodes from one compiler marker; single-instance mapping correctly refused.
+The byte writer also rejects missing/mismatched compiler validation and wrong sessions.
+
+Scope: verified original JSX/TSX, local development provenance, static UI edits with
+existing structure/bindings. Uninstrumented generated files, shared runtime instances,
+Turbopack, other template languages and structural/dynamic expression changes are not
+claimed as supported by this bridge. They require their native source-aware workflow.
