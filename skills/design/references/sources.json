@@ -560,13 +560,13 @@
     },
     "impeccable/upstream/scripts/impeccable": {
       "source": "skills/impeccable/upstream/scripts/impeccable",
-      "source_sha256": "d9709ee88e790bda2d98f55c4d1abe42e28b91db849882a2998bac79b1e074cb",
-      "sha256": "d9709ee88e790bda2d98f55c4d1abe42e28b91db849882a2998bac79b1e074cb"
+      "source_sha256": "e91b8a68fe2595120fa4452ff1888d7a5216557f4bdaa93c537153c739de25c2",
+      "sha256": "e91b8a68fe2595120fa4452ff1888d7a5216557f4bdaa93c537153c739de25c2"
     },
     "impeccable/upstream/scripts/impeccable.cmd": {
       "source": "skills/impeccable/upstream/scripts/impeccable.cmd",
-      "source_sha256": "74154d320dda16e7cb184406a9deecc8c6a5953ab675af99cea207471d63b4b4",
-      "sha256": "74154d320dda16e7cb184406a9deecc8c6a5953ab675af99cea207471d63b4b4"
+      "source_sha256": "73c2e4d7613c38e35654df0444d559c97f1d09a9d373f4e72b3d7b21b6e1060c",
+      "sha256": "73c2e4d7613c38e35654df0444d559c97f1d09a9d373f4e72b3d7b21b6e1060c"
     },
     "impeccable/upstream/scripts/live-browser-dom.js": {
       "source": "skills/impeccable/upstream/scripts/live-browser-dom.js",
@@ -595,8 +595,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "0587a7e9fe8ed7afd03bfe1bab5a092e56a707ea318938c8cace9c68d798f154",
-      "sha256": "0587a7e9fe8ed7afd03bfe1bab5a092e56a707ea318938c8cace9c68d798f154"
+      "source_sha256": "469fba4f86989fd6ca7fecc2174c5d568e51048169350a233fcc70e8066cc1da",
+      "sha256": "469fba4f86989fd6ca7fecc2174c5d568e51048169350a233fcc70e8066cc1da"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
