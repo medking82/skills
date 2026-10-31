@@ -290,8 +290,8 @@
     },
     "impeccable/upstream/agents/impeccable_documenter.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_documenter.toml",
-      "source_sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d",
-      "sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d"
+      "source_sha256": "e7778229d8f31433fc11e29dd2caac8e85281e27ea5c9410474703bb0185100f",
+      "sha256": "e7778229d8f31433fc11e29dd2caac8e85281e27ea5c9410474703bb0185100f"
     },
     "impeccable/upstream/agents/impeccable_finish_reviewer.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_finish_reviewer.toml",
@@ -380,8 +380,8 @@
     },
     "impeccable/upstream/reference/degraded/documenter.md": {
       "source": "skills/impeccable/upstream/reference/degraded/documenter.md",
-      "source_sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745",
-      "sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745"
+      "source_sha256": "42adcdd8956af17259caa03bc9de9326ea6baf4f2b23872b50845f1a27213f5a",
+      "sha256": "42adcdd8956af17259caa03bc9de9326ea6baf4f2b23872b50845f1a27213f5a"
     },
     "impeccable/upstream/reference/degraded/finish-reviewer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/finish-reviewer.md",
@@ -475,8 +475,8 @@
     },
     "impeccable/upstream/reference/new-work.md": {
       "source": "skills/impeccable/upstream/reference/new-work.md",
-      "source_sha256": "e23f8944f8962a36dc01e1b0bfacc55bb754633b3686e83ae53a40af97444118",
-      "sha256": "e23f8944f8962a36dc01e1b0bfacc55bb754633b3686e83ae53a40af97444118"
+      "source_sha256": "4d9410bf9dfdb0890769a2f45e634be809392ac293abd91ee9553e8eabb18fe5",
+      "sha256": "4d9410bf9dfdb0890769a2f45e634be809392ac293abd91ee9553e8eabb18fe5"
     },
     "impeccable/upstream/reference/onboard.md": {
       "source": "skills/impeccable/upstream/reference/onboard.md",
@@ -595,8 +595,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "469fba4f86989fd6ca7fecc2174c5d568e51048169350a233fcc70e8066cc1da",
-      "sha256": "469fba4f86989fd6ca7fecc2174c5d568e51048169350a233fcc70e8066cc1da"
+      "source_sha256": "c70af80e1d3b6a9fcc49a5c239e5dd74df97ffa70aa83e026915f780515c4948",
+      "sha256": "c70af80e1d3b6a9fcc49a5c239e5dd74df97ffa70aa83e026915f780515c4948"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
