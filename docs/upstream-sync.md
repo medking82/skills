@@ -113,9 +113,9 @@ failures. Preserve enrollment state when resolving drift. GitHub delays, disable
 schedules, a signed-out Windows user, and a stopped task can interrupt delivery.
 Adding workflow files alone does not verify those runtime conditions.
 
-The design routing contract keeps the main LLM's final decision, with Jev as a
-second opinion where applicable. Maintenance does not change that contract or the
-user's Title Case preference for visible English UI copy.
+The design routing contract keeps every mode choice, including unresolved ones, with
+the main LLM; no external routing helper is consulted. Maintenance does not change that
+contract or the user's Title Case preference for visible English UI copy.
 
 ## Local Validation
 

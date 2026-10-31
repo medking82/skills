@@ -1,5 +1,9 @@
 # Design Routing And Live Acceptance — 2026-10-29
 
+> Jev was retired on 2026-11-01. The routing observations below are historical
+> evidence from the former Jev-assisted contract; `design` now leaves every mode
+> choice, including unresolved ones, to the main LLM without an external helper.
+
 The installed skill was exercised by an independent model in a fresh agent turn.
 The host receipt `a15f4785908947e3836433619e4c3476` correlated to turn
 `01a185e9-fc98-7251-8d6a-e04a72246c30`: `status: ok`, `source: explicit`, skill
@@ -17,9 +21,9 @@ The ambiguous case sent a remote request and received a structurally valid respo
 The advice was not accepted. The LLM continued without retrying. No raw confidence
 value was retained. An earlier successful helper request is separate evidence.
 
-The operational chain is host skill selection, then LLM playbook/mode selection,
-then a Jev second opinion only for a useful unresolved mode choice. Ordinary hook
-abstention is expected; the model can still select the skill and invoke its helper.
+At the time, the operational chain was host skill selection, then LLM playbook/mode
+selection, then a Jev second opinion only for a useful unresolved mode choice. Ordinary
+hook abstention was expected; the model could still select the skill and invoke its helper.
 No Codex hook, model, permissions or scheduling configuration was changed for this test.
 
 A second fresh agent received a concrete UI implementation request without any skill

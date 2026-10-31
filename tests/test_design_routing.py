@@ -69,15 +69,23 @@ class DesignRoutingTests(unittest.TestCase):
         self.assertIn("upstream/guide.md#commands", self.section)
         self.assertIn("does not start them", self.section)
 
-    def test_jev_receipt_and_fail_open_contract_are_visible(self):
-        section = self.router.split("## Jev-Assisted Mode Selection\n", 1)[1].split("\n## ", 1)[0]
-        for rule in ("Reuse a design-mode recommendation already supplied by the",
-                     "two or more modes plausibly fit", "no\nextra routing call",
-                     "`mode` or `choice`, `source`, and `requests` when present", "not evidence that this turn called Jev",
-                     "minimal non-sensitive context", "without retrying", "main LLM selects the applicable Impeccable playbooks",
-                     "does not expand task scope", "`decision` helper instead", "a\nno-match option"):
+    def test_ambiguous_mode_selection_is_owned_by_the_main_llm(self):
+        section = self.router.split("## Ambiguous Mode Selection\n", 1)[1].split("\n## ", 1)[0]
+        for rule in ("two or more modes plausibly fit", "the main LLM chooses the mode itself",
+                     "No external routing helper or second opinion is involved",
+                     "no\nextra routing deliberation", "no-match outcome",
+                     "name the chosen mode and\nwhy it fits",
+                     "main LLM selects both the mode guides and the applicable Impeccable\nplaybooks",
+                     "does not expand task scope", "a playbook selection does not suppress that choice"):
             with self.subTest(rule=rule):
                 self.assertIn(rule, section)
+
+    def test_retired_jev_routing_is_absent_from_owned_design_sources(self):
+        # Jev was retired on 2026-11-01; owned routing text must not reintroduce it.
+        for path in (DESIGN / "SKILL.md", DESIGN / "references/impeccable/guide.md",
+                     ROOT / "skills/impeccable/SKILL.md"):
+            with self.subTest(path=path.relative_to(ROOT).as_posix()):
+                self.assertNotRegex(path.read_text(encoding="utf-8"), r"(?i)\bjev\b")
 
     def test_scope_reading_and_fallback_boundaries_are_present(self):
         for rule in ("Explicit user selections take", "A negated playbook",
