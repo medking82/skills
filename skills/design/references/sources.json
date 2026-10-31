@@ -375,23 +375,23 @@
     },
     "impeccable/upstream/reference/degraded/asset-producer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/asset-producer.md",
-      "source_sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c",
-      "sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c"
+      "source_sha256": "cf726ce0c7dd1005078fbf560745d4114afe363319648cc9de42d1536370d117",
+      "sha256": "cf726ce0c7dd1005078fbf560745d4114afe363319648cc9de42d1536370d117"
     },
     "impeccable/upstream/reference/degraded/documenter.md": {
       "source": "skills/impeccable/upstream/reference/degraded/documenter.md",
-      "source_sha256": "42adcdd8956af17259caa03bc9de9326ea6baf4f2b23872b50845f1a27213f5a",
-      "sha256": "42adcdd8956af17259caa03bc9de9326ea6baf4f2b23872b50845f1a27213f5a"
+      "source_sha256": "17b6328d809c86622789dcbe1bb1b12ec8937118ef6aa4b37bfd9130d79a205c",
+      "sha256": "17b6328d809c86622789dcbe1bb1b12ec8937118ef6aa4b37bfd9130d79a205c"
     },
     "impeccable/upstream/reference/degraded/finish-reviewer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/finish-reviewer.md",
-      "source_sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d",
-      "sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d"
+      "source_sha256": "3e6cb6f54c2a4796940ce81b0cc3e9c1cfc2eed6445146088e6405a40cb44347",
+      "sha256": "3e6cb6f54c2a4796940ce81b0cc3e9c1cfc2eed6445146088e6405a40cb44347"
     },
     "impeccable/upstream/reference/degraded/manual-edit-applier.md": {
       "source": "skills/impeccable/upstream/reference/degraded/manual-edit-applier.md",
-      "source_sha256": "cf9048c15e1b0935d8b38be54c4d21f77cce60e7c1ef28a6d9bab4b008977c4b",
-      "sha256": "cf9048c15e1b0935d8b38be54c4d21f77cce60e7c1ef28a6d9bab4b008977c4b"
+      "source_sha256": "357b19acc7ef688c337a4f020633a49db23c84620b13636f9ff20d3ab934df1a",
+      "sha256": "357b19acc7ef688c337a4f020633a49db23c84620b13636f9ff20d3ab934df1a"
     },
     "impeccable/upstream/reference/delight.md": {
       "source": "skills/impeccable/upstream/reference/delight.md",
@@ -595,8 +595,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "c70af80e1d3b6a9fcc49a5c239e5dd74df97ffa70aa83e026915f780515c4948",
-      "sha256": "c70af80e1d3b6a9fcc49a5c239e5dd74df97ffa70aa83e026915f780515c4948"
+      "source_sha256": "7ec3d9030bf3cf7cd9d5761b488f1c332081e737125359e7b4c6be51431c2ec4",
+      "sha256": "7ec3d9030bf3cf7cd9d5761b488f1c332081e737125359e7b4c6be51431c2ec4"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
