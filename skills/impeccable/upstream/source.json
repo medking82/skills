@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "medking82/impeccable",
   "upstream": "pbakaus/impeccable",
-  "commit": "2b41c8f9c8a3cc4bc5518b445783b992a565e300",
+  "commit": "533b0541a3f17f49b3beb179dedf5f7da659a039",
   "files": {
     "LICENSE": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
     "NOTICE.md": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
