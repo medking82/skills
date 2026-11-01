@@ -19,7 +19,7 @@ precedence, including `$design layout <target>` and requests naming an Impeccabl
 playbook. A negated playbook or forbidden action is not selected or performed.
 When the scope is unclear, choose conservatively; do not infer all five from a
 general request to improve a UI. Playbook selection precedes the general mode
-table and Jev mode selection; Jev cannot override an explicit user choice.
+table and ambiguous mode selection; neither overrides an explicit user choice.
 
 | Name | Intent and examples | Impeccable playbook |
 | --- | --- | --- |
@@ -102,7 +102,7 @@ new modes from upstream, with descriptions, guide paths and invocation policy.
 When the table does not cover the request or the user names another mode, inspect
 the inventory's `modes` section and read the relevant guide. Respect
 `allow_implicit_invocation: false` and the user's scope. The main LLM can select a
-newly bundled mode even if the current Jev helper does not yet recognize its name.
+newly bundled mode as soon as the inventory lists it.
 
 For a new or substantially redesigned interface, start with `impeccable` when its visual
 direction matters. For focused component work outside selected playbooks, use `emil-design-eng`. Prefer
@@ -110,46 +110,30 @@ direction matters. For focused component work outside selected playbooks, use `e
 question ends with the term; an audit ends with findings or a plan. Implement when
 implementation is part of the request.
 
-## Jev-Assisted Mode Selection
+## Ambiguous Mode Selection
 
-When the unified `$jev` skill is available and two or more modes plausibly fit, use its
-`design` helper with a short description of the current request as a second opinion on
-the main LLM's mode choice. Reuse a design-mode recommendation already supplied by the
-Jev turn hook. On same-layer disagreement, recheck the request, opt-in constraints and
-guide evidence once, then choose the mode and read its guide without another Jev call.
+When two or more modes plausibly fit, the main LLM chooses the mode itself. Recheck the
+request, opt-in constraints and the candidate guides' descriptions once, then choose the
+mode and read its guide. No external routing helper or second opinion is involved.
 Explicit mode names, clear single-mode requests and ordinary component polish need no
-extra routing call. If Jev abstains or is unavailable, choose from this table normally.
+extra routing deliberation; choose from the table above directly.
 
-For an unresolved choice involving `remove-animations` or a newly indexed mode that the
-`design` helper may not recognize, use `$jev`'s `decision` helper instead. Supply only
-the short task, relevant allowed mode names and descriptions from the inventory, and a
-no-match option; use the main LLM's choice as the fallback. Follow `$jev`'s guidance
-for that helper. Reuse a same-layer hook result when present, and make at most one Jev
-call for the choice. Explicit modes and independent requested outcomes need no choice.
+For an unresolved choice involving `remove-animations` or a newly indexed mode, compare
+only the relevant allowed mode names and descriptions from the inventory, and keep a
+no-match outcome available when none fits. Explicit modes and independent requested
+outcomes need no choice.
 
-Give a concise, truthful routing receipt with the selection: say whether this
-turn reused its hook recommendation, called the helper, or needed or allowed no
-call. For an actual hook or helper result, include only the returned `status`,
-`mode` or `choice`, `source`, and `requests` when present. A helper invocation is not
-necessarily a remote Jev request: `source:local` with `requests:0` is local;
-`source:fallback` / `status:fail_open` is an abstention. Reusing a hook result
-is not a new call. An absent result stays absent; Jev `status`
-reports a previous observation and is not evidence that this turn called Jev.
-Send only minimal non-sensitive context to the helper, respecting tool bans and
-explicit model, effort, Fast, and scope choices. On failure, low confidence,
-malformed response, or local fallback, treat the result as an abstention, choose
-locally, and report the fallback without retrying. Jev selects among mode guides;
-the main LLM selects the applicable Impeccable playbooks. Neither grants permission
-or proves work.
+Give a concise, truthful routing receipt with the selection: name the chosen mode and
+why it fits. The main LLM selects both the mode guides and the applicable Impeccable
+playbooks. Neither selection grants permission or proves work.
 If a selected playbook leaves a genuine choice between additional mode guides,
-apply the same one-call Jev rule; a playbook selection does not suppress it.
+choose between them the same way; a playbook selection does not suppress that choice.
 
-The helper's default candidate set excludes the four explicit modes below. Include one
-in `allowed_modes` only when the actual user request authorizes it; a Jev recommendation
-does not expand task scope. Preserve the user's model, effort, Fast, tool bans and UI copy
-preferences. The main LLM owns the final route, design judgment and validation.
-Jev abstention or local fallback is not disagreement. `native-review` remains the owner
-of admitted code review; a routing disagreement does not start one.
+Candidates exclude the four explicit modes below unless the actual user request
+authorizes one; mode selection does not expand task scope. Preserve the user's model,
+effort, Fast, tool bans and UI copy preferences. The main LLM owns the final route,
+design judgment and validation. `native-review` remains the owner of admitted code
+review; a routing ambiguity does not start one.
 
 ## Invocation and scope
 

@@ -19,9 +19,8 @@ judgment, not universal bans: preserve an explicit brief, the established design
 and the user's Title Case UI copy preference. Never invent factual product claims.
 
 Use the existing `emil-design-eng`, motion, mobile or native modes when the task crosses
-into their specialties. The main LLM selects the appropriate mode and owns the outcome;
-Jev offers a second opinion for a useful unresolved mode choice, within `$design`'s
-existing routing rules.
+into their specialties. The main LLM selects the appropriate mode and owns the outcome,
+within `$design`'s existing routing rules.
 
 Use the upstream procedures and tools only when their actions fit the request and the
 available environment. Their mandatory direction picker, repeated reviews, browser,

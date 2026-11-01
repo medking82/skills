@@ -67,7 +67,7 @@
     },
     "impeccable": {
       "entrypoint": "skills/impeccable/SKILL.md",
-      "source_sha256": "2ac2100bafc808bf96caa29b63d7fd577af0294245a765528b7b22eb29ee057c",
+      "source_sha256": "cbf67f510e7db57b2ebbbfe22649f3860024699d1ca25ce8944f6e1ce879cd73",
       "guide": "impeccable/guide.md",
       "description": "Develop a distinctive visual direction and composition for web or native UI, or critique its design when requested.",
       "allow_implicit_invocation": true
@@ -220,8 +220,8 @@
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",
-      "source_sha256": "2ac2100bafc808bf96caa29b63d7fd577af0294245a765528b7b22eb29ee057c",
-      "sha256": "5ccf017870a52bdfff6e9f47a85c4609611c1a00c27ddd6085db321687cfc369"
+      "source_sha256": "cbf67f510e7db57b2ebbbfe22649f3860024699d1ca25ce8944f6e1ce879cd73",
+      "sha256": "9272498151cb55e9bf5153a469fb36a87ef87602bd2f19c192aa79925d9ca35d"
     },
     "impeccable/references/live-exact-source.md": {
       "source": "skills/impeccable/references/live-exact-source.md",
