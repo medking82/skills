@@ -99,6 +99,26 @@ class DesignRoutingTests(unittest.TestCase):
                 self.assertIn(rule, self.section)
         self.assertIn("[review-animations](references/review-animations/guide.md)", self.router)
 
+    def test_hallmark_is_scoped_to_new_web_pages_and_ai_tell_audits(self):
+        self.assertIn("[hallmark](references/hallmark/guide.md)", self.router)
+        for rule in ("app UI such as dashboards, admin screens, editors and tools stays with\n`impeccable`",
+                     "Hallmark never takes over an existing design unless the user names it"):
+            with self.subTest(rule=rule):
+                self.assertIn(rule, self.router)
+        wrapper = (ROOT / "skills/hallmark/SKILL.md").read_text(encoding="utf-8")
+        for rule in ("Never touch an existing design unless the user names", "Floor item 15",
+                     "Skip\n  the comp step", "never add an edit hook",
+                     "Do not run `theme.mjs index` or `theme.mjs scaffold`",
+                     "An audit reports findings and proposed fixes and stops"):
+            with self.subTest(rule=rule):
+                self.assertIn(rule, wrapper)
+        source = json.loads((ROOT / "skills/hallmark/upstream/source.json").read_text(encoding="utf-8"))
+        for excluded in ("scripts/imagegen.mjs", "scripts/install.mjs", "scripts/install-hook.mjs"):
+            with self.subTest(excluded=excluded):
+                self.assertIn(excluded, source["excluded"])
+                self.assertNotIn(excluded, source["files"])
+                self.assertFalse((DESIGN / "references/hallmark/upstream" / excluded).exists())
+
 
 if __name__ == "__main__":
     unittest.main()
