@@ -47,7 +47,7 @@ class DesignBundleTests(unittest.TestCase):
         self.assertTrue(bundle.build(self.repo))
         manifest = json.loads((self.root / "sources.json").read_text())
         self.assertEqual(set(manifest["modes"]), set(bundle.MODES))
-        self.assertEqual(len(manifest["modes"]), 16)
+        self.assertEqual(len(manifest["modes"]), 17)
         for mode in bundle.MODES:
             source = self.repo / "skills" / mode
             destination = self.root / mode

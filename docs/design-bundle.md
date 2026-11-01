@@ -31,6 +31,11 @@ generated-file drift, and validation failures stop publication and abort the mer
 changes to the builder or other automation remain outside this automatic path.
 The Impeccable fork and snapshot stages follow the separate review boundaries described in
 [upstream sync](upstream-sync.md); both upstreams are checked every six hours.
+The Hallmark snapshot (`skills/hallmark/upstream`, from `Nutlope/hallmark`) is refreshed
+manually with `python -B scripts/sync-hallmark.py --source <checkout> --commit <sha>` and then
+rebuilt into the bundle. It omits upstream's paid image-generation client, installers, hooks
+and maintainer fixtures. Script or license changes stop the refresh until reviewed and
+accepted with `--allow-code-updates`.
 
 For a combined installation, copy the whole `skills/design` directory to
 `<codex-home>/skills/design`. Disable previously installed specialist entrypoints using their

@@ -103,6 +103,7 @@ Examples are routing expectations, not a claim that a model has been tested:
 | Request | Mode and guide |
 | --- | --- |
 | Distinctive visual direction, broader UI composition or an explicitly requested visual critique | [impeccable](references/impeccable/guide.md) |
+| New marketing, brand or campaign web page or landing page from scratch, a named Hallmark redesign, or an audit of a web page for AI tells (去 AI 味) | [hallmark](references/hallmark/guide.md) |
 | Component feedback, cohesion or accessibility outside selected playbooks | [emil-design-eng](references/emil-design-eng/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
@@ -128,7 +129,10 @@ the inventory's `modes` section and read the relevant guide. Respect
 newly bundled mode as soon as the inventory lists it.
 
 For a new or substantially redesigned interface, start with `impeccable` when its visual
-direction matters. For focused component work outside selected playbooks, use `emil-design-eng`. Prefer
+direction matters. A new marketing, brand or campaign web page built from scratch uses
+`hallmark` instead; app UI such as dashboards, admin screens, editors and tools stays with
+`impeccable`, and Hallmark never takes over an existing design unless the user names it or
+asks for an AI-tell audit. For focused component work outside selected playbooks, use `emil-design-eng`. Prefer
 `ask-sonner` for a Sonner problem and the platform-specific mode for mobile work. A naming
 question ends with the term; an audit ends with findings or a plan. Implement when
 implementation is part of the request.
