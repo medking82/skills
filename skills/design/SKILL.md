@@ -17,25 +17,47 @@ Impeccable playbooks. Select only those relevant to the requested scope; use mor
 one when the user asks for distinct outcomes. Explicit user selections take
 precedence, including `$design layout <target>` and requests naming an Impeccable
 playbook. A negated playbook or forbidden action is not selected or performed.
-When the scope is unclear, choose conservatively; do not infer all five from a
+When the scope is unclear, choose conservatively; do not infer several playbooks from a
 general request to improve a UI. Playbook selection precedes the general mode
 table and ambiguous mode selection; neither overrides an explicit user choice.
 
-| Name | Intent and examples | Impeccable playbook |
-| --- | --- | --- |
-| `layout` | spacing, grouping, alignment and layout; 间距、分组、布局 | [layout](references/impeccable/upstream/reference/layout.md) |
-| `typeset` | font choices, text hierarchy and reading; 字体、字号、排版层级 | [typeset](references/impeccable/upstream/reference/typeset.md) |
-| `distill` | simplify clutter, remove redundancy; 精简、去冗余 | [distill](references/impeccable/upstream/reference/distill.md) |
-| `polish` | final refinement and consistency before shipping; 上线前打磨、一致性收尾 | [polish](references/impeccable/upstream/reference/polish.md) |
-| `critique` | assess a design and identify issues; 设计评审、找问题 | [critique](references/impeccable/upstream/reference/critique.md) |
+| Name | Category | Intent and examples | Impeccable playbook |
+| --- | --- | --- | --- |
+| `critique` | Evaluate | UX design review, find and rank issues; 设计审查、设计评审、找问题 | [critique](references/impeccable/upstream/reference/critique.md) |
+| `audit` | Evaluate | technical checks: accessibility, contrast, performance, responsive; 无障碍、对比度、上线前技术检查 | [audit](references/impeccable/upstream/reference/audit.md) |
+| `layout` | Enhance | spacing, grouping, alignment, rhythm; 间距、分组、对齐、布局 | [layout](references/impeccable/upstream/reference/layout.md) |
+| `typeset` | Enhance | fonts, type scale, text hierarchy; 字体、字号、排版层级 | [typeset](references/impeccable/upstream/reference/typeset.md) |
+| `colorize` | Enhance | add strategic color to a grey or dull UI; 配色太灰、更有活力 | [colorize](references/impeccable/upstream/reference/colorize.md) |
+| `animate` | Enhance | add purposeful motion to a UI; 加动效 | [animate](references/impeccable/upstream/reference/animate.md) |
+| `delight` | Enhance | personality and memorable touches; 小惊喜、记忆点细节 | [delight](references/impeccable/upstream/reference/delight.md) |
+| `overdrive` | Enhance | push past conventional limits, only when asked; 突破常规 | [overdrive](references/impeccable/upstream/reference/overdrive.md) |
+| `distill` | Refine | simplify, remove clutter and complexity; 精简、去冗余、太复杂 | [distill](references/impeccable/upstream/reference/distill.md) |
+| `quieter` | Refine | tone down loud, busy or overstimulating designs; 太吵、太花、收敛 | [quieter](references/impeccable/upstream/reference/quieter.md) |
+| `bolder` | Refine | amplify a safe, bland or forgettable design; 太平淡、太保守、更大胆 | [bolder](references/impeccable/upstream/reference/bolder.md) |
+| `polish` | Refine | final consistency pass before shipping; 上线前打磨、细节收尾 | [polish](references/impeccable/upstream/reference/polish.md) |
+| `harden` | Refine | make UI production-ready: errors, empty data, long text, i18n; 处理错误/空状态/超长文字/多语系 | [harden](references/impeccable/upstream/reference/harden.md) |
+| `onboard` | Refine | first-run flows, empty states, activation; 新用户引导、首次使用 | [onboard](references/impeccable/upstream/reference/onboard.md) |
+| `clarify` | Fix | UX copy, labels, error messages; 文案、按钮文字、错误讯息看不懂 | [clarify](references/impeccable/upstream/reference/clarify.md) |
+| `adapt` | Fix | other devices and screen sizes; 平板、手机、响应式 (native: adapt.native.md) | [adapt](references/impeccable/upstream/reference/adapt.md) |
+| `optimize` | Fix | diagnose and fix UI performance; 页面卡顿、渲染慢 | [optimize](references/impeccable/upstream/reference/optimize.md) |
+| `shape` | Build | plan UX and UI before code; 先规划流程和页面结构、不写程序 | [shape](references/impeccable/upstream/reference/shape.md) |
+| `extract` | Build | pull shared tokens and components into a design system; 抽成 design tokens、共用元件 | [extract](references/impeccable/upstream/reference/extract.md) |
+| `document` | Build | write DESIGN.md from existing code, only when asked | [document](references/impeccable/upstream/reference/document.md) |
+| `init` | Build | capture product context in PRODUCT.md, only when asked | [init](references/impeccable/upstream/reference/init.md) |
+| `live` | Iterate | browser variant iteration, only when explicitly requested | [live](references/impeccable/upstream/reference/live.md) |
+| `generate` | Iterate | variants of a named element in the live browser, only when explicitly requested | [generate](references/impeccable/upstream/reference/generate.md) |
 
-These five are common examples, not the full set. For other requests, consult the
-current [Impeccable command table](references/impeccable/upstream/guide.md#commands)
-and load the matching reference by explicit command or actual intent. This covers,
-for example, color, UX copy, onboarding, accessibility, responsive adaptation,
-design-system extraction and planning. Honor aliases and platform-specific references
-in that table. Combine an Impeccable playbook with an Emil mode when both contribute
-to the requested work; a shared name does not force an either-or choice. `live` and
+This table lists every current Impeccable command (`craft` is a deprecated alias for
+ordinary new work). Read the linked playbook directly; the Impeccable mode guide and the
+upstream command table are not required first. `harden` fixes edge cases inside the
+requested work; `break-ui` only stress-tests with worst-case data and stays opt-in.
+Smoother or janky existing motion (流畅、丝滑、掉帧) belongs to the motion modes below
+(`animation-performance`, `improve-animations`), not `animate`, which adds new motion.
+Choose the playbook or mode from the request before looking for project files. Honor
+aliases and platform-specific references in the
+[upstream command table](references/impeccable/upstream/guide.md#commands).
+Combine an Impeccable playbook with an Emil mode when both contribute to the requested
+work; a shared name does not force an either-or choice. `live` and
 `generate` remain available for requested visual iteration, within the user's tool
 permissions; an ordinary design request does not start them.
 
@@ -52,7 +74,8 @@ requests changes too. An action request phrased as a question, such as “能帮
 调整间距吗？”, is a request to make that change.
 
 Before using the selected playbooks, give one concise sentence naming them and
-why they fit. Read the Impeccable mode guide and each selected playbook. Only
+why they fit. Read each selected playbook, and the Impeccable mode guide when a new or
+substantially revised visual direction is involved. Only
 say a playbook was loaded after its file was successfully read. If a file is
 missing or unreadable, say which one failed and use the applicable general design
 mode as a clearly identified fallback; do not claim the playbook was followed.

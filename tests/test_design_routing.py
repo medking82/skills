@@ -17,8 +17,11 @@ class DesignRoutingTests(unittest.TestCase):
 
     def test_playbook_table_resolves_to_owned_manifest_files(self):
         entries = re.findall(r"^\| `([a-z]+)` \| .*? \| \[([a-z]+)\]\(([^)]+)\) \|$", self.section, re.MULTILINE)
+        # Every current upstream command is listed and linked directly; `craft` is a deprecated alias.
+        commands = json.loads((DESIGN / "references/impeccable/upstream/scripts/command-metadata.json")
+                              .read_text(encoding="utf-8"))
         expected = {name: f"references/impeccable/upstream/reference/{name}.md"
-                    for name in ("layout", "typeset", "distill", "polish", "critique")}
+                    for name in commands if name != "craft"}
         self.assertEqual(len(entries), len(expected))
         self.assertEqual({name: path for name, label, path in entries if name == label}, expected)
         manifest = json.loads((DESIGN / "references" / "sources.json").read_text(encoding="utf-8"))
@@ -65,7 +68,7 @@ class DesignRoutingTests(unittest.TestCase):
                     self.assertTrue(target.is_file(), relative)
                     record = manifest["files"]["impeccable/upstream/" + relative]
                     self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), record["sha256"])
-        self.assertIn("not the full set", self.section)
+        self.assertIn("lists every current Impeccable command", self.section)
         self.assertIn("upstream/guide.md#commands", self.section)
         self.assertIn("does not start them", self.section)
 
