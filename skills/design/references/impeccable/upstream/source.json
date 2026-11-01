@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "medking82/impeccable",
   "upstream": "pbakaus/impeccable",
-  "commit": "533b0541a3f17f49b3beb179dedf5f7da659a039",
+  "commit": "3e3b52138ae66ed3252bdfd9834d61032ee8d082",
   "files": {
     "LICENSE": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
     "NOTICE.md": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
@@ -61,7 +61,7 @@
     "scripts/data/font-index-failures.json": "835f19a0a3812f3652dd6979a2ce5597f654fd01f26e1b420b92d5f42b997ce4",
     "scripts/data/font-index.json": "47edbdfaf27073c47033d1ac7dfee881be49e2dcbda7671d1157300481dde6da",
     "scripts/engine-checksums.txt": "2f0235179cbc515d7c7ec71a9a08283d0cb88a5238d35ffa5a5f42122e78fe35",
-    "scripts/impeccable": "e91b8a68fe2595120fa4452ff1888d7a5216557f4bdaa93c537153c739de25c2",
+    "scripts/impeccable": "137173707b882616104b9d621b53bea37f135de09461add3301b9fcb3d7de461",
     "scripts/impeccable.cmd": "73c2e4d7613c38e35654df0444d559c97f1d09a9d373f4e72b3d7b21b6e1060c",
     "scripts/live-browser-dom.js": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
     "scripts/live-browser-ignores.js": "ba8905ab865fde5162e34fc17eb80eba26cc990b319b14a6eed6ca89fd491897",
