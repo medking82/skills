@@ -33,6 +33,21 @@ Boundaries that override the upstream text:
 - Photos come from the bundled Wikimedia Commons list with their credits; keep each credit.
 - An audit reports findings and proposed fixes and stops; edit only when the user asks.
 
+Local additions to the upstream flow:
+
+- **Section by section.** Build the hero first, then the remaining sections in page order.
+  A revision changes only the section at fault; never regenerate the whole page to fix one
+  part, so the rest stays stable and the diff stays reviewable.
+- **Ship check.** Before calling a standalone page done, confirm what the page needs from:
+  a branded 404, privacy and terms links in the footer, a favicon, `<title>`, meta
+  description and `og:image`, client-side validation on every form, and a way back from
+  every page. Name any item left out and why in the handoff.
+- **Chinese pages.** When the copy is Chinese, set a CJK fallback in the font stack (for
+  Traditional Chinese, for example `"Noto Sans TC"`, `"PingFang TC"`, `"Microsoft JhengHei"`)
+  and check the rendered glyphs, not just the Latin face. Keep body lines near 30 to 40
+  characters, use line-height around 1.7 for body text, and check headline line breaks so a
+  phrase is not split or a single character left alone on the last line.
+
 Run the Impeccable `detect` scan alongside `sloplint` when both are available; they catch
 different tells. The main LLM selects this mode within `$design`'s routing rules and owns the
 result. Check the rendered page when available and authorized; otherwise state what was not

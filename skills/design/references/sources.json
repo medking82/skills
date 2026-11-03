@@ -67,7 +67,7 @@
     },
     "hallmark": {
       "entrypoint": "skills/hallmark/SKILL.md",
-      "source_sha256": "c4901f6f9a7549c452e4613c653a800e0c5c84f8651b8e8857571b5ad9bf77b8",
+      "source_sha256": "28cac661648a48eea7a8956ca1a8c326e7058c3438d4b172c3af8ede6a631dee",
       "guide": "hallmark/guide.md",
       "description": "Build a new marketing, brand or campaign web page that does not look AI-generated, or audit a web page for AI tells, with Hallmark's floor, themes and sloplint.",
       "allow_implicit_invocation": true
@@ -227,8 +227,8 @@
     },
     "hallmark/guide.md": {
       "source": "skills/hallmark/SKILL.md",
-      "source_sha256": "c4901f6f9a7549c452e4613c653a800e0c5c84f8651b8e8857571b5ad9bf77b8",
-      "sha256": "f2ab1fbc4992900292aea470f9dbba01006ccf19bc5fbcc9487d7ae0ce96e091"
+      "source_sha256": "28cac661648a48eea7a8956ca1a8c326e7058c3438d4b172c3af8ede6a631dee",
+      "sha256": "5f6ca15bbc315f379d0cdaa6d4afde222529906b1808d7b583d0f05862ce3e8c"
     },
     "hallmark/upstream/LICENSE": {
       "source": "skills/hallmark/upstream/LICENSE",
