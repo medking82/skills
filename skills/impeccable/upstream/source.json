@@ -2,13 +2,13 @@
   "schema_version": 1,
   "repository": "medking82/impeccable",
   "upstream": "pbakaus/impeccable",
-  "commit": "3e3b52138ae66ed3252bdfd9834d61032ee8d082",
+  "commit": "4edcf2f69348890ad7a4a9fa9594f24f494bf244",
   "files": {
     "LICENSE": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
     "NOTICE.md": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
     "agents/impeccable_asset_producer.toml": "4dbdb0cfdc2466961da6b22d200f3ec7bf8bb47c27448a2e6e3c03cdbf589831",
     "agents/impeccable_documenter.toml": "e7778229d8f31433fc11e29dd2caac8e85281e27ea5c9410474703bb0185100f",
-    "agents/impeccable_finish_reviewer.toml": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
+    "agents/impeccable_finish_reviewer.toml": "f52cdfbaeea0623c31c25442cab373e93f10e96c65838cd8b672cd345f610d7e",
     "agents/impeccable_manual_edit_applier.toml": "4b01f4eb8a49fb00bc88248735c3b5442beb1791ec71d98e6d203f268a24010b",
     "guide.md": "fab04b31f946573b00a8559db1fc070f8ea5825254d491c2b13156e5661a86d7",
     "reference/adapt.md": "9807cdc112b8bcbdeff9cd2516cda4d07129f1d47f29df4d57645344f34950c1",
@@ -26,7 +26,7 @@
     "reference/critique.md": "c210c9506877c6c8d88880a337fddd95d4315daf70ed6bc631ee6520481f1a0c",
     "reference/degraded/asset-producer.md": "cf726ce0c7dd1005078fbf560745d4114afe363319648cc9de42d1536370d117",
     "reference/degraded/documenter.md": "17b6328d809c86622789dcbe1bb1b12ec8937118ef6aa4b37bfd9130d79a205c",
-    "reference/degraded/finish-reviewer.md": "3e6cb6f54c2a4796940ce81b0cc3e9c1cfc2eed6445146088e6405a40cb44347",
+    "reference/degraded/finish-reviewer.md": "04ba3571cd0f405dffb6b51d892add0e4f19fd7e2bc4815320f2bd2ab5bd2a8a",
     "reference/degraded/manual-edit-applier.md": "357b19acc7ef688c337a4f020633a49db23c84620b13636f9ff20d3ab934df1a",
     "reference/delight.md": "098a891028ce59c212b747d3c70468dd750aff7053a703d1336045ed31e0da7c",
     "reference/distill.md": "8b9283510e38f0d190652f300ea0793acfb5a514b38b991fdc0a289bade83391",
@@ -66,7 +66,7 @@
     "scripts/live-browser-dom.js": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
     "scripts/live-browser-ignores.js": "ba8905ab865fde5162e34fc17eb80eba26cc990b319b14a6eed6ca89fd491897",
     "scripts/live-browser-session.js": "e042339a54d4521fc47555b602013ed5b51410ec9d7d8878d99a526f5f237f68",
-    "scripts/live-browser.js": "3beaec74d362b64fd32656b22e3bd09f3b983ed2b3068625475dbe46b6867ed9",
+    "scripts/live-browser.js": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4",
     "scripts/modern-screenshot.umd.js": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b"
   }
 }

@@ -1102,8 +1102,8 @@
     },
     "impeccable/upstream/agents/impeccable_finish_reviewer.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_finish_reviewer.toml",
-      "source_sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
-      "sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd"
+      "source_sha256": "f52cdfbaeea0623c31c25442cab373e93f10e96c65838cd8b672cd345f610d7e",
+      "sha256": "f52cdfbaeea0623c31c25442cab373e93f10e96c65838cd8b672cd345f610d7e"
     },
     "impeccable/upstream/agents/impeccable_manual_edit_applier.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_manual_edit_applier.toml",
@@ -1192,8 +1192,8 @@
     },
     "impeccable/upstream/reference/degraded/finish-reviewer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/finish-reviewer.md",
-      "source_sha256": "3e6cb6f54c2a4796940ce81b0cc3e9c1cfc2eed6445146088e6405a40cb44347",
-      "sha256": "3e6cb6f54c2a4796940ce81b0cc3e9c1cfc2eed6445146088e6405a40cb44347"
+      "source_sha256": "04ba3571cd0f405dffb6b51d892add0e4f19fd7e2bc4815320f2bd2ab5bd2a8a",
+      "sha256": "04ba3571cd0f405dffb6b51d892add0e4f19fd7e2bc4815320f2bd2ab5bd2a8a"
     },
     "impeccable/upstream/reference/degraded/manual-edit-applier.md": {
       "source": "skills/impeccable/upstream/reference/degraded/manual-edit-applier.md",
@@ -1392,8 +1392,8 @@
     },
     "impeccable/upstream/scripts/live-browser.js": {
       "source": "skills/impeccable/upstream/scripts/live-browser.js",
-      "source_sha256": "3beaec74d362b64fd32656b22e3bd09f3b983ed2b3068625475dbe46b6867ed9",
-      "sha256": "3beaec74d362b64fd32656b22e3bd09f3b983ed2b3068625475dbe46b6867ed9"
+      "source_sha256": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4",
+      "sha256": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4"
     },
     "impeccable/upstream/scripts/modern-screenshot.umd.js": {
       "source": "skills/impeccable/upstream/scripts/modern-screenshot.umd.js",
@@ -1402,8 +1402,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "5559d79f34cdefddffffa86d0a9d3407016cb90e1d3690f3ea7ee02a0909ad7f",
-      "sha256": "5559d79f34cdefddffffa86d0a9d3407016cb90e1d3690f3ea7ee02a0909ad7f"
+      "source_sha256": "2a0460998260ed15b7f4ae07dca1d614152a5e4ea856bedd8d459d9451ee77b8",
+      "sha256": "2a0460998260ed15b7f4ae07dca1d614152a5e4ea856bedd8d459d9451ee77b8"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
