@@ -1402,8 +1402,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "2a0460998260ed15b7f4ae07dca1d614152a5e4ea856bedd8d459d9451ee77b8",
-      "sha256": "2a0460998260ed15b7f4ae07dca1d614152a5e4ea856bedd8d459d9451ee77b8"
+      "source_sha256": "045e6181d27d07cd404784f042f36ee7d186104aa14a4278f476106c1bd90f59",
+      "sha256": "045e6181d27d07cd404784f042f36ee7d186104aa14a4278f476106c1bd90f59"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
