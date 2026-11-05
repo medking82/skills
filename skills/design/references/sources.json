@@ -1259,8 +1259,8 @@
     },
     "impeccable/upstream/reference/init.md": {
       "source": "skills/impeccable/upstream/reference/init.md",
-      "source_sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
-      "sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b"
+      "source_sha256": "c2826a6369f86a325e84edb324021753fa8331b86f22a23c884b0b36b7a15488",
+      "sha256": "c2826a6369f86a325e84edb324021753fa8331b86f22a23c884b0b36b7a15488"
     },
     "impeccable/upstream/reference/ios.md": {
       "source": "skills/impeccable/upstream/reference/ios.md",
@@ -1279,8 +1279,8 @@
     },
     "impeccable/upstream/reference/live.md": {
       "source": "skills/impeccable/upstream/reference/live.md",
-      "source_sha256": "8735aa99406752a1d4bf903051ee9e9e6e3be1f4821c044b1f63d2a0556a6935",
-      "sha256": "8735aa99406752a1d4bf903051ee9e9e6e3be1f4821c044b1f63d2a0556a6935"
+      "source_sha256": "b8ff9aaf183187e52eb10a24b1036b4725ff51eb11abd97a360d5678e32561dc",
+      "sha256": "b8ff9aaf183187e52eb10a24b1036b4725ff51eb11abd97a360d5678e32561dc"
     },
     "impeccable/upstream/reference/mode-operate.md": {
       "source": "skills/impeccable/upstream/reference/mode-operate.md",
@@ -1409,8 +1409,8 @@
     },
     "impeccable/upstream/scripts/live-browser.js": {
       "source": "skills/impeccable/upstream/scripts/live-browser.js",
-      "source_sha256": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4",
-      "sha256": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4"
+      "source_sha256": "cb4549e392cdc0e62da5c92b059acac90de59da658aeb7a0fb30a5f294b75c15",
+      "sha256": "cb4549e392cdc0e62da5c92b059acac90de59da658aeb7a0fb30a5f294b75c15"
     },
     "impeccable/upstream/scripts/modern-screenshot.umd.js": {
       "source": "skills/impeccable/upstream/scripts/modern-screenshot.umd.js",
@@ -1419,8 +1419,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "045e6181d27d07cd404784f042f36ee7d186104aa14a4278f476106c1bd90f59",
-      "sha256": "045e6181d27d07cd404784f042f36ee7d186104aa14a4278f476106c1bd90f59"
+      "source_sha256": "b4dda2718a019d8849e4dd204938df15910fb0ad2405871c16958b377925123f",
+      "sha256": "b4dda2718a019d8849e4dd204938df15910fb0ad2405871c16958b377925123f"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",

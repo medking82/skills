@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "medking82/impeccable",
   "upstream": "pbakaus/impeccable",
-  "commit": "0c3ef358e22021209bf61149d9a41c8af1161e26",
+  "commit": "b1d15373ceae93f2690cc26f91ef6930198414c7",
   "files": {
     "LICENSE": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
     "NOTICE.md": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
@@ -36,11 +36,11 @@
     "reference/generate.md": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
     "reference/harden.md": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
     "reference/hooks.md": "ed38f149e04740707942465a2b2c75851b773fd52a2b52132c2a8e7f4b07f9dc",
-    "reference/init.md": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
+    "reference/init.md": "c2826a6369f86a325e84edb324021753fa8331b86f22a23c884b0b36b7a15488",
     "reference/ios.md": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
     "reference/layout.md": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
     "reference/live-setup.md": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
-    "reference/live.md": "8735aa99406752a1d4bf903051ee9e9e6e3be1f4821c044b1f63d2a0556a6935",
+    "reference/live.md": "b8ff9aaf183187e52eb10a24b1036b4725ff51eb11abd97a360d5678e32561dc",
     "reference/mode-operate.md": "7a52dd7a94ee75f6ae89542c86a1b6e1d306812b16e0d9dbf12d4acad44d148b",
     "reference/mode-persuade.md": "21e78c8a77badb3f83290cd4577ed3b24bd4dd3b57136d7da75733d4f3ee9ac0",
     "reference/mode-read.md": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
@@ -66,7 +66,7 @@
     "scripts/live-browser-dom.js": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
     "scripts/live-browser-ignores.js": "ba8905ab865fde5162e34fc17eb80eba26cc990b319b14a6eed6ca89fd491897",
     "scripts/live-browser-session.js": "e042339a54d4521fc47555b602013ed5b51410ec9d7d8878d99a526f5f237f68",
-    "scripts/live-browser.js": "4f676f5cfb36a77c3e0221a8eb5a27b6327d624628066a3cbbbf19dee68eaaf4",
+    "scripts/live-browser.js": "cb4549e392cdc0e62da5c92b059acac90de59da658aeb7a0fb30a5f294b75c15",
     "scripts/modern-screenshot.umd.js": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b"
   }
 }
