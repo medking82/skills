@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "medking82/impeccable",
   "upstream": "pbakaus/impeccable",
-  "commit": "b1d15373ceae93f2690cc26f91ef6930198414c7",
+  "commit": "12c48d2c137aae71aa27366cc7a46cccbb6e2c38",
   "files": {
     "LICENSE": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
     "NOTICE.md": "c60a093c2845fd9fb82f9c6f742ece31f379f8190b535309d32d66c45ccffdcb",
@@ -35,7 +35,7 @@
     "reference/extract.md": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
     "reference/generate.md": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
     "reference/harden.md": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
-    "reference/hooks.md": "ed38f149e04740707942465a2b2c75851b773fd52a2b52132c2a8e7f4b07f9dc",
+    "reference/hooks.md": "e1275a05b4d5ad2a382727b61827eaa4b491eda1a2e158713ef3db69d987eb62",
     "reference/init.md": "c2826a6369f86a325e84edb324021753fa8331b86f22a23c884b0b36b7a15488",
     "reference/ios.md": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
     "reference/layout.md": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
@@ -66,7 +66,7 @@
     "scripts/live-browser-dom.js": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
     "scripts/live-browser-ignores.js": "ba8905ab865fde5162e34fc17eb80eba26cc990b319b14a6eed6ca89fd491897",
     "scripts/live-browser-session.js": "e042339a54d4521fc47555b602013ed5b51410ec9d7d8878d99a526f5f237f68",
-    "scripts/live-browser.js": "cb4549e392cdc0e62da5c92b059acac90de59da658aeb7a0fb30a5f294b75c15",
+    "scripts/live-browser.js": "521ed8dcf5907ffe233949be5a2c5ed080089c50b38624a19be18aacbc0e268b",
     "scripts/modern-screenshot.umd.js": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b"
   }
 }
