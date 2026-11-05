@@ -1,0 +1,57 @@
+name: Upstream sync notice
+description: >-
+  Limit a blocked scheduled upstream sync to one failed run, and so one GitHub failure
+  email, per workflow per UTC day. Every scheduled run still retries the sync.
+
+inputs:
+  mode:
+    description: >-
+      check, in the job before the sync, sets `quiet` when today's failure was already
+      notified; mark, after a failed sync, remembers that it was.
+    required: true
+
+outputs:
+  quiet:
+    description: true when a failure of this scheduled run should not fail the workflow run.
+    value: ${{ steps.lookup.outputs.cache-hit == 'true' }}
+
+runs:
+  using: composite
+  steps:
+    - name: Name today's notice
+      id: notice
+      shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        WORKFLOW_NAME: ${{ github.workflow }}
+      run: |
+        set -euo pipefail
+        case "$MODE" in check|mark) ;; *) echo "Unknown mode: $MODE" >&2; exit 1 ;; esac
+        slug="$(printf '%s' "$WORKFLOW_NAME" | tr -cs 'A-Za-z0-9' '-')"
+        echo "key=upstream-sync-notice-$slug-$(date -u +%F)" >> "$GITHUB_OUTPUT"
+        mkdir -p "$RUNNER_TEMP/upstream-sync-notice"
+        date -u +%FT%TZ > "$RUNNER_TEMP/upstream-sync-notice/notified"
+
+    # A manual run always reports its own failure.
+    - name: Check today's notice
+      id: lookup
+      if: inputs.mode == 'check' && github.event_name == 'schedule'
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ runner.temp }}/upstream-sync-notice
+        key: ${{ steps.notice.outputs.key }}
+        lookup-only: true
+
+    - name: Explain a quiet retry
+      if: steps.lookup.outputs.cache-hit == 'true'
+      shell: bash
+      run: >-
+        echo "::notice::A blocked upstream sync already failed today. This run retries it,
+        and another failure leaves the run green to avoid a repeat email."
+
+    - name: Remember today's notice
+      if: inputs.mode == 'mark'
+      uses: actions/cache/save@v6
+      with:
+        path: ${{ runner.temp }}/upstream-sync-notice
+        key: ${{ steps.notice.outputs.key }}

@@ -16,6 +16,15 @@ BOT_IDENTITY = (
 )
 
 
+# The fork moved most of these upstream files' bodies into fork-owned references.
+# Git cannot follow moved text, so an upstream edit there always conflicts. The
+# sync keeps the fork's entrypoint and applies the same upstream patch to the
+# reference instead; a hunk without matching context still stops the sync.
+RELOCATED_UPSTREAM_FILES = {
+    "skills/emil-design-eng/SKILL.md": "skills/emil-design-eng/references/craft-guide.md",
+}
+
+
 class SyncError(RuntimeError):
     pass
 
@@ -32,6 +41,31 @@ def git(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProce
     if check and result.returncode:
         raise SyncError(result.stdout + result.stderr)
     return result
+
+
+def port_relocated_changes(repo: Path, upstream: str, merge_output: str) -> None:
+    """Resolve conflicts only in relocated files by porting upstream's patch to the fork's reference."""
+    conflicted = [path for path in git(repo, "diff", "--name-only", "--diff-filter=U", "-z").stdout.split("\0") if path]
+    if not conflicted or any(path not in RELOCATED_UPSTREAM_FILES for path in conflicted):
+        raise SyncError(merge_output)
+    base = git(repo, "merge-base", "HEAD", upstream).stdout.strip()
+    for source in conflicted:
+        target = RELOCATED_UPSTREAM_FILES[source]
+        patch = git(repo, "diff", "--no-renames", "--no-color", base, upstream, "--", source).stdout
+        patch = patch.replace(f"a/{source}", f"a/{target}").replace(f"b/{source}", f"b/{target}")
+        git(repo, "checkout", "--ours", "--", source)
+        git(repo, "add", "--", source)
+        # Bytes keep the patch's LF line endings; text mode on Windows would write CRLF.
+        applied = subprocess.run(
+            ["git", "-C", str(repo), "apply", "--index", "-"],
+            input=patch.encode("utf-8"),
+            capture_output=True,
+            creationflags=NO_WINDOW,
+        )
+        if applied.returncode:
+            error = applied.stderr.decode("utf-8", "replace")
+            raise SyncError(f"{merge_output}Upstream change to {source} does not apply to {target}:\n{error}")
+        print(f"Ported upstream change to {source} into {target}.")
 
 
 def prepare_sync(repo: Path, upstream_url: str = UPSTREAM_URL) -> bool:
@@ -65,7 +99,9 @@ def prepare_sync(repo: Path, upstream_url: str = UPSTREAM_URL) -> bool:
         raise SyncError("Upstream changes outside skill content require manual review: " + ", ".join(blocked))
 
     try:
-        git(repo, *BOT_IDENTITY, "merge", "--no-ff", "--no-commit", upstream)
+        merge = git(repo, *BOT_IDENTITY, "merge", "--no-ff", "--no-commit", upstream, check=False)
+        if merge.returncode:
+            port_relocated_changes(repo, upstream, merge.stdout + merge.stderr)
         if (repo / "skills/design/SKILL.md").exists():
             # The upstream path allowlist above prevents replacing this trusted
             # builder. It admits only registered modes and manifest-owned output.
