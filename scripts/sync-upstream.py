@@ -52,7 +52,10 @@ def port_relocated_changes(repo: Path, upstream: str, merge_output: str) -> None
     for source in conflicted:
         target = RELOCATED_UPSTREAM_FILES[source]
         patch = git(repo, "diff", "--no-renames", "--no-color", base, upstream, "--", source).stdout
-        patch = patch.replace(f"a/{source}", f"a/{target}").replace(f"b/{source}", f"b/{target}")
+        # Retarget only the file headers; hunk text stays exactly as upstream wrote it.
+        header, separator, hunks = patch.partition("\n@@")
+        header = header.replace(f"a/{source}", f"a/{target}").replace(f"b/{source}", f"b/{target}")
+        patch = header + separator + hunks
         git(repo, "checkout", "--ours", "--", source)
         git(repo, "add", "--", source)
         # Bytes keep the patch's LF line endings; text mode on Windows would write CRLF.

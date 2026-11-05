@@ -95,7 +95,9 @@ job's steps, gates and permissions are unchanged. The first failed run of a work
 a UTC day turns red, so GitHub sends one failure email. Later scheduled runs that day
 still retry the sync, but a repeat failure leaves the workflow run green; the `sync` job
 itself still shows as failed and carries a notice. A success needs no reset. A manual
-run always reports its own failure. The marker is an Actions cache entry named
+run always reports its own failure. If the `notice` job itself fails, the sync still
+runs under its own repository and branch guard and reports normally. The marker is an
+Actions cache entry named
 `upstream-sync-notice-<workflow>-<date>`.
 
 A blocked pipeline therefore means one email per day, not one every six hours. When

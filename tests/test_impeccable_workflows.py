@@ -284,10 +284,14 @@ class WorkflowPolicyTests(unittest.TestCase):
                 for name, mode in (("notice", "check"), ("mark", "mark")):
                     self.assertIn(uses + "\n        with:\n          mode: " + mode + "\n", jobs[name])
                     self.assertNotIn("permissions:", jobs[name])
-                self.assertIn("github.ref == 'refs/heads/main'", jobs["notice"])
+                guard = re.search(r"github\.repository == '[\w/-]+' && github\.ref == 'refs/heads/main'", jobs["notice"])
+                self.assertIsNotNone(guard)
                 self.assertIn("needs: notice\n", jobs["sync"])
+                # A failed notice job must not skip the sync; the sync keeps its own guard.
+                self.assertIn("if: ${{ !cancelled() && " + guard[0] + " }}\n", jobs["sync"])
                 self.assertIn("continue-on-error: ${{ needs.notice.outputs.quiet == 'true' }}", jobs["sync"])
-                self.assertIn("if: failure() && needs.notice.outputs.quiet != 'true'", jobs["mark"])
+                self.assertIn("if: ${{ !cancelled() && needs.sync.result == 'failure' "
+                              "&& needs.notice.outputs.quiet != 'true' }}\n", jobs["mark"])
 
 
 class NoticeActionTests(WorkflowFixtures):

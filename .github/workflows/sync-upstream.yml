@@ -27,6 +27,8 @@ jobs:
 
   sync:
     needs: notice
+    # A failed notice job must not skip the sync; it then reports normally.
+    if: ${{ !cancelled() && github.repository == 'medking82/skills' && github.ref == 'refs/heads/main' }}
     # After the day's first failure email, a scheduled retry that fails again stays green.
     continue-on-error: ${{ needs.notice.outputs.quiet == 'true' }}
     runs-on: ubuntu-latest
@@ -58,7 +60,7 @@ jobs:
 
   mark:
     needs: [notice, sync]
-    if: failure() && needs.notice.outputs.quiet != 'true'
+    if: ${{ !cancelled() && needs.sync.result == 'failure' && needs.notice.outputs.quiet != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

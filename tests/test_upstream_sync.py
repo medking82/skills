@@ -211,6 +211,16 @@ class UpstreamSyncTests(unittest.TestCase):
                          "# Craft Guide\n\n" + updated)
         self.assertEqual(self.git(self.fork, "status", "--porcelain").stdout, "")
 
+    def test_relocated_port_keeps_upstream_text_that_names_the_source_path(self) -> None:
+        body = self.relocate_emil_guide()
+        literal = "Patch target: a/skills/emil-design-eng/SKILL.md and b/skills/emil-design-eng/SKILL.md."
+        updated = body.replace("Rule 6 stays as upstream wrote it.", literal)
+        source = (self.upstream / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8")
+        self.write(self.upstream, "skills/emil-design-eng/SKILL.md", source.replace(body, updated))
+        self.commit(self.upstream, "mention the source path")
+        self.assertTrue(self.prepare())
+        self.assertIn(literal, (self.fork / "skills/emil-design-eng/references/craft-guide.md").read_text(encoding="utf-8"))
+
     def test_relocated_change_outside_reference_restores_fork(self) -> None:
         self.relocate_emil_guide()
         source = (self.upstream / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8")
