@@ -106,6 +106,7 @@ Examples are routing expectations, not a claim that a model has been tested:
 | New marketing, brand or campaign web page or landing page from scratch, a named Hallmark redesign, or an audit of a web page for AI tells (去 AI 味) | [hallmark](references/hallmark/guide.md) |
 | Component feedback, cohesion or accessibility outside selected playbooks | [emil-design-eng](references/emil-design-eng/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
+| Coordinate several elements that move together: stagger, sequencing, entrances, view swaps or multi-step transitions | [choreograph](references/choreograph/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
 | Fix janky or dropping-frame web animation, or work inside the frame budget | [animation-performance](references/animation-performance/guide.md) |
 | Remove excessive or unnecessary motion | [remove-animations](references/remove-animations/guide.md) |

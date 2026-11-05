@@ -16,6 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE = ROOT / ".github/workflows/sync-impeccable.yml"
+NOTICE = ROOT / ".github/actions/upstream-sync-notice/action.yml"
 FORK = Path(os.environ.get("IMPECCABLE_FORK_WORKFLOW", str(
     ROOT.parent / "impeccable/.github/workflows/sync-personal-fork.yml")))
 BASH = (str(Path(shutil.which("git") or "").parent.parent / "bin/bash.exe")
@@ -267,6 +268,42 @@ class WorkflowPolicyTests(unittest.TestCase):
         for step in BUNDLE.read_text().split("      - name: ")[1:]:
             if "GH_TOKEN:" in step:
                 self.assertIn(step.splitlines()[0], {"Check source ancestry", "Publish the verified snapshot"})
+
+    def test_failures_notify_once_per_day_without_new_permissions(self):
+        action = NOTICE.read_text(encoding="utf-8")
+        self.assertNotRegex(action, r"secrets\.|github\.token|GH_TOKEN")
+        self.assertIn("if: inputs.mode == 'check' && github.event_name == 'schedule'", action)
+        uses = "uses: medking82/skills/.github/actions/upstream-sync-notice@main"
+        for path in (ROOT / ".github/workflows/sync-upstream.yml", BUNDLE, FORK):
+            if not path.is_file():
+                continue
+            with self.subTest(path=path.name):
+                section = path.read_text(encoding="utf-8").split("\njobs:\n", 1)[1]
+                jobs = {job.split(":", 1)[0]: job for job in re.split(r"^  (?=[\w-]+:\n)", section, flags=re.M) if job}
+                self.assertEqual(list(jobs), ["notice", "sync", "mark"])
+                for name, mode in (("notice", "check"), ("mark", "mark")):
+                    self.assertIn(uses + "\n        with:\n          mode: " + mode + "\n", jobs[name])
+                    self.assertNotIn("permissions:", jobs[name])
+                guard = re.search(r"github\.repository == '[\w/-]+' && github\.ref == 'refs/heads/main'", jobs["notice"])
+                self.assertIsNotNone(guard)
+                self.assertIn("needs: notice\n", jobs["sync"])
+                # A failed notice job must not skip the sync; the sync keeps its own guard.
+                self.assertIn("if: ${{ !cancelled() && " + guard[0] + " }}\n", jobs["sync"])
+                self.assertIn("continue-on-error: ${{ needs.notice.outputs.quiet == 'true' }}", jobs["sync"])
+                self.assertIn("if: ${{ !cancelled() && needs.sync.result == 'failure' "
+                              "&& needs.notice.outputs.quiet != 'true' }}\n", jobs["mark"])
+
+
+class NoticeActionTests(WorkflowFixtures):
+    def test_notice_key_names_the_workflow_and_utc_day(self):
+        script = block(NOTICE, "run")
+        self.env.update(MODE="check", WORKFLOW_NAME="Sync Impeccable References", RUNNER_TEMP=str(self.root))
+        self.shell(script, self.root)
+        self.assertRegex((self.root / "output").read_text(encoding="utf-8"),
+                         r"\Akey=upstream-sync-notice-Sync-Impeccable-References-\d{4}-\d{2}-\d{2}\n\Z")
+        self.assertTrue((self.root / "upstream-sync-notice/notified").is_file())
+        self.env["MODE"] = "unexpected"
+        self.assertNotEqual(self.shell(script, self.root, check=False).returncode, 0)
 
 
 if __name__ == "__main__":

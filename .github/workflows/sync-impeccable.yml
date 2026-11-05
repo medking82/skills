@@ -13,8 +13,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  sync:
+  notice:
     if: github.repository == 'medking82/skills' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      quiet: ${{ steps.check.outputs.quiet }}
+    steps:
+      - name: Check today's failure notice
+        id: check
+        uses: medking82/skills/.github/actions/upstream-sync-notice@main
+        with:
+          mode: check
+
+  sync:
+    needs: notice
+    # A failed notice job must not skip the sync; it then reports normally.
+    if: ${{ !cancelled() && github.repository == 'medking82/skills' && github.ref == 'refs/heads/main' }}
+    # After the day's first failure email, a scheduled retry that fails again stays green.
+    continue-on-error: ${{ needs.notice.outputs.quiet == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -87,3 +104,14 @@ jobs:
           set -euo pipefail
           gh auth setup-git --hostname github.com
           git push origin HEAD:refs/heads/main
+
+  mark:
+    needs: [notice, sync]
+    if: ${{ !cancelled() && needs.sync.result == 'failure' && needs.notice.outputs.quiet != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Remember today's failure notice
+        uses: medking82/skills/.github/actions/upstream-sync-notice@main
+        with:
+          mode: mark

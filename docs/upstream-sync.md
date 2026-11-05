@@ -30,6 +30,17 @@ indexed with their descriptions and invocation policies. Missing core routes,
 generated-file drift, invalid metadata, and merge conflicts halt publication and
 abort the merge.
 
+The fork moved most of `skills/emil-design-eng/SKILL.md` into
+`references/craft-guide.md`. Git cannot follow moved text, so `RELOCATED_UPSTREAM_FILES`
+in `scripts/sync-upstream.py` maps that upstream file to the fork's reference. When
+only mapped files conflict, the sync keeps the fork's entrypoint and applies the same
+upstream patch to the reference; any hunk without matching context still stops the
+sync. Add a mapping whenever the fork moves upstream text into another file.
+
+A new upstream mode also needs a row in the `/design` router table: the Windows
+updater rejects a published package whose router does not link every bundled guide,
+and the post-merge regression suite stops the sync until the row exists.
+
 The fork retains the iPhone Home Screen web-app profile in
 [`apple-design`](../skills/apple-design/SKILL.md), Codex-compatible frontmatter,
 and invocation policies in `agents/openai.yaml`. Fork-only commits remain in history.
@@ -74,6 +85,24 @@ Checkout credential persistence is disabled; no extra secret or personal token i
 needed. Every push is normal: a concurrent remote update rejects publication
 without rewriting history, and the next run starts from the new `main`.
 
+## Failure Notices
+
+All three workflows share the
+[`upstream-sync-notice`](../.github/actions/upstream-sync-notice/action.yml) action,
+referenced from this repository's `main`. A `notice` job runs before `sync` and a
+`mark` job after a failed `sync`; neither receives a token permission, and the `sync`
+job's steps, gates and permissions are unchanged. The first failed run of a workflow in
+a UTC day turns red, so GitHub sends one failure email. Later scheduled runs that day
+still retry the sync, but a repeat failure leaves the workflow run green; the `sync` job
+itself still shows as failed and carries a notice. A success needs no reset. A manual
+run always reports its own failure. If the `notice` job itself fails, the sync still
+runs under its own repository and branch guard and reports normally. The marker is an
+Actions cache entry named
+`upstream-sync-notice-<workflow>-<date>`.
+
+A blocked pipeline therefore means one email per day, not one every six hours. When
+checking health, read the latest `sync` job result, not only the run conclusion.
+
 ## Review And Recovery
 
 Inspect the failed step and exact upstream diff before retrying:
@@ -101,7 +130,7 @@ package and stops on local drift. Its hidden launcher uses the actual `python.ex
 changes to the updater implementation require reinstalling its trusted runtime helper.
 The disabled shared SOP updater is separate.
 
-Check each stage's latest completed Actions run, result, and published commit.
+Check each stage's latest completed `sync` job result and published commit.
 Compare the bundle's Impeccable source SHA with the personal fork head, and check
 `skills/design/references/sources.json` hashes. A successful no-op is healthy only
 when the relevant source is represented; an old green run is not evidence of freshness.

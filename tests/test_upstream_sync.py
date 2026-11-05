@@ -181,6 +181,56 @@ class UpstreamSyncTests(unittest.TestCase):
         self.assert_restored()
         self.assertEqual((self.fork / "README.md").read_text(), "# Customized skills\n")
 
+    def relocate_emil_guide(self) -> str:
+        """Mirror the fork's split of the upstream guide into a slim entrypoint and a reference."""
+        body = "".join(f"## Section {number}\n\nRule {number} stays as upstream wrote it.\n\n" for number in range(1, 9))
+        self.write(self.upstream, "skills/emil-design-eng/SKILL.md",
+                   "---\nname: emil-design-eng\ndescription: Design engineering.\n---\n\n# Design Engineering\n\n"
+                   "Upstream introduction.\n\n" + body)
+        self.commit(self.upstream, "upstream guide")
+        self.git(self.fork, "pull", "--no-rebase", "--no-edit", str(self.upstream), "main")
+        self.write(self.fork, "skills/emil-design-eng/SKILL.md",
+                   "---\nname: emil-design-eng\ndescription: Design engineering.\n---\n\n# Design Engineering\n\n"
+                   "Fork routing. Read [the craft guide](references/craft-guide.md).\n")
+        self.write(self.fork, "skills/emil-design-eng/references/craft-guide.md", "# Craft Guide\n\n" + body)
+        self.initial = self.commit(self.fork, "relocate guide")
+        self.git(self.fork, "push", "origin", "main")
+        return body
+
+    def test_relocated_upstream_change_is_ported_to_fork_reference(self) -> None:
+        body = self.relocate_emil_guide()
+        updated = body.replace("Rule 6 stays as upstream wrote it.", "Rule 6 was corrected upstream.")
+        source = (self.upstream / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8")
+        self.write(self.upstream, "skills/emil-design-eng/SKILL.md", source.replace(body, updated))
+        upstream = self.commit(self.upstream, "correct relocated rule")
+        self.assertTrue(self.prepare())
+        self.git(self.fork, "merge-base", "--is-ancestor", upstream, "HEAD")
+        self.assertIn("Fork routing.", (self.fork / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8"))
+        self.assertNotIn("Rule 6", (self.fork / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8"))
+        self.assertEqual((self.fork / "skills/emil-design-eng/references/craft-guide.md").read_text(encoding="utf-8"),
+                         "# Craft Guide\n\n" + updated)
+        self.assertEqual(self.git(self.fork, "status", "--porcelain").stdout, "")
+
+    def test_relocated_port_keeps_upstream_text_that_names_the_source_path(self) -> None:
+        body = self.relocate_emil_guide()
+        literal = "Patch target: a/skills/emil-design-eng/SKILL.md and b/skills/emil-design-eng/SKILL.md."
+        updated = body.replace("Rule 6 stays as upstream wrote it.", literal)
+        source = (self.upstream / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8")
+        self.write(self.upstream, "skills/emil-design-eng/SKILL.md", source.replace(body, updated))
+        self.commit(self.upstream, "mention the source path")
+        self.assertTrue(self.prepare())
+        self.assertIn(literal, (self.fork / "skills/emil-design-eng/references/craft-guide.md").read_text(encoding="utf-8"))
+
+    def test_relocated_change_outside_reference_restores_fork(self) -> None:
+        self.relocate_emil_guide()
+        source = (self.upstream / "skills/emil-design-eng/SKILL.md").read_text(encoding="utf-8")
+        self.write(self.upstream, "skills/emil-design-eng/SKILL.md",
+                   source.replace("Upstream introduction.", "Rewritten upstream introduction."))
+        self.commit(self.upstream, "rewrite introduction")
+        with self.assertRaisesRegex(sync.SyncError, "does not apply to skills/emil-design-eng/references/craft-guide.md"):
+            self.prepare()
+        self.assert_restored()
+
     def test_invalid_metadata_restores_fork(self) -> None:
         self.write(self.upstream, "skills/example/SKILL.md", "---\nname: example\ndescription: Example.\ndisable-model-invocation: true\n---\n")
         self.commit(self.upstream, "unsupported metadata")

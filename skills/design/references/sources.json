@@ -4,7 +4,7 @@
   "modes": {
     "animate": {
       "entrypoint": "skills/animate/SKILL.md",
-      "source_sha256": "be1096e27365b3983fdb42bc4f04aeb75049fce21d8c66de23b22ded79295493",
+      "source_sha256": "ded66997c9b756316fdb2c84cc9f48c6e4fc333b7a86fbf505238ee25d8e07eb",
       "guide": "animate/guide.md",
       "description": "Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.",
       "allow_implicit_invocation": true
@@ -18,9 +18,9 @@
     },
     "animation-performance": {
       "entrypoint": "skills/animation-performance/SKILL.md",
-      "source_sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
+      "source_sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
       "guide": "animation-performance/guide.md",
-      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Framer Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
+      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
       "allow_implicit_invocation": true
     },
     "animation-vocabulary": {
@@ -50,6 +50,13 @@
       "guide": "break-ui/guide.md",
       "description": "Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts, zero items, long labels, non-Latin text, emoji, extreme numbers — then render it behind a \"Demo data / Worst case\" toggle and report everything that broke, with the fix for each. Use when the user asks to stress-test, break, or find edge cases in a component or screen, or to \"try the worst case\". For visual design critique use emil-design-eng; for motion use review-animations.",
       "allow_implicit_invocation": false
+    },
+    "choreograph": {
+      "entrypoint": "skills/choreograph/SKILL.md",
+      "source_sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+      "guide": "choreograph/guide.md",
+      "description": "Coordinate several elements that animate together — decide what moves, in what order, how much they overlap, and what stays still — so a group reads as one intentional motion instead of a pile of separate animations. Use when building or fixing a staggered list, a hero entrance, a view swap inside a container, a multi-step flow, an element leaving while its siblings close the gap, a morph between rich states, or any interaction with several moving parts (icon + background + lines, panel + content, items flying into a target). Triggers on — stagger, staggerChildren, delayChildren, animation-delay, sequence, sequencing, orchestration, choreography, cascade, wave, timeline, \"one after another\", \"at the same time\", crossfade, popLayout, mode=\"wait\", AnimatePresence mode, hero entrance, list entrance, multi-step, step transition, morph, useAnimate, Promise.all animations, \"feels mechanical\", \"feels robotic\", \"too much going on\", \"feels slow to open\".",
+      "allow_implicit_invocation": true
     },
     "emil-design-eng": {
       "entrypoint": "skills/emil-design-eng/SKILL.md",
@@ -116,7 +123,7 @@
     },
     "review-animations": {
       "entrypoint": "skills/review-animations/SKILL.md",
-      "source_sha256": "18265c933507ddc66d7719dc63619b7f64576271f9575705b97f2fda2bc28946",
+      "source_sha256": "2b96f0bf7841f712fc0bf83081fbb4ee046e4c441c8fffe477a3c40ff83768b3",
       "guide": "review-animations/guide.md",
       "description": "Review existing animation and motion code for purpose, responsiveness, interruption, performance, and accessibility. Use when explicitly asked to critique motion or review an animation diff; report evidence and verification gaps.",
       "allow_implicit_invocation": false
@@ -132,8 +139,8 @@
   "files": {
     "animate/guide.md": {
       "source": "skills/animate/SKILL.md",
-      "source_sha256": "be1096e27365b3983fdb42bc4f04aeb75049fce21d8c66de23b22ded79295493",
-      "sha256": "0cd083d153f5051e1421bb126fde07fd633609949657c7c94499970822b04d37"
+      "source_sha256": "ded66997c9b756316fdb2c84cc9f48c6e4fc333b7a86fbf505238ee25d8e07eb",
+      "sha256": "f1ca8c58ae4537e2eed7189fe8c5b16e75cd413bd50e85e76908f0c6c9c60426"
     },
     "animate/RECIPES.md": {
       "source": "skills/animate/RECIPES.md",
@@ -152,8 +159,8 @@
     },
     "animation-performance/guide.md": {
       "source": "skills/animation-performance/SKILL.md",
-      "source_sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
-      "sha256": "eb05376015bade50cb18d1d653467ab43fffa638cac0fd194c4aee3fdb79a881"
+      "source_sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
+      "sha256": "c5b9244c8ee6d92fc76c8893bf4ffcd38ed5db6359a50fd3b432e7da9ce0a36a"
     },
     "animation-vocabulary/guide.md": {
       "source": "skills/animation-vocabulary/SKILL.md",
@@ -210,6 +217,16 @@
       "source_sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15",
       "sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15"
     },
+    "choreograph/guide.md": {
+      "source": "skills/choreograph/SKILL.md",
+      "source_sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+      "sha256": "38358d30c27fb6fe2b80d225fa35e0ace24e50fc9eb781368a3852e4159ac5ad"
+    },
+    "choreograph/RECIPES.md": {
+      "source": "skills/choreograph/RECIPES.md",
+      "source_sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
+      "sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2"
+    },
     "emil-design-eng/guide.md": {
       "source": "skills/emil-design-eng/SKILL.md",
       "source_sha256": "bffa3135d676ff7e4618ab8873dc246e6bb497f0d00f337b83c5b14cd9da1ea0",
@@ -217,8 +234,8 @@
     },
     "emil-design-eng/references/craft-guide.md": {
       "source": "skills/emil-design-eng/references/craft-guide.md",
-      "source_sha256": "e9f16b035280a6e4f93645beb7b48549748f17d3e33068555656541859863edd",
-      "sha256": "e9f16b035280a6e4f93645beb7b48549748f17d3e33068555656541859863edd"
+      "source_sha256": "bc99624f4cec406e1315f6ed2e2b9687e79d19aab80b658b0be770273b451cf2",
+      "sha256": "bc99624f4cec406e1315f6ed2e2b9687e79d19aab80b658b0be770273b451cf2"
     },
     "find-animation-opportunities/guide.md": {
       "source": "skills/find-animation-opportunities/SKILL.md",
@@ -1412,8 +1429,8 @@
     },
     "improve-animations/AUDIT.md": {
       "source": "skills/improve-animations/AUDIT.md",
-      "source_sha256": "5b0b06e92a55732f4aa6417c96fd5020fe1b810df3a2b5c70727be08cffcd358",
-      "sha256": "5b0b06e92a55732f4aa6417c96fd5020fe1b810df3a2b5c70727be08cffcd358"
+      "source_sha256": "aad5c98da31030821d195d3b9e9faf3f27518ae5b3985e38bdec66091841a139",
+      "sha256": "aad5c98da31030821d195d3b9e9faf3f27518ae5b3985e38bdec66091841a139"
     },
     "improve-animations/PLAN-TEMPLATE.md": {
       "source": "skills/improve-animations/PLAN-TEMPLATE.md",
@@ -1447,13 +1464,13 @@
     },
     "review-animations/guide.md": {
       "source": "skills/review-animations/SKILL.md",
-      "source_sha256": "18265c933507ddc66d7719dc63619b7f64576271f9575705b97f2fda2bc28946",
-      "sha256": "c8165c75f8871202c2b08bbaf5372f6432f14ad7d05fc2caca158396efe98cfd"
+      "source_sha256": "2b96f0bf7841f712fc0bf83081fbb4ee046e4c441c8fffe477a3c40ff83768b3",
+      "sha256": "5a22696464c1ff185f985706fbcc5f925bb359e23974bb4421da983dce80993c"
     },
     "review-animations/STANDARDS.md": {
       "source": "skills/review-animations/STANDARDS.md",
-      "source_sha256": "610ca889f57adb748f8616190dec3f6a10cb6c85dffd5cda22c439404120d8b1",
-      "sha256": "610ca889f57adb748f8616190dec3f6a10cb6c85dffd5cda22c439404120d8b1"
+      "source_sha256": "8cfd1974fba5b6b709133bd858a4f3422b4bc00c692c2f1f44644d9d19443bcc",
+      "sha256": "8cfd1974fba5b6b709133bd858a4f3422b4bc00c692c2f1f44644d9d19443bcc"
     },
     "write-swift/guide.md": {
       "source": "skills/write-swift/SKILL.md",
