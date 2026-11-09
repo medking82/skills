@@ -1,0 +1,105 @@
+name: Sync Hallmark References
+
+on:
+  schedule:
+    - cron: '52 */6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+# Serialize with the Emil and Impeccable syncs that also publish to main.
+concurrency:
+  group: sync-upstream-main
+  cancel-in-progress: false
+
+jobs:
+  notice:
+    if: github.repository == 'medking82/skills' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      quiet: ${{ steps.check.outputs.quiet }}
+    steps:
+      - name: Check today's failure notice
+        id: check
+        uses: medking82/skills/.github/actions/upstream-sync-notice@main
+        with:
+          mode: check
+
+  sync:
+    needs: notice
+    if: ${{ !cancelled() && github.repository == 'medking82/skills' && github.ref == 'refs/heads/main' }}
+    # After the day's first failure email, a scheduled retry that fails again stays green;
+    # the upstream drift monitor in medking82/hermes-skills still reports the stall.
+    continue-on-error: ${{ needs.notice.outputs.quiet == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Use stable source line endings
+        run: git config --global core.autocrlf false
+
+      - name: Check out the maintained design bundle
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check out Hallmark upstream as data
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: Nutlope/hallmark
+          path: hallmark-source
+          persist-credentials: false
+
+      # Prose and reference updates are applied automatically. Script or license
+      # changes stop here (sync-hallmark.py refuses them) until a person reviews them
+      # and runs the script locally with --allow-code-updates.
+      - name: Refresh the owned snapshot
+        run: |
+          set -euo pipefail
+          head="$(git -C hallmark-source rev-parse HEAD)"
+          python -B scripts/sync-hallmark.py --source hallmark-source --commit "$head" || {
+            echo "::error::Hallmark upstream $head needs review (script/license change). Run scripts/sync-hallmark.py --allow-code-updates locally after reviewing."
+            exit 1
+          }
+          python -B scripts/build-design-skill.py
+
+      - name: Validate the combined package
+        run: python -B -m unittest discover -s tests
+
+      - name: Prepare the verified snapshot
+        id: prepare
+        run: |
+          set -euo pipefail
+          git add skills/hallmark/upstream skills/design/references
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Sync Hallmark design references'
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
+
+      - name: Publish the verified snapshot
+        if: steps.prepare.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git --hostname github.com
+          git push origin HEAD:refs/heads/main
+
+  mark:
+    needs: [notice, sync]
+    if: ${{ !cancelled() && needs.sync.result == 'failure' && needs.notice.outputs.quiet != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Remember today's failure notice
+        uses: medking82/skills/.github/actions/upstream-sync-notice@main
+        with:
+          mode: mark

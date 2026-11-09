@@ -316,8 +316,8 @@
     },
     "hallmark/upstream/references/flow.md": {
       "source": "skills/hallmark/upstream/references/flow.md",
-      "source_sha256": "45565a78e3c7fdc33791c5074c8640199e2f711e62131cd4ef1cb337010b6e85",
-      "sha256": "45565a78e3c7fdc33791c5074c8640199e2f711e62131cd4ef1cb337010b6e85"
+      "source_sha256": "d24fa0bbfd8ea6f8add579029598e09815a697fc99a4abdb8c17f67155e368e5",
+      "sha256": "d24fa0bbfd8ea6f8add579029598e09815a697fc99a4abdb8c17f67155e368e5"
     },
     "hallmark/upstream/references/fonts.md": {
       "source": "skills/hallmark/upstream/references/fonts.md",
@@ -1026,33 +1026,48 @@
     },
     "hallmark/upstream/scripts/capture.mjs": {
       "source": "skills/hallmark/upstream/scripts/capture.mjs",
-      "source_sha256": "17c36f7400c2633ac37d87b236894385f6e72c3026ab916deed27b5e17e1cc2a",
-      "sha256": "17c36f7400c2633ac37d87b236894385f6e72c3026ab916deed27b5e17e1cc2a"
+      "source_sha256": "898fa25b1430fb1e94c02206f0b39769c9af0f40205d1928a5a58d07039bd4a8",
+      "sha256": "898fa25b1430fb1e94c02206f0b39769c9af0f40205d1928a5a58d07039bd4a8"
+    },
+    "hallmark/upstream/scripts/capture.test.mjs": {
+      "source": "skills/hallmark/upstream/scripts/capture.test.mjs",
+      "source_sha256": "cd14d4e2ee080611a0e9c89ca005ae6c8ab43c2966e5485a3a2e85ddfd6fc7c7",
+      "sha256": "cd14d4e2ee080611a0e9c89ca005ae6c8ab43c2966e5485a3a2e85ddfd6fc7c7"
     },
     "hallmark/upstream/scripts/photos.json": {
       "source": "skills/hallmark/upstream/scripts/photos.json",
       "source_sha256": "1ee6836583e8048400876351c0605bc3f08515fecfe68aca3712b9e75498bc65",
       "sha256": "1ee6836583e8048400876351c0605bc3f08515fecfe68aca3712b9e75498bc65"
     },
+    "hallmark/upstream/scripts/reroll-exhaustion.test.mjs": {
+      "source": "skills/hallmark/upstream/scripts/reroll-exhaustion.test.mjs",
+      "source_sha256": "21072d8044e13e6eec47ceb711db05e4df34e847db3aab3e749864cbced48413",
+      "sha256": "21072d8044e13e6eec47ceb711db05e4df34e847db3aab3e749864cbced48413"
+    },
     "hallmark/upstream/scripts/sloplint-render.mjs": {
       "source": "skills/hallmark/upstream/scripts/sloplint-render.mjs",
-      "source_sha256": "3af79afa100a9804f248ade24d5128cea4fde1ef6d1a279f1dd935bfe6dc41cd",
-      "sha256": "3af79afa100a9804f248ade24d5128cea4fde1ef6d1a279f1dd935bfe6dc41cd"
+      "source_sha256": "228f14808cbf872ab6dcc5f4f9e8d58a5a9060028f1530bec80e24dbd12737f3",
+      "sha256": "228f14808cbf872ab6dcc5f4f9e8d58a5a9060028f1530bec80e24dbd12737f3"
+    },
+    "hallmark/upstream/scripts/sloplint-render.test.mjs": {
+      "source": "skills/hallmark/upstream/scripts/sloplint-render.test.mjs",
+      "source_sha256": "5acd02402b8ef867fee730191f96fec9018d9baeafa0afc2f54cf7519ea7e843",
+      "sha256": "5acd02402b8ef867fee730191f96fec9018d9baeafa0afc2f54cf7519ea7e843"
     },
     "hallmark/upstream/scripts/sloplint.mjs": {
       "source": "skills/hallmark/upstream/scripts/sloplint.mjs",
-      "source_sha256": "530b8d5a5ad0bb19b3e06a74600523bef3f3397de47e43de045e7862d73ca11e",
-      "sha256": "530b8d5a5ad0bb19b3e06a74600523bef3f3397de47e43de045e7862d73ca11e"
+      "source_sha256": "23fb94903ae0e3b709019380443163bdc50390a246911e3423b83695e4bc8037",
+      "sha256": "23fb94903ae0e3b709019380443163bdc50390a246911e3423b83695e4bc8037"
     },
     "hallmark/upstream/scripts/theme.mjs": {
       "source": "skills/hallmark/upstream/scripts/theme.mjs",
-      "source_sha256": "246f8773c5772986c1f382a8c60e7e2194df4b8c04851f59fd4ff216accd158f",
-      "sha256": "246f8773c5772986c1f382a8c60e7e2194df4b8c04851f59fd4ff216accd158f"
+      "source_sha256": "7c5cd6ea080e47b663967f2cce5c806e38acbc33eb77b6dce7585a9f2ea1a1a6",
+      "sha256": "7c5cd6ea080e47b663967f2cce5c806e38acbc33eb77b6dce7585a9f2ea1a1a6"
     },
     "hallmark/upstream/source.json": {
       "source": "skills/hallmark/upstream/source.json",
-      "source_sha256": "429c162657fa07aa3021738a149a3980c26807c8c26b154fc7189134eb8d601f",
-      "sha256": "429c162657fa07aa3021738a149a3980c26807c8c26b154fc7189134eb8d601f"
+      "source_sha256": "bd390c30f33c3797ed1c0836a2ef7280e7dd4027c0af93d96675ce9793b4c163",
+      "sha256": "bd390c30f33c3797ed1c0836a2ef7280e7dd4027c0af93d96675ce9793b4c163"
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",

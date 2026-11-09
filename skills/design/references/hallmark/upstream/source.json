@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "Nutlope/hallmark",
   "upstream": "Nutlope/hallmark",
-  "commit": "4f6a46c6dc325d40ab268c93e25c7b96676ebccd",
+  "commit": "407fa689f4a276f2fd389208d271d0fef08f5058",
   "excluded": [
     "agents/openai.yaml",
     "scripts/imagegen.mjs",
@@ -26,7 +26,7 @@
     "references/design-md.md": "839d4cd8d5b07007854e9c6de95491691725f2968a0922f9b8fcfdbe42e2784c",
     "references/direction.md": "19e00099e95be52df2ae893881e29a23cd7a5ee5dc8434a87588376818851642",
     "references/export-formats.md": "3078bcb08e6324904ee156b6871dc0f47aa170e5d4baf09d43a5c48c46ca7c6b",
-    "references/flow.md": "45565a78e3c7fdc33791c5074c8640199e2f711e62131cd4ef1cb337010b6e85",
+    "references/flow.md": "d24fa0bbfd8ea6f8add579029598e09815a697fc99a4abdb8c17f67155e368e5",
     "references/fonts.md": "87d50b1b32b9c901d9df5376870cf6d8e39334f468fe9a582a2720d9da5586ec",
     "references/gates.md": "63ad234a1acab5e081dfe8ecf2331518a43cbf42760dc5c6ababfb24d7b3e50c",
     "references/genres/atmospheric.md": "39c2ba5b282fcc934742aeb410d1bb4d6c65f1da1514b0f18a9600aa8f13f289",
@@ -168,10 +168,13 @@
     "references/themes/wayfind.md": "7849521b843f82a3956727e0d06a595d6ecec5f501f4c31f577bf4bd1bae9e2c",
     "references/themes/werkstatt.jpg": "5cd183720988973306ff568fa7f21a7c7cb345621dfa1d288a33d22f785aac20",
     "references/themes/werkstatt.md": "b3a31e2acb8a15ca46bbb194f23b9555ef19d9c70ceb1cf67d9fde3b55b7e08a",
-    "scripts/capture.mjs": "17c36f7400c2633ac37d87b236894385f6e72c3026ab916deed27b5e17e1cc2a",
+    "scripts/capture.mjs": "898fa25b1430fb1e94c02206f0b39769c9af0f40205d1928a5a58d07039bd4a8",
+    "scripts/capture.test.mjs": "cd14d4e2ee080611a0e9c89ca005ae6c8ab43c2966e5485a3a2e85ddfd6fc7c7",
     "scripts/photos.json": "1ee6836583e8048400876351c0605bc3f08515fecfe68aca3712b9e75498bc65",
-    "scripts/sloplint-render.mjs": "3af79afa100a9804f248ade24d5128cea4fde1ef6d1a279f1dd935bfe6dc41cd",
-    "scripts/sloplint.mjs": "530b8d5a5ad0bb19b3e06a74600523bef3f3397de47e43de045e7862d73ca11e",
-    "scripts/theme.mjs": "246f8773c5772986c1f382a8c60e7e2194df4b8c04851f59fd4ff216accd158f"
+    "scripts/reroll-exhaustion.test.mjs": "21072d8044e13e6eec47ceb711db05e4df34e847db3aab3e749864cbced48413",
+    "scripts/sloplint-render.mjs": "228f14808cbf872ab6dcc5f4f9e8d58a5a9060028f1530bec80e24dbd12737f3",
+    "scripts/sloplint-render.test.mjs": "5acd02402b8ef867fee730191f96fec9018d9baeafa0afc2f54cf7519ea7e843",
+    "scripts/sloplint.mjs": "23fb94903ae0e3b709019380443163bdc50390a246911e3423b83695e4bc8037",
+    "scripts/theme.mjs": "7c5cd6ea080e47b663967f2cce5c806e38acbc33eb77b6dce7585a9f2ea1a1a6"
   }
 }
