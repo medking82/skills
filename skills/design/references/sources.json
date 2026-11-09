@@ -74,7 +74,7 @@
     },
     "gestures": {
       "entrypoint": "skills/gestures/SKILL.md",
-      "source_sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
+      "source_sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
       "guide": "gestures/guide.md",
       "description": "Build drag, swipe, and sheet interactions that track the finger 1:1 and stay interruptible. Use when building or fixing anything the user drags, swipes, flings, holds, or dismisses with a gesture — drawers, sheets, swipe-to-dismiss toasts and cards, drag-to-reorder, pull-to-refresh, hold-to-confirm — or when a gesture feels laggy, disconnected from the finger, jumps on release, or can't be caught mid-animation. Triggers on — gesture, drag, draggable, swipe, swipe to dismiss, fling, momentum, velocity, drawer, sheet, bottom sheet, snap points, Vaul, dragConstraints, dragElastic, dragMomentum, onDragEnd, whileDrag, useMotionValue, rubber-band, overscroll, pull to refresh, hold to delete, press and hold, touch-action, dismiss threshold, \"doesn't follow my finger\", \"jumps when I let go\", \"can't grab it mid-animation\".",
       "allow_implicit_invocation": true
@@ -251,8 +251,8 @@
     },
     "gestures/guide.md": {
       "source": "skills/gestures/SKILL.md",
-      "source_sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
-      "sha256": "d81e859f83eca0a1a616b702b4483c5468305029635983aa124ce409f96d585f"
+      "source_sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
+      "sha256": "bd367d05d2564a416464f9bc5db222fdf22c19a862bd32b1b878a28d6f42d051"
     },
     "hallmark/guide.md": {
       "source": "skills/hallmark/SKILL.md",
