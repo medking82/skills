@@ -72,6 +72,13 @@
       "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
       "allow_implicit_invocation": true
     },
+    "gestures": {
+      "entrypoint": "skills/gestures/SKILL.md",
+      "source_sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
+      "guide": "gestures/guide.md",
+      "description": "Build drag, swipe, and sheet interactions that track the finger 1:1 and stay interruptible. Use when building or fixing anything the user drags, swipes, flings, holds, or dismisses with a gesture — drawers, sheets, swipe-to-dismiss toasts and cards, drag-to-reorder, pull-to-refresh, hold-to-confirm — or when a gesture feels laggy, disconnected from the finger, jumps on release, or can't be caught mid-animation. Triggers on — gesture, drag, draggable, swipe, swipe to dismiss, fling, momentum, velocity, drawer, sheet, bottom sheet, snap points, Vaul, dragConstraints, dragElastic, dragMomentum, onDragEnd, whileDrag, useMotionValue, rubber-band, overscroll, pull to refresh, hold to delete, press and hold, touch-action, dismiss threshold, \"doesn't follow my finger\", \"jumps when I let go\", \"can't grab it mid-animation\".",
+      "allow_implicit_invocation": true
+    },
     "hallmark": {
       "entrypoint": "skills/hallmark/SKILL.md",
       "source_sha256": "28cac661648a48eea7a8956ca1a8c326e7058c3438d4b172c3af8ede6a631dee",
@@ -241,6 +248,11 @@
       "source": "skills/find-animation-opportunities/SKILL.md",
       "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
       "sha256": "e444ab42ae9b707fbe1119dc99ed5f43422f0fdf4d54495a7577741cabcc4fe7"
+    },
+    "gestures/guide.md": {
+      "source": "skills/gestures/SKILL.md",
+      "source_sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
+      "sha256": "d81e859f83eca0a1a616b702b4483c5468305029635983aa124ce409f96d585f"
     },
     "hallmark/guide.md": {
       "source": "skills/hallmark/SKILL.md",

@@ -107,6 +107,7 @@ Examples are routing expectations, not a claim that a model has been tested:
 | Component feedback, cohesion or accessibility outside selected playbooks | [emil-design-eng](references/emil-design-eng/guide.md) |
 | Implement web motion or transitions | [animate](references/animate/guide.md) |
 | Coordinate several elements that move together: stagger, sequencing, entrances, view swaps or multi-step transitions | [choreograph](references/choreograph/guide.md) |
+| Build or fix web drag, swipe, sheet, drawer, fling or hold-to-confirm interactions that must track the finger and stay interruptible | [gestures](references/gestures/guide.md) |
 | Implement React Native / Expo motion, gestures or haptics | [animate-expo](references/animate-expo/guide.md) |
 | Fix janky or dropping-frame web animation, or work inside the frame budget | [animation-performance](references/animation-performance/guide.md) |
 | Remove excessive or unnecessary motion | [remove-animations](references/remove-animations/guide.md) |

@@ -144,7 +144,11 @@ def validate_package(package: dict[str, bytes]) -> list[str]:
         if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
             raise SyncError("Invalid design mode name")
         guide = "references/" + relative(mode["guide"]).as_posix()
-        if guide not in package or "(" + guide + ")" not in text:
+        if guide not in package:
+            raise SyncError("Missing mode guide: " + name)
+        # A newly bundled upstream mode may be reachable through the full inventory
+        # (references/sources.json) before the router table gains its own row.
+        if "(" + guide + ")" not in text and "(references/sources.json)" not in text:
             raise SyncError("Missing routed mode guide: " + name)
     expected = {"references/" + relative(name).as_posix(): entry["sha256"]
                 for name, entry in manifest["files"].items()}
