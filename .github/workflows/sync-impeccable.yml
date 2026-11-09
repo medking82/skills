@@ -96,6 +96,25 @@ jobs:
           git commit -m 'Sync Impeccable design references'
           echo 'changed=true' >> "$GITHUB_OUTPUT"
 
+      - name: Check out the pinned qualification runner
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: medking82/hermes-fleet-sync
+          ref: 4f79a5b4452d9a91037e4cbf564a927b44e2bac6
+          path: .qualification-runner
+          persist-credentials: false
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+
+      - name: Qualify the exact prepared commit
+        if: steps.prepare.outputs.changed == 'true'
+        run: python -B scripts/qualify-release.py --runner .qualification-runner --state "$RUNNER_TEMP/release-qualification"
+
       - name: Publish the verified snapshot
         if: steps.prepare.outputs.changed == 'true'
         env:
