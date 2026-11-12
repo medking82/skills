@@ -100,6 +100,13 @@
       "description": "Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them. Use when the user asks to \"improve the animations\", \"audit the motion\", \"make this app feel better\", or wants a roadmap of animation fixes rather than a review of a single diff.",
       "allow_implicit_invocation": true
     },
+    "learn-taste": {
+      "entrypoint": "skills/learn-taste/SKILL.md",
+      "source_sha256": "9567d3d939655320a1cab2d7f4dd734157376bc41b29e783eda7ba6f8b6b6100",
+      "guide": "learn-taste/guide.md",
+      "description": "Turn the design corrections a user made during a session into rules the next agent follows. Collects every correction (explicit ones, edits the user made to files you wrote, repeated nudges, reverts), generalizes each to the right level, confirms the why, and writes it as rule plus reason into the project's DESIGN.md, a project skill, or a lint check. Only runs when explicitly invoked.",
+      "allow_implicit_invocation": false
+    },
     "mobile-native": {
       "entrypoint": "skills/mobile-native/SKILL.md",
       "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
@@ -1026,13 +1033,13 @@
     },
     "hallmark/upstream/scripts/capture.mjs": {
       "source": "skills/hallmark/upstream/scripts/capture.mjs",
-      "source_sha256": "898fa25b1430fb1e94c02206f0b39769c9af0f40205d1928a5a58d07039bd4a8",
-      "sha256": "898fa25b1430fb1e94c02206f0b39769c9af0f40205d1928a5a58d07039bd4a8"
+      "source_sha256": "0364ca6591a722d14b935f201956c300d688b8f9f73879b00df92242dc26610b",
+      "sha256": "0364ca6591a722d14b935f201956c300d688b8f9f73879b00df92242dc26610b"
     },
     "hallmark/upstream/scripts/capture.test.mjs": {
       "source": "skills/hallmark/upstream/scripts/capture.test.mjs",
-      "source_sha256": "cd14d4e2ee080611a0e9c89ca005ae6c8ab43c2966e5485a3a2e85ddfd6fc7c7",
-      "sha256": "cd14d4e2ee080611a0e9c89ca005ae6c8ab43c2966e5485a3a2e85ddfd6fc7c7"
+      "source_sha256": "f2e5e44e78ef3fb71a10c2a54706cbd7adafe904f907f6f7b845254d6a924ca0",
+      "sha256": "f2e5e44e78ef3fb71a10c2a54706cbd7adafe904f907f6f7b845254d6a924ca0"
     },
     "hallmark/upstream/scripts/photos.json": {
       "source": "skills/hallmark/upstream/scripts/photos.json",
@@ -1066,8 +1073,8 @@
     },
     "hallmark/upstream/source.json": {
       "source": "skills/hallmark/upstream/source.json",
-      "source_sha256": "bd390c30f33c3797ed1c0836a2ef7280e7dd4027c0af93d96675ce9793b4c163",
-      "sha256": "bd390c30f33c3797ed1c0836a2ef7280e7dd4027c0af93d96675ce9793b4c163"
+      "source_sha256": "9ccba416bf383f31385cc69f258081847578f8ce77d90bf8b98839735e013c26",
+      "sha256": "9ccba416bf383f31385cc69f258081847578f8ce77d90bf8b98839735e013c26"
     },
     "impeccable/guide.md": {
       "source": "skills/impeccable/SKILL.md",
@@ -1463,6 +1470,11 @@
       "source": "skills/improve-animations/PLAN-TEMPLATE.md",
       "source_sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad",
       "sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad"
+    },
+    "learn-taste/guide.md": {
+      "source": "skills/learn-taste/SKILL.md",
+      "source_sha256": "9567d3d939655320a1cab2d7f4dd734157376bc41b29e783eda7ba6f8b6b6100",
+      "sha256": "0e53b0b4ab3e2c679fd6814bd6bc6d00df9d7c71b1ba5314899860a1e8b10d3c"
     },
     "mobile-native/guide.md": {
       "source": "skills/mobile-native/SKILL.md",

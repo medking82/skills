@@ -122,6 +122,7 @@ Examples are routing expectations, not a claim that a model has been tested:
 | Explicitly critique motion or review an animation diff | [review-animations](references/review-animations/guide.md) |
 | Explicitly choose or compare UI libraries | [pick-ui-library](references/pick-ui-library/guide.md) |
 | Explicitly explore different UI variants behind a visual picker | [prototype](references/prototype/guide.md) |
+| Explicitly capture design corrections and preferences from the current session in DESIGN.md | [learn-taste](references/learn-taste/guide.md) |
 
 The [mode inventory](references/sources.json) lists all bundled modes, including
 new modes from upstream, with descriptions, guide paths and invocation policy.
