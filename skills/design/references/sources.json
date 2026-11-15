@@ -1148,8 +1148,8 @@
     },
     "impeccable/upstream/agents/impeccable_documenter.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_documenter.toml",
-      "source_sha256": "e7778229d8f31433fc11e29dd2caac8e85281e27ea5c9410474703bb0185100f",
-      "sha256": "e7778229d8f31433fc11e29dd2caac8e85281e27ea5c9410474703bb0185100f"
+      "source_sha256": "4df1e09feae14414edb13c7c49b19b11861dbacba16426e93a828f700dfbada5",
+      "sha256": "4df1e09feae14414edb13c7c49b19b11861dbacba16426e93a828f700dfbada5"
     },
     "impeccable/upstream/agents/impeccable_finish_reviewer.toml": {
       "source": "skills/impeccable/upstream/agents/impeccable_finish_reviewer.toml",
@@ -1161,15 +1161,20 @@
       "source_sha256": "4b01f4eb8a49fb00bc88248735c3b5442beb1791ec71d98e6d203f268a24010b",
       "sha256": "4b01f4eb8a49fb00bc88248735c3b5442beb1791ec71d98e6d203f268a24010b"
     },
+    "impeccable/upstream/agents/impeccable_motion_reviewer.toml": {
+      "source": "skills/impeccable/upstream/agents/impeccable_motion_reviewer.toml",
+      "source_sha256": "0067e7d3c4f52e8ff51ec94b960e2bed3917facdefee1ff91a4f1471fbd158b8",
+      "sha256": "0067e7d3c4f52e8ff51ec94b960e2bed3917facdefee1ff91a4f1471fbd158b8"
+    },
     "impeccable/upstream/guide.md": {
       "source": "skills/impeccable/upstream/guide.md",
-      "source_sha256": "c6921e830b7a565ebbe9aabe11516d34092062cd7fa2b442f030134857bf86a8",
-      "sha256": "c6921e830b7a565ebbe9aabe11516d34092062cd7fa2b442f030134857bf86a8"
+      "source_sha256": "233c81d5a07f0ed0c9d16d200057178b2e026c139c11ad1c161eadfb7ee467a8",
+      "sha256": "233c81d5a07f0ed0c9d16d200057178b2e026c139c11ad1c161eadfb7ee467a8"
     },
     "impeccable/upstream/reference/adapt.md": {
       "source": "skills/impeccable/upstream/reference/adapt.md",
-      "source_sha256": "f68b42ac3ba8d0953bcf43a93c9fca0d8a603e05230abdbf09096d3a53f7abcc",
-      "sha256": "f68b42ac3ba8d0953bcf43a93c9fca0d8a603e05230abdbf09096d3a53f7abcc"
+      "source_sha256": "fa68e46b9d163923717da6b3826782ded4a4d32434553994b5dd10bdf08d7399",
+      "sha256": "fa68e46b9d163923717da6b3826782ded4a4d32434553994b5dd10bdf08d7399"
     },
     "impeccable/upstream/reference/adapt.native.md": {
       "source": "skills/impeccable/upstream/reference/adapt.native.md",
@@ -1183,8 +1188,8 @@
     },
     "impeccable/upstream/reference/animate.md": {
       "source": "skills/impeccable/upstream/reference/animate.md",
-      "source_sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c",
-      "sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c"
+      "source_sha256": "d314f507b836dcc0b71d8080f0a0677af3f45bf732dbcb06f398b76cdf15fe29",
+      "sha256": "d314f507b836dcc0b71d8080f0a0677af3f45bf732dbcb06f398b76cdf15fe29"
     },
     "impeccable/upstream/reference/audit.md": {
       "source": "skills/impeccable/upstream/reference/audit.md",
@@ -1226,10 +1231,15 @@
       "source_sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c",
       "sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c"
     },
+    "impeccable/upstream/reference/critique-rubric.md": {
+      "source": "skills/impeccable/upstream/reference/critique-rubric.md",
+      "source_sha256": "ba070404e3f61c62b40c25a5d096b803825408de12a0fbb559b1587c89692866",
+      "sha256": "ba070404e3f61c62b40c25a5d096b803825408de12a0fbb559b1587c89692866"
+    },
     "impeccable/upstream/reference/critique.md": {
       "source": "skills/impeccable/upstream/reference/critique.md",
-      "source_sha256": "0b1fef797791eb6ef968a5d5b628c0c5b630ddd7926c83d5b942bf9494aee509",
-      "sha256": "0b1fef797791eb6ef968a5d5b628c0c5b630ddd7926c83d5b942bf9494aee509"
+      "source_sha256": "945c46add59c1519b137263b1dc7b68d631f65f4e48c6bac1a944499dbbbdb42",
+      "sha256": "945c46add59c1519b137263b1dc7b68d631f65f4e48c6bac1a944499dbbbdb42"
     },
     "impeccable/upstream/reference/degraded/asset-producer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/asset-producer.md",
@@ -1238,8 +1248,8 @@
     },
     "impeccable/upstream/reference/degraded/documenter.md": {
       "source": "skills/impeccable/upstream/reference/degraded/documenter.md",
-      "source_sha256": "17b6328d809c86622789dcbe1bb1b12ec8937118ef6aa4b37bfd9130d79a205c",
-      "sha256": "17b6328d809c86622789dcbe1bb1b12ec8937118ef6aa4b37bfd9130d79a205c"
+      "source_sha256": "5a175082e1357b20cbf25c965e18b520700aa441d9fdb76757cc43fc590b9305",
+      "sha256": "5a175082e1357b20cbf25c965e18b520700aa441d9fdb76757cc43fc590b9305"
     },
     "impeccable/upstream/reference/degraded/finish-reviewer.md": {
       "source": "skills/impeccable/upstream/reference/degraded/finish-reviewer.md",
@@ -1250,6 +1260,11 @@
       "source": "skills/impeccable/upstream/reference/degraded/manual-edit-applier.md",
       "source_sha256": "357b19acc7ef688c337a4f020633a49db23c84620b13636f9ff20d3ab934df1a",
       "sha256": "357b19acc7ef688c337a4f020633a49db23c84620b13636f9ff20d3ab934df1a"
+    },
+    "impeccable/upstream/reference/degraded/motion-reviewer.md": {
+      "source": "skills/impeccable/upstream/reference/degraded/motion-reviewer.md",
+      "source_sha256": "363003cd992724abdec08c30d54e79e33829d1938b5f875a7770be98d15e043f",
+      "sha256": "363003cd992724abdec08c30d54e79e33829d1938b5f875a7770be98d15e043f"
     },
     "impeccable/upstream/reference/delight.md": {
       "source": "skills/impeccable/upstream/reference/delight.md",
@@ -1268,13 +1283,18 @@
     },
     "impeccable/upstream/reference/document.md": {
       "source": "skills/impeccable/upstream/reference/document.md",
-      "source_sha256": "7e7e97388cac7b5af7afa5b6fec19a6576c89ce6a998c973cb007b8e5494a8c9",
-      "sha256": "7e7e97388cac7b5af7afa5b6fec19a6576c89ce6a998c973cb007b8e5494a8c9"
+      "source_sha256": "226b55902f9404a8862090f9f273e699a6088fb87dd034600bf0850dbc06ea5a",
+      "sha256": "226b55902f9404a8862090f9f273e699a6088fb87dd034600bf0850dbc06ea5a"
     },
     "impeccable/upstream/reference/extract.md": {
       "source": "skills/impeccable/upstream/reference/extract.md",
       "source_sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
       "sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd"
+    },
+    "impeccable/upstream/reference/foundations.md": {
+      "source": "skills/impeccable/upstream/reference/foundations.md",
+      "source_sha256": "0d39efab1603887e258c982cc979861e8dcf25b306d2fa74bd4c847886b41d56",
+      "sha256": "0d39efab1603887e258c982cc979861e8dcf25b306d2fa74bd4c847886b41d56"
     },
     "impeccable/upstream/reference/generate.md": {
       "source": "skills/impeccable/upstream/reference/generate.md",
@@ -1288,8 +1308,8 @@
     },
     "impeccable/upstream/reference/hooks.md": {
       "source": "skills/impeccable/upstream/reference/hooks.md",
-      "source_sha256": "22f99dc8f891dcc620fb6dc670eab09b84585c1810bf7a3c2063a6e6f7f42152",
-      "sha256": "22f99dc8f891dcc620fb6dc670eab09b84585c1810bf7a3c2063a6e6f7f42152"
+      "source_sha256": "6e4baca40d38a3829b5140b6f21c7cd30610c2ee11336966d758017fe94899f6",
+      "sha256": "6e4baca40d38a3829b5140b6f21c7cd30610c2ee11336966d758017fe94899f6"
     },
     "impeccable/upstream/reference/init.md": {
       "source": "skills/impeccable/upstream/reference/init.md",
@@ -1308,13 +1328,13 @@
     },
     "impeccable/upstream/reference/live-setup.md": {
       "source": "skills/impeccable/upstream/reference/live-setup.md",
-      "source_sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
-      "sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4"
+      "source_sha256": "1b4178820b9ffe559cde6e3d63ac8a0cbab1e8aeb72e9ef4c6ef69e41aab436d",
+      "sha256": "1b4178820b9ffe559cde6e3d63ac8a0cbab1e8aeb72e9ef4c6ef69e41aab436d"
     },
     "impeccable/upstream/reference/live.md": {
       "source": "skills/impeccable/upstream/reference/live.md",
-      "source_sha256": "b8ff9aaf183187e52eb10a24b1036b4725ff51eb11abd97a360d5678e32561dc",
-      "sha256": "b8ff9aaf183187e52eb10a24b1036b4725ff51eb11abd97a360d5678e32561dc"
+      "source_sha256": "bd9443e8ac4dfdefe17f7e5cd8402fbb7de42e89308783636fc40643de1f130c",
+      "sha256": "bd9443e8ac4dfdefe17f7e5cd8402fbb7de42e89308783636fc40643de1f130c"
     },
     "impeccable/upstream/reference/mode-operate.md": {
       "source": "skills/impeccable/upstream/reference/mode-operate.md",
@@ -1331,10 +1351,20 @@
       "source_sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
       "sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5"
     },
+    "impeccable/upstream/reference/new-work-comp.md": {
+      "source": "skills/impeccable/upstream/reference/new-work-comp.md",
+      "source_sha256": "4994bf8c6a74c623aeddd8b540e6278ffba5a35b6229d25fd4525aee30a29e1e",
+      "sha256": "4994bf8c6a74c623aeddd8b540e6278ffba5a35b6229d25fd4525aee30a29e1e"
+    },
+    "impeccable/upstream/reference/new-work-world.md": {
+      "source": "skills/impeccable/upstream/reference/new-work-world.md",
+      "source_sha256": "a0ca7486961f8154141c0382474f47b57d93a2c98a063ececdd6de72c4de946f",
+      "sha256": "a0ca7486961f8154141c0382474f47b57d93a2c98a063ececdd6de72c4de946f"
+    },
     "impeccable/upstream/reference/new-work.md": {
       "source": "skills/impeccable/upstream/reference/new-work.md",
-      "source_sha256": "1bdd209c4799e1aedbf5a564900c05f6e1f88f0aaf9449025dd1bec804b59d43",
-      "sha256": "1bdd209c4799e1aedbf5a564900c05f6e1f88f0aaf9449025dd1bec804b59d43"
+      "source_sha256": "e4df7aae0564c28d7fe7d43332b8b5462e6903a6e20a65e910d9be28116c25e3",
+      "sha256": "e4df7aae0564c28d7fe7d43332b8b5462e6903a6e20a65e910d9be28116c25e3"
     },
     "impeccable/upstream/reference/onboard.md": {
       "source": "skills/impeccable/upstream/reference/onboard.md",
@@ -1383,18 +1413,18 @@
     },
     "impeccable/upstream/reference/typeset.md": {
       "source": "skills/impeccable/upstream/reference/typeset.md",
-      "source_sha256": "c26c5b4524f3ccb650ed0680c10c25fd18083f8ebfd00a54c4d983c4747aab70",
-      "sha256": "c26c5b4524f3ccb650ed0680c10c25fd18083f8ebfd00a54c4d983c4747aab70"
+      "source_sha256": "f943b43e009cedb13e97ab3c44049950b905b36b4325cfefc2155ea810d1b626",
+      "sha256": "f943b43e009cedb13e97ab3c44049950b905b36b4325cfefc2155ea810d1b626"
     },
     "impeccable/upstream/reference/visualize.md": {
       "source": "skills/impeccable/upstream/reference/visualize.md",
-      "source_sha256": "0c431d0dafbcac7ae8bde70ffa622f9ee542c44ec12e14b48bb44b269bef67eb",
-      "sha256": "0c431d0dafbcac7ae8bde70ffa622f9ee542c44ec12e14b48bb44b269bef67eb"
+      "source_sha256": "4a32d4f3eb29db217c210135680896f3e26907b2a9d53cc0126279116520af80",
+      "sha256": "4a32d4f3eb29db217c210135680896f3e26907b2a9d53cc0126279116520af80"
     },
     "impeccable/upstream/scripts/VERSION": {
       "source": "skills/impeccable/upstream/scripts/VERSION",
-      "source_sha256": "b0569383609842116bc78ee560cb5a7aee44bdbe59d85efc7b7316cb72389862",
-      "sha256": "b0569383609842116bc78ee560cb5a7aee44bdbe59d85efc7b7316cb72389862"
+      "source_sha256": "4a4f652678a28b9c8a2d3d89b6b865c84e328fdcb3e27c297c711c7e723073ed",
+      "sha256": "4a4f652678a28b9c8a2d3d89b6b865c84e328fdcb3e27c297c711c7e723073ed"
     },
     "impeccable/upstream/scripts/command-metadata.json": {
       "source": "skills/impeccable/upstream/scripts/command-metadata.json",
@@ -1413,8 +1443,8 @@
     },
     "impeccable/upstream/scripts/engine-checksums.txt": {
       "source": "skills/impeccable/upstream/scripts/engine-checksums.txt",
-      "source_sha256": "5a374b368586a029b4bd4a2610cde9fb1c586b99b88c496519eeda1f09cf5550",
-      "sha256": "5a374b368586a029b4bd4a2610cde9fb1c586b99b88c496519eeda1f09cf5550"
+      "source_sha256": "8b6e503413f838e9475d6b7253fac409468d23d8e74f23a2692276449a5d8b33",
+      "sha256": "8b6e503413f838e9475d6b7253fac409468d23d8e74f23a2692276449a5d8b33"
     },
     "impeccable/upstream/scripts/impeccable": {
       "source": "skills/impeccable/upstream/scripts/impeccable",
@@ -1443,8 +1473,8 @@
     },
     "impeccable/upstream/scripts/live-browser.js": {
       "source": "skills/impeccable/upstream/scripts/live-browser.js",
-      "source_sha256": "144335146f4f5a3a06be4b5daab24cac82653510c0007ad3786dbd3ef1a02f6e",
-      "sha256": "144335146f4f5a3a06be4b5daab24cac82653510c0007ad3786dbd3ef1a02f6e"
+      "source_sha256": "718d8cef65b92222219a45ffd024230ffad7273ff368f80e41e9f4d56d3cbd96",
+      "sha256": "718d8cef65b92222219a45ffd024230ffad7273ff368f80e41e9f4d56d3cbd96"
     },
     "impeccable/upstream/scripts/modern-screenshot.umd.js": {
       "source": "skills/impeccable/upstream/scripts/modern-screenshot.umd.js",
@@ -1453,8 +1483,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "f636fa8e04c8bab4155a585ef3132317f5aaae304a701f379ae0998344fb102c",
-      "sha256": "f636fa8e04c8bab4155a585ef3132317f5aaae304a701f379ae0998344fb102c"
+      "source_sha256": "2de904215634dac9c15d4a9c0089ebba5e96e0e2735e858b48ea7b8f5e06cd14",
+      "sha256": "2de904215634dac9c15d4a9c0089ebba5e96e0e2735e858b48ea7b8f5e06cd14"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
