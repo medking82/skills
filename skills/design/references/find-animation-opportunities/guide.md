@@ -5,7 +5,7 @@ A search skill. It does ONE thing: sweep an interface for moments that would gen
 
 ## Operating Posture
 
-You are a senior design engineer whose defining trait is **restraint**. The premise of this skill is Emil Kowalski's ["You Don't Need Animations"](https://emilkowal.ski/ui/you-dont-need-animations): sometimes the best animation is no animation. An opportunity finder that suggests motion everywhere is worse than useless — it produces the sluggish, over-animated interfaces this repo exists to prevent.
+You are a senior design engineer whose defining trait is **restraint**. The premise of this skill is Emil Kowalski's ["You Don't Need Animations"](https://emilkowal.ski/ui/you-dont-need-animations): sometimes the best animation is no animation. An opportunity finder that suggests motion everywhere is worse than useless — it produces sluggish, over-animated interfaces.
 
 So this skill is a filter as much as a finder. Expect to reject most candidates. A short list of high-conviction opportunities beats a long wishlist.
 
@@ -46,7 +46,7 @@ The answer must be one of these, named explicitly:
 
 ### 3. Speed — can it stay inside budget?
 
-Use the standard budgets as defaults (ordinary UI under 300ms); explain a longer component-specific exception rather than silently applying it:
+Use the standard budgets as defaults (ordinary UI under 300ms; modals, drawers, sheets, and toasts are the documented exceptions); explain any other longer exception rather than silently applying it:
 
 | Element | Duration |
 | --- | --- |
@@ -67,8 +67,8 @@ Decoration on functional, information-dense UI hinders. A decorative mouse-track
 Sweep for these seams — each is a known class of genuine opportunity:
 
 **Feedback gaps**
-- Pressable elements with no `:active` state → `transform: scale(0.97)` with `transition: transform 160ms ease-out` (subtle: 0.95–0.98)
-- Destructive actions confirmed with a plain click where a hold-to-confirm fill would prevent slips → `clip-path: inset(0 100% 0 0)` overlay, 2s linear on press, 200ms ease-out snap-back on release
+- Pressable elements with no `:active` state → `transform: scale(0.97)` with `transition: transform 160ms var(--ease-out)` (subtle: 0.95–0.98)
+- Destructive actions confirmed with a plain click where a hold-to-confirm fill would prevent slips → `clip-path: inset(0 100% 0 0)` overlay, 2s linear on press, 200ms `var(--ease-out)` snap-back on release
 
 **Teleporting state**
 - Content that swaps, appears, or vanishes instantly (conditional renders, route content, expanding sections) → fade/scale entrances from `scale(0.95–0.97)` + `opacity: 0`, `ease-out`, never `scale(0)`; `@starting-style` for entry without JS
@@ -77,10 +77,9 @@ Sweep for these seams — each is a known class of genuine opportunity:
 
 **Missing spatial story**
 - Panels, popovers, menus that appear with no connection to their trigger → scale in with `transform-origin` at the trigger (Base UI: `var(--transform-origin)`); modals are exempt — they stay centered
-- Dismissable surfaces (toasts, sheets) that exit a different way than they entered → symmetric paths; `translateY(100%)` percentages, not hardcoded pixels
 
 **Group entrances**
-- A grid or list that pops in all at once on a page users see occasionally → 30–80ms stagger; decorative, must never block interaction
+- A grid or list that pops in all at once on a page users see occasionally → 30–80ms stagger, non-uniform, one entrance per container (see `../choreograph/SKILL.md`); decorative, must never block interaction
 
 **Gesture seams**
 - Draggable/swipeable elements that snap with no physics → springs (`{ type: "spring", duration: 0.5, bounce: 0.2 }`, bounce 0.1–0.3), velocity-based dismissal (`Math.abs(distance)/elapsedMs > ~0.11`), rubber-banding at boundaries instead of hard stops
@@ -106,13 +105,13 @@ One row per surviving suggestion, ordered by leverage:
 | # | Location | Today | Purpose | Frequency | Suggested motion |
 | --- | --- | --- | --- | --- | --- |
 | 1 | `Toast.tsx:41` | New toasts appear instantly | Preventing a jarring change | Occasional | Enter via `@starting-style`: `opacity: 0; transform: translateY(100%)` → settled, `transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out)`, exit same edge; reduced motion keeps opacity and removes travel |
-| 2 | `Button.tsx:18` | No press feedback | Feedback | Tens/day | `:active { transform: scale(0.97) }`, `transition: transform 160ms ease-out` — subtle enough for the frequency tier |
+| 2 | `Button.tsx:18` | No press feedback | Feedback | Tens/day | `:active { transform: scale(0.97) }`, `transition: transform 160ms var(--ease-out)` — subtle enough for the frequency tier |
 
-Every "Suggested motion" cell carries exact values — the curve, the duration, the properties — using existing project tokens first, otherwise this repo's shared vocabulary (`--ease-out: cubic-bezier(0.23, 1, 0.32, 1)`, `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)`, `--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)`). Prefer `transform` and `opacity`; an accordion may need a measured height transition, as described above. Include reduced-motion handling and pointer/hover gating when relevant. Preserve a documented component-specific duration exception rather than treating the budget as an absolute.
+Every "Suggested motion" cell carries exact values — the curve, the duration, the properties — using existing project tokens first, otherwise this repo's shared vocabulary (`--ease-out: cubic-bezier(0.23, 1, 0.32, 1)`, `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)`, `--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1)`), never approximated. Prefer `transform` and `opacity`; `clip-path` (hold-to-confirm) and measured height (accordions) are the documented exceptions. Include reduced-motion handling (gentler, not zero) and `@media (hover: hover) and (pointer: fine)` gating when the suggestion involves hover. Preserve a documented component-specific duration exception rather than treating the budget as an absolute.
 
 ### Part 2 — Rejected candidates (REQUIRED)
 
-List 2–5 places you considered and deliberately did **not** suggest, each with the gate question that killed it:
+List up to 5 places you considered and deliberately did **not** suggest, each with the gate question that killed it. If you rejected none, say so:
 
 - `CommandMenu.tsx:12` — command palette open/close. **Rejected: keyboard-initiated, 100+/day. Never animate.**
 - `Chart.tsx:88` — animated line drawing on the analytics graph. **Rejected: functional data the user is reading; decoration hinders.**

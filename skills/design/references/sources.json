@@ -4,23 +4,23 @@
   "modes": {
     "animate": {
       "entrypoint": "skills/animate/SKILL.md",
-      "source_sha256": "ded66997c9b756316fdb2c84cc9f48c6e4fc333b7a86fbf505238ee25d8e07eb",
+      "source_sha256": "f96ca2599c157a2b16ac26ece87063c12eee71f46ea5d1b2160843f06ce0ed2d",
       "guide": "animate/guide.md",
       "description": "Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.",
       "allow_implicit_invocation": true
     },
     "animate-expo": {
       "entrypoint": "skills/animate-expo/SKILL.md",
-      "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
+      "source_sha256": "d87d29d96c0c880fdb88d1c6daed44c1a00720cc7996c849424a18d971328d6a",
       "guide": "animate-expo/guide.md",
       "description": "Build animations in React Native and Expo, making the decisions in the order that determines whether they feel right — should it animate, which thread it runs on, which properties, spring or timing, how the gesture hands off, how it degrades. Writes the implementation with Reanimated, Gesture Handler, Expo Router and expo-haptics. Use when animating anything in an Expo app, adding gestures, sheets, screen transitions, press feedback or haptics, or fixing motion that stutters on device. For web animation use `animate`.",
       "allow_implicit_invocation": true
     },
     "animation-performance": {
       "entrypoint": "skills/animation-performance/SKILL.md",
-      "source_sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
+      "source_sha256": "6481e7a611b54c0d1d229ac3ac516c05648e63aa79de88c0a1bdc5ae2666ab80",
       "guide": "animation-performance/guide.md",
-      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
+      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
       "allow_implicit_invocation": true
     },
     "animation-vocabulary": {
@@ -39,23 +39,23 @@
     },
     "ask-sonner": {
       "entrypoint": "skills/ask-sonner/SKILL.md",
-      "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
+      "source_sha256": "302c9275aee6a46178f428e00f5ad0c98d599ca1438f209e604d4bcf036c4e4a",
       "guide": "ask-sonner/guide.md",
       "description": "Guide to Sonner, the React toast library — install and wire up the Toaster, pick the right toast() call, promise and loading toasts, updating, dismissing and persisting toasts, styling, theming and icons, positioning and multiple toasters. Use when working with Sonner or troubleshooting it — toasts that don't appear, appear twice, lose their styles, ignore Tailwind classes, sit behind a modal, or don't follow dark mode.",
       "allow_implicit_invocation": true
     },
     "break-ui": {
       "entrypoint": "skills/break-ui/SKILL.md",
-      "source_sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+      "source_sha256": "fb126d176f3b6bf7dfe71f2ae6620ab3dd81e6282c672a1801720055addfce18",
       "guide": "break-ui/guide.md",
       "description": "Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts, zero items, long labels, non-Latin text, emoji, extreme numbers — then render it behind a \"Demo data / Worst case\" toggle and report everything that broke, with the fix for each. Use when the user asks to stress-test, break, or find edge cases in a component or screen, or to \"try the worst case\". For visual design critique use emil-design-eng; for motion use review-animations.",
       "allow_implicit_invocation": false
     },
     "choreograph": {
       "entrypoint": "skills/choreograph/SKILL.md",
-      "source_sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+      "source_sha256": "0a6802bb2fd5a3993842d48332b8ab56ae5bab369ffa8700f85f6fcff56b8478",
       "guide": "choreograph/guide.md",
-      "description": "Coordinate several elements that animate together — decide what moves, in what order, how much they overlap, and what stays still — so a group reads as one intentional motion instead of a pile of separate animations. Use when building or fixing a staggered list, a hero entrance, a view swap inside a container, a multi-step flow, an element leaving while its siblings close the gap, a morph between rich states, or any interaction with several moving parts (icon + background + lines, panel + content, items flying into a target). Triggers on — stagger, staggerChildren, delayChildren, animation-delay, sequence, sequencing, orchestration, choreography, cascade, wave, timeline, \"one after another\", \"at the same time\", crossfade, popLayout, mode=\"wait\", AnimatePresence mode, hero entrance, list entrance, multi-step, step transition, morph, useAnimate, Promise.all animations, \"feels mechanical\", \"feels robotic\", \"too much going on\", \"feels slow to open\".",
+      "description": "Coordinate several elements that animate together — decide what moves, in what order, how much they overlap, and what stays still — so a group reads as one intentional motion instead of a pile of separate animations. Use when building or fixing a staggered list, a hero entrance, a view swap inside a container, a multi-step flow, an element leaving while its siblings close the gap, a morph between rich states, or any interaction with several moving parts (icon + background + lines, panel + content, items flying into a target). Triggers on — stagger, sequence, choreography, \"one after another\", crossfade, AnimatePresence mode, hero entrance, multi-step, useAnimate, \"feels mechanical\", \"too much going on\", \"feels slow to open\".",
       "allow_implicit_invocation": true
     },
     "emil-design-eng": {
@@ -67,16 +67,16 @@
     },
     "find-animation-opportunities": {
       "entrypoint": "skills/find-animation-opportunities/SKILL.md",
-      "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
+      "source_sha256": "b2e9dfd7718484611978ee7c447a223d1588b62d07b10890a264653f5bc16c1e",
       "guide": "find-animation-opportunities/guide.md",
       "description": "Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks \"what could be animated here?\" or wants to \"make this feel more alive\". For fixing existing animations, use improve-animations or review-animations instead.",
       "allow_implicit_invocation": true
     },
     "gestures": {
       "entrypoint": "skills/gestures/SKILL.md",
-      "source_sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
+      "source_sha256": "1928c86cce924a2a178ddd156ba5ed0f184665a1f95b549724ffb5ae703e994f",
       "guide": "gestures/guide.md",
-      "description": "Build drag, swipe, and sheet interactions that track the finger 1:1 and stay interruptible. Use when building or fixing anything the user drags, swipes, flings, holds, or dismisses with a gesture — drawers, sheets, swipe-to-dismiss toasts and cards, drag-to-reorder, pull-to-refresh, hold-to-confirm — or when a gesture feels laggy, disconnected from the finger, jumps on release, or can't be caught mid-animation. Triggers on — gesture, drag, draggable, swipe, swipe to dismiss, fling, momentum, velocity, drawer, sheet, bottom sheet, snap points, Vaul, dragConstraints, dragElastic, dragMomentum, onDragEnd, whileDrag, useMotionValue, rubber-band, overscroll, pull to refresh, hold to delete, press and hold, touch-action, dismiss threshold, \"doesn't follow my finger\", \"jumps when I let go\", \"can't grab it mid-animation\".",
+      "description": "Build drag, swipe, and sheet interactions that track the finger 1:1 and stay interruptible. Use when building or fixing anything the user drags, swipes, flings, holds, or dismisses with a gesture — drawers, sheets, swipe-to-dismiss toasts and cards, drag-to-reorder, pull-to-refresh, hold-to-confirm — or when a gesture feels laggy, disconnected from the finger, jumps on release, or can't be caught mid-animation. Triggers on — gesture, drag, swipe, fling, sheet, snap points, Vaul, Motion drag props, rubber-band, pull to refresh, hold to delete, touch-action, \"doesn't follow my finger\", \"jumps when I let go\", \"can't grab it mid-animation\".",
       "allow_implicit_invocation": true
     },
     "hallmark": {
@@ -95,56 +95,56 @@
     },
     "improve-animations": {
       "entrypoint": "skills/improve-animations/SKILL.md",
-      "source_sha256": "39f8338e6fb19814e6b94d2ad40ae4a5d6046e081b5d074678dd8db54d96d810",
+      "source_sha256": "98ac08583550822c5cf3f234ac5608ee1b8e401de294f4eb93abe65f04d20bc0",
       "guide": "improve-animations/guide.md",
       "description": "Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them. Use when the user asks to \"improve the animations\", \"audit the motion\", \"make this app feel better\", or wants a roadmap of animation fixes rather than a review of a single diff.",
       "allow_implicit_invocation": true
     },
     "learn-taste": {
       "entrypoint": "skills/learn-taste/SKILL.md",
-      "source_sha256": "9567d3d939655320a1cab2d7f4dd734157376bc41b29e783eda7ba6f8b6b6100",
+      "source_sha256": "115897a0914197a6ec00ae2fb948c62b5439dcb847b52b05c2d451a998f4b5e2",
       "guide": "learn-taste/guide.md",
       "description": "Turn the design corrections a user made during a session into rules the next agent follows. Collects every correction (explicit ones, edits the user made to files you wrote, repeated nudges, reverts), generalizes each to the right level, confirms the why, and writes it as rule plus reason into the project's DESIGN.md, a project skill, or a lint check. Only runs when explicitly invoked.",
       "allow_implicit_invocation": false
     },
     "mobile-native": {
       "entrypoint": "skills/mobile-native/SKILL.md",
-      "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
+      "source_sha256": "971e1838238ddcf2b7562397e9632b428cd6226014dcd220bb42c15ea812f56f",
       "guide": "mobile-native/guide.md",
       "description": "Make a web app feel native on a phone — the small CSS and meta-tag fixes that separate \"a website in a browser\" from something that feels installed. Covers sticky hover states, tap highlight flashes, the 100vh bug, inputs that zoom the page, laggy taps, pull-to-refresh hijacking scroll, content under the notch, long-press selecting button text, carousels that scroll the wrong way, mismatched status bars, and the rule that you test on real hardware. Use when a web app is being built for or reviewed on mobile, when something \"works in Chrome but feels wrong on my phone\", when building a PWA, a bottom sheet, a carousel, a full-screen layout, or any touch interaction. For motion itself use animate; for React Native use animate-expo.",
       "allow_implicit_invocation": true
     },
     "pick-ui-library": {
       "entrypoint": "skills/pick-ui-library/SKILL.md",
-      "source_sha256": "54ee1b6b2a4e5fe6fc6fb7851329c15b26a870d75c6ff988cb7745d3bece2d19",
+      "source_sha256": "c162aa883d0e98828bcba22cc2ef8e261c383cad202e840c4178b8ddf88cf1a8",
       "guide": "pick-ui-library/guide.md",
       "description": "Pick the right library for a given frontend task from a curated, opinionated list — numbers, OTP inputs, charts, command menus, virtualization, drag and drop, toasts, state, styling, and more. Only runs when explicitly invoked; it does not trigger on its own.",
       "allow_implicit_invocation": false
     },
     "prototype": {
       "entrypoint": "skills/prototype/SKILL.md",
-      "source_sha256": "f9f1dcccbd5769e15f6eafe0e832ee57f5e07765f4afb626166d7545a805a180",
+      "source_sha256": "45f4ca779ac7435132104780c35269bfd598992c83942bb49048a49f9f4d69ab",
       "guide": "prototype/guide.md",
       "description": "Build multiple genuinely different versions of a UI piece you describe, rendered behind a visual picker so you can flip through them live and promote the one that feels right. Only runs when explicitly invoked; it does not trigger on its own.",
       "allow_implicit_invocation": false
     },
     "remove-animations": {
       "entrypoint": "skills/remove-animations/SKILL.md",
-      "source_sha256": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
+      "source_sha256": "228d98a3d05637f2ff8fc2d1c2bd88c14783c8c901105cac39a7ae24a4d3e408",
       "guide": "remove-animations/guide.md",
       "description": "Find the animations an interface doesn't need and remove them — motion on keyboard actions, high-frequency surfaces, functional data, and decoration with no purpose — then clean up what they leave behind. Edits code, but only to subtract; it never adds or retunes motion. Use when the user says the app \"feels slow\", \"has too much animation\", \"feels over-animated\", wants to \"tone down the motion\", or asks what animations to remove. For finding places that should animate, use find-animation-opportunities; for fixing animations that should stay, use improve-animations or review-animations.",
       "allow_implicit_invocation": true
     },
     "review-animations": {
       "entrypoint": "skills/review-animations/SKILL.md",
-      "source_sha256": "2b96f0bf7841f712fc0bf83081fbb4ee046e4c441c8fffe477a3c40ff83768b3",
+      "source_sha256": "35b842495bd9ef1be7a36225a0a73513eee84631da9633d3217964a2d88e0100",
       "guide": "review-animations/guide.md",
       "description": "Review existing animation and motion code for purpose, responsiveness, interruption, performance, and accessibility. Use when explicitly asked to critique motion or review an animation diff; report evidence and verification gaps.",
       "allow_implicit_invocation": false
     },
     "write-swift": {
       "entrypoint": "skills/write-swift/SKILL.md",
-      "source_sha256": "287e500d2d6d6bd5e9577bc77fc95807dfd8b43c320f275c45a87a1b8beb2ef6",
+      "source_sha256": "84ce07c459a9668b6a59c80ffdff1bcfa679bd8d467ecf6a83570cf33aea778b",
       "guide": "write-swift/guide.md",
       "description": "How to write modern Swift well — modeling with value types, Swift 6 data-race safety and approachable concurrency (@concurrent, main-actor-by-default, actors, task groups), protocols and generics (some vs any), API design, performance and ARC, Swift Testing, macros, and the modern language features agents don't know about yet. Use when writing, reviewing, or migrating Swift, or when a concurrency error, a hang, a data race, a retain cycle, or a performance problem needs fixing.",
       "allow_implicit_invocation": true
@@ -153,28 +153,28 @@
   "files": {
     "animate/guide.md": {
       "source": "skills/animate/SKILL.md",
-      "source_sha256": "ded66997c9b756316fdb2c84cc9f48c6e4fc333b7a86fbf505238ee25d8e07eb",
-      "sha256": "f1ca8c58ae4537e2eed7189fe8c5b16e75cd413bd50e85e76908f0c6c9c60426"
+      "source_sha256": "f96ca2599c157a2b16ac26ece87063c12eee71f46ea5d1b2160843f06ce0ed2d",
+      "sha256": "3fbc62be82f90514af42d33bf02cc64d92f9b54b44409f5907c70b371c1c330e"
     },
     "animate/RECIPES.md": {
       "source": "skills/animate/RECIPES.md",
-      "source_sha256": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2",
-      "sha256": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2"
+      "source_sha256": "129cddcba35dedacd307ef2de7f2c71e6d23efd9c1756dde44168241207581f9",
+      "sha256": "129cddcba35dedacd307ef2de7f2c71e6d23efd9c1756dde44168241207581f9"
     },
     "animate-expo/guide.md": {
       "source": "skills/animate-expo/SKILL.md",
-      "source_sha256": "2121fc72ffa476492c1b91ccf96c7b26aade9d1a332dc5834ba3526e1102b00d",
-      "sha256": "762354244e786021d3be814a632cb99ed20894ea21c1131012ce14428aa4b227"
+      "source_sha256": "d87d29d96c0c880fdb88d1c6daed44c1a00720cc7996c849424a18d971328d6a",
+      "sha256": "7c1223c621e4e3259ecc3d1acda6cace858e2294cc371b85b95daee607e80925"
     },
     "animate-expo/RECIPES.md": {
       "source": "skills/animate-expo/RECIPES.md",
-      "source_sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718",
-      "sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718"
+      "source_sha256": "31373774c7eef1d3d9f366b638fa2b722f9c730a98e292cda1aa7df2c2b39a56",
+      "sha256": "31373774c7eef1d3d9f366b638fa2b722f9c730a98e292cda1aa7df2c2b39a56"
     },
     "animation-performance/guide.md": {
       "source": "skills/animation-performance/SKILL.md",
-      "source_sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
-      "sha256": "c5b9244c8ee6d92fc76c8893bf4ffcd38ed5db6359a50fd3b432e7da9ce0a36a"
+      "source_sha256": "6481e7a611b54c0d1d229ac3ac516c05648e63aa79de88c0a1bdc5ae2666ab80",
+      "sha256": "6a65c9d40ca41b325ac9d26f1a50c0a38371e76c1dc1ffcd90d6486a0f2dc277"
     },
     "animation-vocabulary/guide.md": {
       "source": "skills/animation-vocabulary/SKILL.md",
@@ -183,8 +183,8 @@
     },
     "animation-vocabulary/references/glossary.md": {
       "source": "skills/animation-vocabulary/references/glossary.md",
-      "source_sha256": "fb4e28a05955fb667493b1515b3ebb7c4322743ea5b7f52de0736df9a1b4f96c",
-      "sha256": "fb4e28a05955fb667493b1515b3ebb7c4322743ea5b7f52de0736df9a1b4f96c"
+      "source_sha256": "81d15130aed0a33f1c3a55b8d55e904fd8cbc0e8bf4995777c459783b8e93c04",
+      "sha256": "81d15130aed0a33f1c3a55b8d55e904fd8cbc0e8bf4995777c459783b8e93c04"
     },
     "apple-design/guide.md": {
       "source": "skills/apple-design/SKILL.md",
@@ -213,33 +213,33 @@
     },
     "ask-sonner/guide.md": {
       "source": "skills/ask-sonner/SKILL.md",
-      "source_sha256": "9267a9adae18acd9bcc21efb983576fa5d1f2b68c7468ae17739f823981fff59",
-      "sha256": "007d5a89822741dd00eaeba07c717b57d5ca0672ec82c2aa7ab9a3a1361e1a1e"
+      "source_sha256": "302c9275aee6a46178f428e00f5ad0c98d599ca1438f209e604d4bcf036c4e4a",
+      "sha256": "00d927807b0cbb9543f73dad2d339d6eb7d03ddb25b4f0c7b264a51c3b3390d8"
     },
     "ask-sonner/API.md": {
       "source": "skills/ask-sonner/API.md",
-      "source_sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491",
-      "sha256": "003f1b313e0094c28b1cfc127ade1875a6ba655f354b7d8c2fc4e6ef912d8491"
+      "source_sha256": "1d323f15b801736a6c36b373912a891d95b3b8d8bea22190ed32e067f3de67bf",
+      "sha256": "1d323f15b801736a6c36b373912a891d95b3b8d8bea22190ed32e067f3de67bf"
     },
     "break-ui/guide.md": {
       "source": "skills/break-ui/SKILL.md",
-      "source_sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
-      "sha256": "79d846a84d02d019435fefbc4869a3431f1ba13f3482b155e6f7d0f7bcae3d0e"
+      "source_sha256": "fb126d176f3b6bf7dfe71f2ae6620ab3dd81e6282c672a1801720055addfce18",
+      "sha256": "50b68f640cdc046d1326eca79da44864b208bbe0c8385b72376126b1e4362b4c"
     },
     "break-ui/CATALOG.md": {
       "source": "skills/break-ui/CATALOG.md",
-      "source_sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15",
-      "sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15"
+      "source_sha256": "80522dcc81039bf317bce5adcb7b499e9d9da3c98952abb4dfb34ba6c1c32360",
+      "sha256": "80522dcc81039bf317bce5adcb7b499e9d9da3c98952abb4dfb34ba6c1c32360"
     },
     "choreograph/guide.md": {
       "source": "skills/choreograph/SKILL.md",
-      "source_sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
-      "sha256": "38358d30c27fb6fe2b80d225fa35e0ace24e50fc9eb781368a3852e4159ac5ad"
+      "source_sha256": "0a6802bb2fd5a3993842d48332b8ab56ae5bab369ffa8700f85f6fcff56b8478",
+      "sha256": "34b561a5ed2b1d8975128ea9e50dd2de774eaf5a8a3883518759e4bef71cc518"
     },
     "choreograph/RECIPES.md": {
       "source": "skills/choreograph/RECIPES.md",
-      "source_sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
-      "sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2"
+      "source_sha256": "c256ff760f42d905b19f97becd2c0caaf40a95b41b49770c973281374c9600cf",
+      "sha256": "c256ff760f42d905b19f97becd2c0caaf40a95b41b49770c973281374c9600cf"
     },
     "emil-design-eng/guide.md": {
       "source": "skills/emil-design-eng/SKILL.md",
@@ -248,18 +248,18 @@
     },
     "emil-design-eng/references/craft-guide.md": {
       "source": "skills/emil-design-eng/references/craft-guide.md",
-      "source_sha256": "bc99624f4cec406e1315f6ed2e2b9687e79d19aab80b658b0be770273b451cf2",
-      "sha256": "bc99624f4cec406e1315f6ed2e2b9687e79d19aab80b658b0be770273b451cf2"
+      "source_sha256": "fe15bf371be49f58b3eb61d55139db2326c6ae15e950bacd3d4011af59873101",
+      "sha256": "fe15bf371be49f58b3eb61d55139db2326c6ae15e950bacd3d4011af59873101"
     },
     "find-animation-opportunities/guide.md": {
       "source": "skills/find-animation-opportunities/SKILL.md",
-      "source_sha256": "211d9371a471ac29bc0af832366a8a0c298f97ead57a79c2f816368e03a099d1",
-      "sha256": "e444ab42ae9b707fbe1119dc99ed5f43422f0fdf4d54495a7577741cabcc4fe7"
+      "source_sha256": "b2e9dfd7718484611978ee7c447a223d1588b62d07b10890a264653f5bc16c1e",
+      "sha256": "9f319f850ea14415c388c82896c38d8bab389507f6b98143ca8b273ff387eef2"
     },
     "gestures/guide.md": {
       "source": "skills/gestures/SKILL.md",
-      "source_sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
-      "sha256": "bd367d05d2564a416464f9bc5db222fdf22c19a862bd32b1b878a28d6f42d051"
+      "source_sha256": "1928c86cce924a2a178ddd156ba5ed0f184665a1f95b549724ffb5ae703e994f",
+      "sha256": "6650adc7b12cde9e1f45986b9af11118bd7cc414d82b922fbb7eb2c55da37ebb"
     },
     "hallmark/guide.md": {
       "source": "skills/hallmark/SKILL.md",
@@ -1458,63 +1458,63 @@
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
-      "source_sha256": "39f8338e6fb19814e6b94d2ad40ae4a5d6046e081b5d074678dd8db54d96d810",
-      "sha256": "426210360c31b58fe3e22ee5948ed320593ddf447707a099cfafdf13176d1ad4"
+      "source_sha256": "98ac08583550822c5cf3f234ac5608ee1b8e401de294f4eb93abe65f04d20bc0",
+      "sha256": "f9fa7db12b287d6f5f0a8d107de4bd3550a2ed4491f4bfa3a3b680524b021e0a"
     },
     "improve-animations/AUDIT.md": {
       "source": "skills/improve-animations/AUDIT.md",
-      "source_sha256": "aad5c98da31030821d195d3b9e9faf3f27518ae5b3985e38bdec66091841a139",
-      "sha256": "aad5c98da31030821d195d3b9e9faf3f27518ae5b3985e38bdec66091841a139"
+      "source_sha256": "128d1bff32cae86523f60436937df4dc65d3c52b132fc2934576419cef65e442",
+      "sha256": "128d1bff32cae86523f60436937df4dc65d3c52b132fc2934576419cef65e442"
     },
     "improve-animations/PLAN-TEMPLATE.md": {
       "source": "skills/improve-animations/PLAN-TEMPLATE.md",
-      "source_sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad",
-      "sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad"
+      "source_sha256": "e25250c49937e183cca5bc42a057d9f5407a0cacd30d0aad1a4b6d59d7b2a844",
+      "sha256": "e25250c49937e183cca5bc42a057d9f5407a0cacd30d0aad1a4b6d59d7b2a844"
     },
     "learn-taste/guide.md": {
       "source": "skills/learn-taste/SKILL.md",
-      "source_sha256": "9567d3d939655320a1cab2d7f4dd734157376bc41b29e783eda7ba6f8b6b6100",
-      "sha256": "0e53b0b4ab3e2c679fd6814bd6bc6d00df9d7c71b1ba5314899860a1e8b10d3c"
+      "source_sha256": "115897a0914197a6ec00ae2fb948c62b5439dcb847b52b05c2d451a998f4b5e2",
+      "sha256": "35634acea26ca1d4e34792620c55e253bf2b304733497120820ead75d9cfe027"
     },
     "mobile-native/guide.md": {
       "source": "skills/mobile-native/SKILL.md",
-      "source_sha256": "4a8484e510c97a9a8aac12aeeccfdadbc75931d35375a6dd030c16af824ccc49",
-      "sha256": "774877e0a78ee60474d016c91174e5474e173a1195b793772e151c026a5d3819"
+      "source_sha256": "971e1838238ddcf2b7562397e9632b428cd6226014dcd220bb42c15ea812f56f",
+      "sha256": "dc033c8a9a03cb473b5c4ae4c6c3629d12621e3c795c7505d3c3664553810cdf"
     },
     "pick-ui-library/guide.md": {
       "source": "skills/pick-ui-library/SKILL.md",
-      "source_sha256": "54ee1b6b2a4e5fe6fc6fb7851329c15b26a870d75c6ff988cb7745d3bece2d19",
-      "sha256": "b5862154b8171b03d5c7f9c891267b5a6e0ead1df57e2c6a81121d8d8ec5545a"
+      "source_sha256": "c162aa883d0e98828bcba22cc2ef8e261c383cad202e840c4178b8ddf88cf1a8",
+      "sha256": "145ee037dceba36504b4603d6d0b000ecb5ca238c294e8623240832322ab5754"
     },
     "prototype/guide.md": {
       "source": "skills/prototype/SKILL.md",
-      "source_sha256": "f9f1dcccbd5769e15f6eafe0e832ee57f5e07765f4afb626166d7545a805a180",
-      "sha256": "3d98c50551827dc6ee44a070780b0f843c3d54fe859822442b70d53a304a17b4"
+      "source_sha256": "45f4ca779ac7435132104780c35269bfd598992c83942bb49048a49f9f4d69ab",
+      "sha256": "5a1febc01fb613b1c1ee97c11d1b819c1faa829241ab8dd2e6d8726b98cb85fc"
     },
     "prototype/PICKER.md": {
       "source": "skills/prototype/PICKER.md",
-      "source_sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65",
-      "sha256": "8bc927fa874314991fe00fe35446dae75072946403686c20092d56d2061cba65"
+      "source_sha256": "471633afb3eb4f46d80d9693629ea524a9926d4478d98eb04274dddeb046c4d2",
+      "sha256": "471633afb3eb4f46d80d9693629ea524a9926d4478d98eb04274dddeb046c4d2"
     },
     "remove-animations/guide.md": {
       "source": "skills/remove-animations/SKILL.md",
-      "source_sha256": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
-      "sha256": "0ac974216f64f30889e9a0e4984e9eb550229b0d6d15c4fbc3d34553a3e3d958"
+      "source_sha256": "228d98a3d05637f2ff8fc2d1c2bd88c14783c8c901105cac39a7ae24a4d3e408",
+      "sha256": "6f3dda2fd6b927b895f97c6fa02fb443848c68dba6eae429c0a976b1b49f6a73"
     },
     "review-animations/guide.md": {
       "source": "skills/review-animations/SKILL.md",
-      "source_sha256": "2b96f0bf7841f712fc0bf83081fbb4ee046e4c441c8fffe477a3c40ff83768b3",
-      "sha256": "5a22696464c1ff185f985706fbcc5f925bb359e23974bb4421da983dce80993c"
+      "source_sha256": "35b842495bd9ef1be7a36225a0a73513eee84631da9633d3217964a2d88e0100",
+      "sha256": "373bebab4876349299d14ca33ae364ddf1afdc0841a3ecac48a574fb79b2cdcb"
     },
     "review-animations/STANDARDS.md": {
       "source": "skills/review-animations/STANDARDS.md",
-      "source_sha256": "8cfd1974fba5b6b709133bd858a4f3422b4bc00c692c2f1f44644d9d19443bcc",
-      "sha256": "8cfd1974fba5b6b709133bd858a4f3422b4bc00c692c2f1f44644d9d19443bcc"
+      "source_sha256": "3616a08129f46a1316cbea27593b99137d612efe07ee5bee34d18e46eca1aa0e",
+      "sha256": "3616a08129f46a1316cbea27593b99137d612efe07ee5bee34d18e46eca1aa0e"
     },
     "write-swift/guide.md": {
       "source": "skills/write-swift/SKILL.md",
-      "source_sha256": "287e500d2d6d6bd5e9577bc77fc95807dfd8b43c320f275c45a87a1b8beb2ef6",
-      "sha256": "af3dc11ee4434ca7b3c2a197ee4366cac7403151ada754c16b76b3f523e7eb89"
+      "source_sha256": "84ce07c459a9668b6a59c80ffdff1bcfa679bd8d467ecf6a83570cf33aea778b",
+      "sha256": "4711154231509a7e3a285972f655bf6a0720ba99b3e96994389c8702351af810"
     }
   }
 }

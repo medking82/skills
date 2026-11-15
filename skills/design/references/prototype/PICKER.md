@@ -57,7 +57,6 @@ In a framework, keep the class names and structure; only the rendering syntax ch
   height: 28px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
-  will-change: transform;
 }
 
 /* The slide is enabled only after first paint (data-ready), so load doesn't animate. */
@@ -83,11 +82,15 @@ In a framework, keep the class names and structure; only the rendering syntax ch
   color: rgba(255, 255, 255, 0.55);
   font: inherit;
   cursor: pointer;
-  transition: color 150ms ease-out;
+  transition:
+    color 150ms ease-out,
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.proto-picker-item:hover {
-  color: rgba(255, 255, 255, 0.85);
+@media (hover: hover) and (pointer: fine) {
+  .proto-picker-item:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
 }
 
 .proto-picker-item:active {

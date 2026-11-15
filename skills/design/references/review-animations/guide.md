@@ -9,7 +9,7 @@ Inspect motion for responsiveness, correct origin, appropriate frequency, interr
 
 The craft bar comes from Emil Kowalski's animation philosophy (animations.dev). Use the standards and remedial hierarchy to explain findings, with explicit evidence and verification gaps.
 
-For the full rule catalog (easing curves, duration tables, spring config, gestures, clip-path, performance, a11y), see [STANDARDS.md](STANDARDS.md). Load it whenever a finding needs a precise value or citation.
+For the full rule catalog (easing curves, duration tables, spring config, gestures, clip-path, performance, a11y), see [STANDARDS.md](STANDARDS.md). Read it before you write the verdict, and pull every value you recommend from it.
 
 ## The Ten Non-Negotiable Standards
 
@@ -19,15 +19,15 @@ Every animation in the diff is measured against these. A violation is a finding.
 
 2. **Frequency-appropriate.** Match motion to how often it's seen. Keyboard-initiated and 100+/day actions get **no** animation. Tens/day gets reduced motion. Occasional gets standard. Rare/first-time can have delight.
 
-3. **Responsive easing.** Entering/exiting elements use `ease-out` or a strong custom curve. `ease-in` on UI is a block — it delays the moment the user watches most. Built-in CSS easings are too weak; expect custom cubic-beziers.
+3. **Responsive easing.** Entering/exiting elements use `ease-out` or a strong custom curve. `ease-in` on UI is a block — it delays the moment the user watches most. Built-in CSS easings are too weak; expect custom cubic-beziers. Exception: Sonner-style toasts use 400ms `ease`.
 
-4. **Sub-300ms UI.** UI animations stay under 300ms; anything slower on a UI element needs justification or it's a finding. Per-element budgets live in [STANDARDS.md](STANDARDS.md).
+4. **Sub-300ms UI.** UI animations stay under 300ms. Modals, drawers, sheets, and toasts are the documented exceptions; anything else slower on a UI element needs justification or it's a finding. Per-element budgets live in [STANDARDS.md](STANDARDS.md).
 
 5. **Origin & physical correctness.** Popovers/dropdowns/tooltips scale from their trigger (`transform-origin`), not center. Never animate from `scale(0)` — start from `scale(0.9–0.97)` + opacity (Modals are exempt — they stay centered.)
 
 6. **Interruptibility.** Rapidly-triggered or gesture-driven motion (toasts, toggles, drags) must be interruptible — CSS transitions or springs that retarget from current state, not keyframes that restart from zero.
 
-7. **Performance appropriate to the interaction.** Prefer `transform` and `opacity`. Verify the cost before flagging necessary layout animation: a measured accordion height transition or an isolated indicator can be deliberate exceptions. Check actual library behavior and runtime evidence before claiming that a property is hardware accelerated: Motion `x`/`y`/`scale` shorthands are hardware accelerated from `motion` 14.2 but run on the main thread before it, and layout animations run on the main thread in every version.
+7. **Performance appropriate to the interaction.** Prefer `transform` and `opacity`; `clip-path` and measured height (accordions) are the documented exceptions, and an isolated indicator can be another. Verify the cost before flagging necessary layout animation. Check actual library behavior and runtime evidence before claiming that a property is hardware accelerated: Motion `x`/`y`/`scale` shorthands are hardware accelerated from `motion` 14.2 but run on the main thread before it, and layout animations run on the main thread in every version.
 
 8. **Accessibility.** `prefers-reduced-motion` is honored (gentler, not zero — keep opacity/color, drop movement). Hover animations are gated behind `@media (hover: hover) and (pointer: fine)`.
 
@@ -41,7 +41,7 @@ Flag these on sight, hard:
 
 - `transition: all` (unbounded property animation)
 - `scale(0)` entrances; a pure fade is valid when appropriate, including reduced-motion variants
-- `ease-in` on any UI interaction; weak built-in easing on a deliberate animation
+- `ease-in` on any UI interaction; weak built-in easing on a deliberate animation (Sonner-style toast `ease` excepted)
 - Animation on a keyboard shortcut, command-palette toggle, or 100+/day action
 - UI duration > 300ms with no stated reason
 - `transform-origin: center` on a trigger-anchored popover/dropdown/tooltip
@@ -52,7 +52,7 @@ Flag these on sight, hard:
 - Missing `prefers-reduced-motion` handling on movement
 - Ungated `:hover` motion
 - Symmetric enter/exit timing on a press-and-release or hold interaction
-- Everything-at-once entrance where a 30–80ms stagger belongs
+- Everything-at-once entrance where a 30–80ms stagger belongs (non-uniform, one entrance per container; see `../choreograph/SKILL.md`)
 
 ## Remedial Preference Hierarchy
 
@@ -78,7 +78,7 @@ A single markdown table. One row per issue. Never a "Before:/After:" list.
 
 | Before | After | Why |
 | --- | --- | --- |
-| `transition: all 300ms` | `transition: transform 200ms ease-out` | Specify exact properties; `all` animates unintended properties off-GPU |
+| `transition: all 300ms` | `transition: transform 200ms var(--ease-out)` | Specify exact properties; `all` animates unintended properties off-GPU |
 | `transform: scale(0)` | `transform: scale(0.95); opacity: 0` | Nothing appears from nothing — `scale(0)` looks like it came from nowhere |
 | `ease-in` on dropdown | `ease-out` + custom curve | `ease-in` delays the moment the user watches most; feels sluggish |
 | `transform-origin: center` on popover | `var(--transform-origin)` (Base UI) | Popovers scale from their trigger, not center (modals are exempt) |
@@ -102,8 +102,3 @@ Close with an explicit decision:
 This is motion-review evidence, not implementation or release approval. Do not invent findings to satisfy the format, and preserve documented design decisions and explicit user choices.
 
 Be specific and cite `file:line`. When a value is needed (a curve, a duration, a spring config), pull the exact one from [STANDARDS.md](STANDARDS.md) rather than approximating.
-
-## Guidelines
-
-- Prefer CSS transitions/`@starting-style`/WAAPI for predetermined motion; JS/springs for dynamic, interruptible, gesture-driven motion.
-- When unsure whether motion feels right, recommend reviewing it in slow motion / frame-by-frame and with fresh eyes the next day rather than guessing.

@@ -13,7 +13,7 @@ It does ONE thing: survey animation and motion code, then produce prioritized fi
 
 You are a senior design engineer with a brutal eye for craft. Your job is to find the animation work with the highest leverage — the `ease-in` that makes every dropdown feel sluggish, the keyframes that make toasts jump, the keyboard action that should never have animated — and turn each into a plan so precise that a model with zero context can execute it without taste of its own.
 
-The bar comes from Emil Kowalski's animation philosophy. The workflow — recon, parallel audit, vetting, self-contained plans — is adapted from senior-advisor codebase auditing.
+The bar comes from Emil Kowalski's animation philosophy.
 
 The rule catalog with precise values lives in [AUDIT.md](AUDIT.md). The plan format lives in [PLAN-TEMPLATE.md](PLAN-TEMPLATE.md). Load them when you audit and when you write plans.
 
@@ -39,6 +39,8 @@ Map the motion surface before judging it:
 
 Useful sweeps: grep for `transition`, `animation`, `@keyframes`, `motion.`, `animate={`, `useSpring`, `ease-in`, `transition: all`, `scale(0)`, `prefers-reduced-motion`, `transform-origin`.
 
+**Completion criterion:** stack, motion locations, tokens, personality, and a frequency tier for every animated surface are recorded.
+
 ### Phase 2 — Audit
 
 Audit against the eight categories in [AUDIT.md](AUDIT.md):
@@ -63,6 +65,8 @@ Depth follows effort level (default `standard`):
 | `deep` | Requested whole-repo scope, including marketing when relevant | Confirmed findings, including useful polish items |
 
 Effort controls coverage, not a required number of agents or findings. Zero findings is a valid result.
+
+**Completion criterion:** every category in scope returned findings or was explicitly cleared.
 
 ### Phase 3 — Vet, prioritize, confirm
 
@@ -91,7 +95,7 @@ When multiple plans need coordination, update the existing plan index with execu
 
 | Invocation | Behavior |
 | --- | --- |
-| bare | Recon → audit → vetted findings; write plans only when requested |
+| a request with no variant ("improve the animations") | Recon → audit → vetted findings; write plans only when requested |
 | `quick` / `deep` | Adjust audit effort (see table); composes with a focus |
 | a category focus (`performance`, `accessibility`, `easing`…) | Recon + audit that category only |
 | `plan <description>` | Skip the audit; recon just enough to specify, then write a single plan for the described improvement |

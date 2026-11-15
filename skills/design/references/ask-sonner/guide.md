@@ -36,17 +36,17 @@ const id = toast.loading('Uploading…');
 toast.success('Uploaded', { id });
 ```
 
-**Persist** — `{ duration: Infinity }`. **Dismiss** — `toast.dismiss(id)`, or `toast.dismiss()` for all. **Read active toasts** — `useSonner()` in React, `toast.getActiveToasts()` outside it.
+**Persist** — `{ duration: Infinity }`. **Dismiss** — `toast.dismiss(id)`, or `toast.dismiss()` for all. **Read active toasts** — `useSonner()` in React, `toast.getToasts()` outside it.
 
 **Links or components in the text** — pass a function for the title or description: `toast(() => <a href="…">View</a>)`.
 
-**Multiple toasters** — give each an `id` and target with `toast('…', { toasterId: 'canvas' })`. Without `toasterId`, every toaster renders the toast.
+**Multiple toasters** — give each an `id` and target with `toast('…', { toasterId: 'canvas' })`. A toaster with an `id` renders only toasts targeted at it; a toaster without one renders only untargeted toasts.
 
-**Close callbacks** — `onDismiss` fires on close button or swipe; `onAutoClose` fires on timeout. They are separate; there is no single "closed" callback.
+**Close callbacks** — `onDismiss` fires on close button, swipe, or `toast.dismiss()`; `onAutoClose` fires on timeout. They are separate; there is no single "closed" callback.
 
 ## Styling — the escalation ladder
 
-Use the smallest styling change that satisfies the request. Preserve the existing toast implementation and design-system conventions.
+Use the smallest styling change that satisfies the request. Preserve the existing toast implementation and design-system conventions. If the change would need `!important` on more than a few classes, propose headless (`unstyled`) instead of stacking overrides.
 
 1. **Defaults** — plus `richColors` on the Toaster for colorful success/error, `invert` to flip against the theme.
 2. **Inline tweaks** — `toastOptions={{ style: {…} }}` on the Toaster for all toasts, or `style` per `toast()` call.
@@ -66,11 +66,11 @@ Use the smallest styling change that satisfies the request. Preserve the existin
 | Tailwind/CSS classes have no effect | Inspect selector specificity, stylesheet order, and installed-version documentation. Use a targeted override, `unstyled`, or headless only as the design requires. |
 | Toasts render completely unstyled (common in Astro, view transitions) | Sonner's injected stylesheet was lost — import it explicitly in a layout: `import 'sonner/dist/styles.css'`. |
 | Unstyled inside Shadow DOM | Styles land in `document.head`, not the shadow root. Copy the style tag whose text includes `[data-sonner-toaster]` into the shadow root. |
-| Toast behind a modal/overlay, or clipped | An ancestor creates a stacking context (`transform`, `filter`, `overflow`) or the overlay out-z-indexes the toaster. Move `<Toaster />` to the document root, outside any dialog/portal container. |
+| Toast behind a modal/overlay, or clipped | An ancestor creates a stacking context (`transform`, `filter`) or clips it (`overflow`), or the overlay out-z-indexes the toaster. Move `<Toaster />` to the document root, outside any dialog/portal container. |
 | Dark mode ignored | `theme` defaults to `'light'` — set `theme="system"` or pass the resolved theme (see Theme above). |
 | Success/error look gray, not green/red | That's the default. Add `richColors` to the Toaster. |
-| Toast never closes | `duration: Infinity`, `dismissible: false`, or a `toast.promise` whose promise never settles — the loading toast waits forever. |
+| Toast never closes | `duration: Infinity`, or a `toast.promise` whose promise never settles — the loading toast waits forever. |
 | `toast.promise` stuck on loading | It needs a promise (or a function returning one) as its first argument, and the promise must actually resolve/reject. |
 | Swipe-to-dismiss goes the wrong way / doesn't work | Directions derive from `position`. Override with `swipeDirections` on the Toaster. |
 | Toast shows up in every toaster | Multiple toasters need targeting: give each Toaster an `id` and pass `toasterId` in the `toast()` call. |
-| Toasts too close to the screen edge on mobile | `offset` (desktop, default 32px) and `mobileOffset` (<600px, default 16px) — numbers, CSS strings, or per-side objects. |
+| Toasts too close to the screen edge on mobile | `offset` (desktop, default 24px) and `mobileOffset` (<600px, default 16px) — numbers, CSS strings, or per-side objects. |
