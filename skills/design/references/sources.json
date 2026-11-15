@@ -37,6 +37,13 @@
       "description": "Apple's interface principles translated for web work involving gesture-driven UI, spring motion, sheets, momentum, materials, typography, accessibility, or iPhone-focused PWAs. Use the smallest relevant reference for the request.",
       "allow_implicit_invocation": true
     },
+    "ask-emil": {
+      "entrypoint": "skills/ask-emil/SKILL.md",
+      "source_sha256": "b5e58613f5e2788ff052ac9495ae4b428fe96b1328d499f2e9515c542159ccb6",
+      "guide": "ask-emil/guide.md",
+      "description": "Explicitly ask which skill or flow fits your situation. A router over the skills in this repo.",
+      "allow_implicit_invocation": false
+    },
     "ask-sonner": {
       "entrypoint": "skills/ask-sonner/SKILL.md",
       "source_sha256": "302c9275aee6a46178f428e00f5ad0c98d599ca1438f209e604d4bcf036c4e4a",
@@ -210,6 +217,11 @@
       "source": "skills/apple-design/references/typography.md",
       "source_sha256": "ac09be4511ed2d858a19b04c4acc264a09ed076f1984a10e2097899908dc4bf3",
       "sha256": "ac09be4511ed2d858a19b04c4acc264a09ed076f1984a10e2097899908dc4bf3"
+    },
+    "ask-emil/guide.md": {
+      "source": "skills/ask-emil/SKILL.md",
+      "source_sha256": "b5e58613f5e2788ff052ac9495ae4b428fe96b1328d499f2e9515c542159ccb6",
+      "sha256": "edfe29ad7b6a570ec6d8a9cbfd996c3baba562ce81de4bee3b676cac2ad158da"
     },
     "ask-sonner/guide.md": {
       "source": "skills/ask-sonner/SKILL.md",

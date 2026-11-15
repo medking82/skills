@@ -24,6 +24,7 @@ CLAUDE_ONLY_KEYS = {
     "disable_model_invocation",
 }
 EXPLICIT_ONLY_SKILLS = {
+    "ask-emil",
     "break-ui",
     "pick-ui-library",
     "prototype",
