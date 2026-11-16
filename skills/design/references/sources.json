@@ -1180,8 +1180,8 @@
     },
     "impeccable/upstream/guide.md": {
       "source": "skills/impeccable/upstream/guide.md",
-      "source_sha256": "233c81d5a07f0ed0c9d16d200057178b2e026c139c11ad1c161eadfb7ee467a8",
-      "sha256": "233c81d5a07f0ed0c9d16d200057178b2e026c139c11ad1c161eadfb7ee467a8"
+      "source_sha256": "12d15997482e6d0734c5f2dcc4f62cea7bcba19953940214cffa5c6a7758aa93",
+      "sha256": "12d15997482e6d0734c5f2dcc4f62cea7bcba19953940214cffa5c6a7758aa93"
     },
     "impeccable/upstream/reference/adapt.md": {
       "source": "skills/impeccable/upstream/reference/adapt.md",
@@ -1435,8 +1435,8 @@
     },
     "impeccable/upstream/scripts/VERSION": {
       "source": "skills/impeccable/upstream/scripts/VERSION",
-      "source_sha256": "4a4f652678a28b9c8a2d3d89b6b865c84e328fdcb3e27c297c711c7e723073ed",
-      "sha256": "4a4f652678a28b9c8a2d3d89b6b865c84e328fdcb3e27c297c711c7e723073ed"
+      "source_sha256": "19408c72bbb91a1f1e134b12c4366af698302c129d3a789800be552c92e77dc7",
+      "sha256": "19408c72bbb91a1f1e134b12c4366af698302c129d3a789800be552c92e77dc7"
     },
     "impeccable/upstream/scripts/command-metadata.json": {
       "source": "skills/impeccable/upstream/scripts/command-metadata.json",
@@ -1455,8 +1455,8 @@
     },
     "impeccable/upstream/scripts/engine-checksums.txt": {
       "source": "skills/impeccable/upstream/scripts/engine-checksums.txt",
-      "source_sha256": "8b6e503413f838e9475d6b7253fac409468d23d8e74f23a2692276449a5d8b33",
-      "sha256": "8b6e503413f838e9475d6b7253fac409468d23d8e74f23a2692276449a5d8b33"
+      "source_sha256": "fef1eacc1167f48a5a958376f55067353cc813643b4dbc67426e1de9a0847fd1",
+      "sha256": "fef1eacc1167f48a5a958376f55067353cc813643b4dbc67426e1de9a0847fd1"
     },
     "impeccable/upstream/scripts/impeccable": {
       "source": "skills/impeccable/upstream/scripts/impeccable",
@@ -1495,8 +1495,8 @@
     },
     "impeccable/upstream/source.json": {
       "source": "skills/impeccable/upstream/source.json",
-      "source_sha256": "16e6b896c75da0d497d2b6d61d66d5960592aef080394a744cd960c582e61ea4",
-      "sha256": "16e6b896c75da0d497d2b6d61d66d5960592aef080394a744cd960c582e61ea4"
+      "source_sha256": "5c543e25e9b0089aa1e467580559bd6d0016804cea922d818f58679c38776841",
+      "sha256": "5c543e25e9b0089aa1e467580559bd6d0016804cea922d818f58679c38776841"
     },
     "improve-animations/guide.md": {
       "source": "skills/improve-animations/SKILL.md",
