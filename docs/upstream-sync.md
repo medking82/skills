@@ -47,13 +47,12 @@ and invocation policies in `agents/openai.yaml`. Fork-only commits remain in his
 
 ## Impeccable Fork And Bundle
 
-`sync-personal-fork.yml` in the personal fork fetches `pbakaus/impeccable:main`
-and merges normally, preserving personal commits. Changes to `.github/workflows`
-between merge base and upstream head stop before merge, including additions,
-edits, deletions, and renames. Conflicts abort without publication. This job does
-not execute upstream builds, engine scripts, package installs, or inherited workflows.
-Review inherited workflows, including Sheriff, separately; do not enable them just
-to activate the personal sync workflow.
+`sync-personal-fork.yml` fetches `pbakaus/impeccable:main` and records a merge that
+preserves fork history. The merge keeps the fork's entire `.github/workflows` tree
+byte for byte, including when upstream adds, changes, renames, or deletes files in
+that directory. Conflicts elsewhere abort publication. The job uses the repository
+`GITHUB_TOKEN` with `contents: write` and treats upstream as source data. Review
+and apply any desired changes to the fork's workflows in a separate commit.
 
 [`sync-impeccable.yml`](../.github/workflows/sync-impeccable.yml) checks out the
 personal fork as data. Root-anchored non-cone sparse patterns materialize the entire
@@ -109,7 +108,7 @@ Inspect the failed step and exact upstream diff before retrying:
 
 - Workflow/top-level automation changes: reconcile manually in a clean review
   checkout, preserving the personal sync workflow and trusted validation code.
-  Keep inherited workflows disabled until separately reviewed.
+  The Impeccable fork sync already preserves its workflow tree automatically.
 - Impeccable snapshot failures: inspect the fork SHA, ownership and failing tests.
   Direct invocations require `--allow-code-updates` for script, agent or attribution
   changes; the scheduled workflow uses it for the configured personal fork.
